@@ -1,0 +1,77 @@
+/**
+ * Screen Breakpoint
+ */
+
+$screen-xxs-min: 1px;
+$screen-xxs-max: 375px;
+
+$screen-xs-min: 376px;
+$screen-xs-max: 575px;
+
+$screen-sm-min: $screen-xs-max + 1;
+$screen-sm-max: 767px;
+
+$screen-md-min: $screen-sm-max + 1;
+$screen-md-max: 991px;
+
+$screen-lg-min: $screen-md-max + 1;
+$screen-lg-max: 1199px;
+
+$screen-xl-min: $screen-lg-max + 1;
+$screen-xl-max: 1365px;
+
+$screen-xxl-min: $screen-xl-max + 1;
+$screen-xxl-max: 1440px;
+
+
+
+
+
+/**
+ * Container Width
+ */
+
+$container-xxl: 1300px;
+$container-xl: 1140px;
+$container-lg: 960px;
+$container-md: 720px;
+$container-sm: 540px;
+
+
+
+
+
+/**
+ * Screen Maps
+ */
+
+$screen-brkp: (
+	xxs: (
+		min: $screen-xxs-min,
+		max: $screen-xxs-max
+	),
+	xs: (
+		min: $screen-xs-min,
+		max: $screen-xs-max
+	),
+	sm: (
+		min: $screen-sm-min,
+		max: $screen-sm-max
+	),
+	md: (
+		min: $screen-md-min,
+		max: $screen-md-max
+	),
+	lg: (
+		min: $screen-lg-min,
+		max: $screen-lg-max
+	),
+	xl: (
+		min: $screen-xl-min,
+		max: $screen-xl-max
+	),
+	xxl: (
+		min: $screen-xxl-min,
+		max: $screen-xxl-max
+	)
+);

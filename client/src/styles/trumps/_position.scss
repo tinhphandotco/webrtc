@@ -1,0 +1,24 @@
+.u-center-v-h {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+
+.u-center-v {
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
+}
+
+.u-center-h {
+	position: absolute;
+	left: 50%;
+	transform: translateX(-50%);
+}
+
+.u-pos-a {position: absolute !important;}
+.u-pos-re {position: relative !important;}
+.u-l-0 {left: 0;}
+.u-t-0 {top: 0;}
+.u-r-0 {right: 0;}

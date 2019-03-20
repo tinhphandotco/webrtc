@@ -1,0 +1,41 @@
+/**
+ * Responsive media query
+ */
+@mixin responsive-up($breakpoint) {
+  @if(map-has-key($screen-brkp, $breakpoint)) {
+    @media (min-width: screen($breakpoint, min)) { @content }
+  } @else {
+    @error "Whoops! No value could be retrieved for `#{$breakpoint}`. "
+  }
+}
+
+@mixin responsive-down($breakpoint) {
+  @if(map-has-key($screen-brkp, $breakpoint)) {
+    @media (max-width: screen($breakpoint, max)) { @content }
+  } @else {
+    @error "Whoops! No value could be retrieved for `#{$down-brkp}`. "
+  }
+}
+
+@mixin responsive-only($breakpoint) {
+  @if(map-has-key($screen-brkp, $breakpoint)) {
+    @media (min-width: screen($breakpoint, min)) and (max-width: screen($breakpoint, max)) { @content; }
+  } @else {
+    @error "Whoops! No value could be retrieved for `#{$breakpoint}`. "
+  }
+}
+
+@mixin responsive-between($min-breakpoint, $max-breakpoint) {
+  @if (map-has-key($screen-brkp, $min-breakpoint) and map-has-key($screen-brkp, $max-breakpoint)) {
+    $min-screen: screen($min-breakpoint, min);
+    $max-screen: screen($max-breakpoint, max);
+
+    @if($min-screen < $max-screen) {
+      @media (min-width: $min-screen) and (max-width: max-screen) { @content; }
+    } @else {
+      @error "Whoops! `#{$min-breakpoint}` larger than `#{$max-breakpoint}`."
+    }
+  } @else {
+    @error "Whoops! No value could be retrieved for `#{$min-breakpoint}` and `#{$max-breakpoint}`."
+  }
+}

@@ -1,0 +1,9 @@
+$w-h: (
+	50: 50%,
+	100: 100%
+);
+
+@each $key, $value in $w-h {
+	.u-w-#{$key} {width: $value;}
+	.u-h-#{$key} {height: $value;}
+}

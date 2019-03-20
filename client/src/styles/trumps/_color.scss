@@ -1,0 +1,41 @@
+/**
+ * Hightlight.
+ */
+// .u-hightlight-white {background: palette(white) !important;}
+// .u-hightlight-dark-white {background: palette(white, dark);}
+// .u-hightlight-xx-dark-white {background: palette(white, xx-dark);}
+// .u-hightlight-orange {background: palette(orange) !important;}
+// .u-hightlight-grey {background: palette(grey);}
+// .u-hightlight-dark-grey {background: palette(grey, dark) !important;}
+// .u-hightlight-xx-dark-grey {background: palette(grey, xx-dark) !important;}
+// .u-hightlight-light-black {background: palette(black, light) !important;}
+
+@each $base, $item in $paletters {
+  @each $shade, $color in $item {
+    @if ($shade == 'base') {
+      .u-hightlight-#{$base} { background-color: $color; }
+    } @else {
+      .u-hightlight-#{$shade}-#{$base} { background-color: $color; }
+    }
+  }
+}
+
+.u-transparent {
+  background: transparent !important;
+  border: none !important;
+  outline: none !important;
+}
+
+
+
+
+/**
+ * Color.
+ */
+ @each $base, $item in $paletters {
+  @each $shade, $color in $item {
+    @if ($shade == 'base') {
+      .u-color-#{$base} { color: $color !important; }
+    }
+  }
+}

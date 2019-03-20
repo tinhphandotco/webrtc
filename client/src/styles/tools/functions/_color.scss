@@ -1,0 +1,7 @@
+/**
+ * Color Paletters Modiers
+ */
+
+ @function palette($color, $shade: 'base') {
+	@return map-get(map-get($paletters, $color), $shade);
+}

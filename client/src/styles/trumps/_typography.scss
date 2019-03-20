@@ -1,0 +1,104 @@
+/**
+ * Headings.
+ *
+ * Redefine our heading styles against utility classes. This gives us a double
+ * stranded heading hierarchy whereby we can style one heading as another, e.g.:
+ *
+     <h4 class="u-h1">I am an H4 that is the same size as an H1</h4>
+ *
+ */
+
+@if (variable-exists(heading--size-1)) {
+
+  .u-h1 { @include font-size($font-size--h1, auto, important); }
+  .u-h2 { @include font-size($font-size--h2, auto, important); }
+  .u-h3 { @include font-size($font-size--h3, auto, important); }
+  .u-h4 { @include font-size($font-size--h4, auto, important); }
+  .u-h5 { @include font-size($font-size--h5, auto, important); }
+  .u-h6 { @include font-size($font-size--h6, auto, important); }
+
+} @else {
+  @warn "You need to include `_elements.headings.scss`.";
+}
+
+
+
+
+/**
+ * Create font size at some points.
+ */
+
+$font-maps: (
+  8: 8px,
+  14: 14px,
+  18: 18px,
+  24: 24px,
+  32: 32px,
+);
+@each $key, $value in $font-maps {
+  .u-fz-#{$key} {font-size: $value;}
+}
+
+
+
+
+/**
+ * Adjustments.
+ *
+ * ‘Can you just make that text a little bigger?’
+ *
+ * Sure! Use these utilities to adjust the size of a span of text by a little
+ * bit more, or a little bit less, e.g.:
+ *
+     <p class="u-text++">A little bit bigger.</p>
+ *
+ */
+.u-text\+\+ { font-size: larger  !important; }
+.u-text--   { font-size: smaller !important; }
+
+
+
+
+
+/**
+ * Alignments.
+ */
+.u-text-right   { text-align: right !important; }
+.u-text-left    { text-align: left !important; }
+.u-text-center  { text-align: center !important; }
+.u-text-justify { text-align: justify !important; }
+
+
+
+
+
+
+/**
+ * Truncation.
+ *
+ * Cause long spans of text to truncate after running out of horizontal space.
+ */
+.u-text-truncate { @include truncate(100%, important); }
+
+
+
+
+
+/**
+ * Text Case.
+ */
+.u-text-uppercase {text-transform: uppercase !important;}
+.u-text-lowercase {text-transform: lowercase !important;}
+.u-text-capitalize {text-transform: capitalize !important;}
+
+
+
+
+
+/**
+ * Text Color.
+ */
+.u-text-muted {color: #777 !important;}
+.u-text-danger {color: #a94442 !important;}
+
+.u-text-bold { font-weight: bold; }

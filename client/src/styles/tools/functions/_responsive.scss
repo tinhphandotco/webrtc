@@ -1,0 +1,8 @@
+/**
+ * Responsive breakpoint
+ * screen(xs, min)
+ */
+
+ @function screen($brkp, $type) {
+	@return map-get(map-get($screen-brkp, $brkp), $type);
+}

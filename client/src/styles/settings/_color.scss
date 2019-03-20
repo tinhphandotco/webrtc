@@ -1,0 +1,91 @@
+$color-white: #fff;
+$color-black: #0b0b0b;
+$color-grey: #797e83;
+$color-blue: #53bdf6;
+$color-orange: #f79c5a;
+
+$color-fountain-blue: #52bab3;
+$color-emerald: #5ece7f;
+$color-sunglo: #e67478;
+$color-coral: #ff784f;
+$color-purple-majesty: #9279c3;
+$color-scooter: #39add1;
+
+
+
+
+
+// Colors UI Map
+$ui-colors: (
+	default: #ffffff,
+	primary: #337ab7,
+	success: #5cb85c,
+	warning: #f0ad4e,
+	info: #5bc0de,
+	danger: #d9534f
+);
+
+
+
+
+
+/**
+ * Color Paletters Modiers
+ *
+ * How to use: map-get(map-get($paletter, grey), xx-light);
+ * Example: palette(grey, light);
+ */
+$paletters: (
+	grey: (
+		xx-light: lighten($color-grey, 15%),
+		x-light: lighten($color-grey, 10%),
+		light: lighten($color-grey, 5%),
+		base: $color-grey,
+		dark: darken($color-grey, 5%),
+		x-dark: darken($color-grey, 10%),
+		xx-dark: darken($color-grey, 15%),
+		xxx-dark: darken($color-grey, 20%)
+	),
+	black: (
+		x-light: lighten($color-black, 10%),
+		light: lighten($color-black, 5%),
+		base: $color-black,
+		dark: darken($color-black, 5%)
+	),
+	white: (
+		light: lighten($color-white, 5%),
+		base: $color-white,
+		dark: darken($color-white, 5%),
+		x-dark: darken($color-white, 10%),
+		xx-dark: darken($color-white, 15%)
+	),
+	orange: (
+		base: $color-orange,
+		dark: darken($color-orange, 5%)
+	),
+	blue: (
+		base: $color-blue
+	),
+	main: (
+		base: $color-blue
+	),
+	secondary: (
+		base: $color-orange
+	),
+	primary: (
+		base: map-get($map: $ui-colors, $key: primary)
+	),
+	success: (
+		base: map-get($map: $ui-colors, $key: success)
+	),
+	danger: (
+		base: map-get($map: $ui-colors, $key: danger)
+	),
+	warning: (
+		base: map-get($map: $ui-colors, $key: warning)
+	)
+);
+
+// Main color
+$color-main: $color-orange;
+$color-secondary: $color-blue;

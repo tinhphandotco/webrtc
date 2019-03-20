@@ -1,0 +1,69 @@
+@function strip-units($number) {
+  @if type-of($number) == 'number' and not unitless($number) {
+    @return $number / ($number * 0 + 1);
+  }
+
+  @return $number;
+}
+
+// em()
+//
+//  Convert pixel values to ems.
+//
+// $target    - Value to convert to ems.
+// $context   - The context the conversion is based on. Defaults to `$font-size--base`
+// @requires  - `$font-size--base` / `@strip-units`
+// @returns   - number
+// @source    - http://www.pjmccormick.com/sweet-sass-function-convert-px-em
+
+@function em($target, $context: $font-size--base) {
+  @if not unitless($target) {
+    $target: strip-units($target);
+  }
+  @if not unitless($context) {
+    $context: strip-units($context);
+  }
+  @if $target == 0 { @return 0 }
+  @return $target / $context + 0em;
+}
+// rem()
+//
+// Convert pixel values to rems.
+//
+// $target    - Value to convert to ems.
+// $context   - The context the conversion is based on. Defaults to `$font-size--base`
+// @requires  - `$font-size--base` / `@strip-units`
+// @returns   - number
+// @source    - http://www.pjmccormick.com/sweet-sass-function-convert-px-em
+
+@function rem($target, $context: $font-size--base) {
+  @if not unitless($target) {
+    $target: strip-units($target);
+  }
+  @if not unitless($context) {
+    $context: strip-units($context);
+  }
+  @if $target == 0 { @return 0 }
+  @return $target / $context + 0rem;
+}
+
+// px()
+//
+// Convery em values to pixels.
+//
+// $target    - Value to convert to ems.
+// $context   - The context the conversion is based on. Defaults to `$font-size--base`
+// @requires  - `$font-size--base` / `@strip-units`
+// @returns   - number
+// @source    - http://www.pjmccormick.com/sweet-sass-function-convert-px-em
+
+@function px($target, $context: $font-size--base) {
+  @if not unitless($target) {
+    $pxval: strip-units($target);
+  }
+  @if not unitless($context) {
+    $base: strip-units($context);
+  }
+  @if $target == 0 { @return 0 }
+  @return $target * $context + 0px;
+}

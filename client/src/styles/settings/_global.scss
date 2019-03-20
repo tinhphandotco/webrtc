@@ -1,0 +1,22 @@
+// These variables are framework variables, sourced from variables defined
+// above. Feel free to use these variables throughout your project, but do not
+// modify or reassign them.
+$base__spacing-unit:       $line-height--base;
+$base__spacing-unit--tiny:  round($base__spacing-unit / 4);
+$base__spacing-unit--small: round($base__spacing-unit / 2);
+$base__spacing-unit--large: round($base__spacing-unit * 2);
+$base__spacing-unit--huge:  round($base__spacing-unit * 4);
+
+
+// Variables
+$max-width-row: 70%;
+
+
+// Z-index
+$z-index--max: 999999;
+
+
+
+
+// Display
+$display: "block" "inline" "inline-block";

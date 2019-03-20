@@ -1,0 +1,12 @@
+.a-bounce {
+  animation: bounce 2.0s infinite ease-in-out;
+
+  &--delay {
+    animation-delay: -1.0s;
+  }
+}
+
+@keyframes bounce {
+  0%, 100% { transform: scale(0.0); -webkit-transform: scale(0.0); }
+  50% { transform: scale(1.0); -webkit-transform: scale(1.0); }
+}

@@ -1,0 +1,13 @@
+/**
+ * Create color type
+ * Example: bg-colors($ui-colors)
+ * .btn--primary, .btn--success, .btn--danger,...
+ */
+
+ @mixin bg-colors($map) {
+  @each $theme, $color in $map {
+    &--#{$theme} {
+      background-color: $color;
+    }
+  }
+}

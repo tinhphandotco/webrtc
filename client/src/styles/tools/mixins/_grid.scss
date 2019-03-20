@@ -1,0 +1,74 @@
+// NOTE: $g-col-name: ".o-grid__col"
+@mixin make-grid-columns($i: 1, $list: "#{$g-col-name}--xs-#{$i}, #{$g-col-name}--sm-#{$i}, #{$g-col-name}--md-#{$i}, #{$g-col-name}--lg-#{$i}, #{$g-col-name}--xl-#{$i}, #{$g-col-name}--xxl-#{$i}") {
+  @for $i from (1 + 1) through $g-columns {
+    $list: "#{$list}, #{$g-col-name}--xs-#{$i}, #{$g-col-name}--sm-#{$i}, #{$g-col-name}--md-#{$i}, #{$g-col-name}--lg-#{$i}, #{$g-col-name}--xl-#{$i}, #{$g-col-name}--xxl-#{$i}";
+  }
+
+  #{$list} {
+    position: relative;
+    // Prevent columns from collapsing when empty
+    min-height: 1px;
+    // Inner gutter via padding
+    padding-left:  ceil(($g-gutter / 2));
+    padding-right: floor(($g-gutter / 2));
+  }
+}
+
+@mixin float-grid-columns($class, $i: 1, $list: "#{$g-col-name}--#{$class}-#{$i}") {
+  @for $i from (1 + 1) through $g-columns {
+    $list: "#{$list}, #{$g-col-name}--#{$class}-#{$i}";
+  }
+  #{$list} {
+    float: left;
+  }
+}
+
+
+@mixin calc-grid-column($index, $class, $type) {
+  @if ($type == width) and ($index > 0) {
+    #{$g-col-name}--#{$class}-#{$index} {
+      width: percentage(($index / $g-columns));
+    }
+  }
+  @if ($type == push) and ($index > 0) {
+    #{$g-col-name}--#{$class}-push-#{$index} {
+      left: percentage(($index / $g-columns));
+    }
+  }
+  @if ($type == push) and ($index == 0) {
+    #{$g-col-name}--#{$class}-push-0 {
+      left: auto;
+    }
+  }
+  @if ($type == pull) and ($index > 0) {
+    #{$g-col-name}--#{$class}-pull-#{$index} {
+      right: percentage(($index / $g-columns));
+    }
+  }
+  @if ($type == pull) and ($index == 0) {
+    #{$g-col-name}--#{$class}-pull-0 {
+      right: auto;
+    }
+  }
+  @if ($type == offset) {
+    #{$g-col-name}--#{$class}-offset-#{$index} {
+      margin-left: percentage(($index / $g-columns));
+    }
+  }
+}
+
+
+@mixin loop-grid-columns($columns, $class, $type) {
+  @for $i from 0 through $columns {
+    @include calc-grid-column($i, $class, $type);
+  }
+}
+
+
+@mixin make-grid($class) {
+  @include float-grid-columns($class);
+  @include loop-grid-columns($g-columns, $class, width);
+  @include loop-grid-columns($g-columns, $class, pull);
+  @include loop-grid-columns($g-columns, $class, push);
+  @include loop-grid-columns($g-columns, $class, offset);
+}
