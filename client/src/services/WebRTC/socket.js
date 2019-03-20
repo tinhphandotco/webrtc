@@ -1,6 +1,7 @@
 import io from 'socket.io-client';
+import { SOCKET_URL } from 'config';
 
-const socket = io('http://localhost:8080');
+const socket = io(SOCKET_URL);
 
 const connect = () => {
   return new Promise((res, rej) => {

@@ -3,10 +3,7 @@ import { RoomTypes, UsersTypes } from 'actions';
 
 const INITIAL_STATE = {
   roomName: '',
-  users: {
-    me: null,
-    others: null
-  }
+  users: []
 };
 
 const roomName = (state = INITIAL_STATE.roomName, { type, payload }) => {
@@ -21,10 +18,7 @@ const roomName = (state = INITIAL_STATE.roomName, { type, payload }) => {
 const users = (state = INITIAL_STATE.users, { type, payload }) => {
   switch (type) {
     case UsersTypes.INIT_LOCAL_USER:
-      return {
-        me: payload.id,
-        others: []
-      }
+      return [payload.id]
     default:
       return state;
   }

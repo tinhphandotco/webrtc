@@ -40,8 +40,7 @@ class App extends Component {
   }
 
   componentDidMount() {
-    serviceWebRTC.connect()
-      .then(id => this.props.initLocalUser({ id }))
+    serviceWebRTC.connect().then(id => this.props.initLocalUser({ id }));
   }
 
   render() {

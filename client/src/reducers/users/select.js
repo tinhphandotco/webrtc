@@ -1,12 +1,12 @@
 import compose from 'ramda/src/compose';
-import { getMyUserId } from '../room/select';
+import path from 'ramda/src/path';
 
 export const getUsersState = state => state.users;
-export const getUserInfoById = (userId) => compose(
-  usersState => usersState.byId[userId],
+export const getLocalUserInfo = compose(
+  usersState => usersState.byId[usersState.localUser],
   getUsersState
 );
-export const getMySetting = (userId) => compose(
-  userInfo => userInfo.settings,
-  getUserInfoById(userId)
+export const getLocalUserSettings = compose(
+  path(['settings']),
+  getLocalUserInfo
 );
