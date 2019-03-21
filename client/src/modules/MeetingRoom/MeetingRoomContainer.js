@@ -3,24 +3,28 @@ import { connect } from "react-redux";
 
 import path from 'ramda/src/path';
 
-import { getLocalUserSettings } from 'reducers/users/select';
+import { getLocalUserInfo } from 'reducers/users/select';
+
+import { UsersActions } from 'actions';
 
 import {
   Input,
+  message,
 } from 'antd';
 import { Button } from 'components';
 
-// import { ConnectRoom as StyledConnectRoom } from './styled';
+import { AskActiveDevices } from './atomics';
 
-import serviceWebRTC from 'services/WebRTC';
+import * as serviceWebRTC from 'services/WebRTC';
 
 const mapStateToProps = (state, props) => {
 	return {
-    localUserSettings: getLocalUserSettings(state)
+    localUserInfo: getLocalUserInfo(state)
 	}
 };
 
 const mapDispatchToProps = {
+  setLocalStream: UsersActions.setLocalStream
 };
 
 @connect(mapStateToProps, mapDispatchToProps)
@@ -29,16 +33,35 @@ class MeetingRoomContainer extends React.Component {
     return path(['video', 'active'], this.localUserSettings) && path(['audio', 'active'], this.localUserSettings);
   }
 
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      readyToMeeting: false
+    };
+  }
+
   componentDidMount() {
-    // serviceWebRTC.getUserMedia()
+    serviceWebRTC.getUserMedia({ video: true, audio: true })
+      .then((stream) => {
+        this.props.setLocalStream(this.props.localUserInfo.id, stream);
+      })
+      .catch((error) => {
+        message.warning(error.name);
+      })
+      .finally(() => {
+        this.setState({
+          readyToMeeting: true
+        });
+      })
   }
 
   render() {
     return (
       <React.Fragment>
-        {/* {!this.everyDevicesActive && (
-          <AskDevice
-        )} */}
+        {!this.state.readyToMeeting && (
+          <AskActiveDevices />
+        )}
       </React.Fragment>
     )
   }

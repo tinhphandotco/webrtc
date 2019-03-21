@@ -8,6 +8,8 @@ import configStore from "store";
 import { App } from 'modules';
 import { BASE_PATH } from "config";
 
+import 'webrtc-adapter';
+
 import 'antd/dist/antd.css';
 import './styles/main.scss';
 

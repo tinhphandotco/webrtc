@@ -54,7 +54,6 @@ export default class AuthRoute extends React.Component {
 
   render() {
     const { component: C, render, ...rest } = this.props;
-    console.log(this.state)
     return (
       <Route {...rest} render={(props) => {
         if (this.state.isCheckingMiddlewares || this.state.hasntChecked) { return null; }
