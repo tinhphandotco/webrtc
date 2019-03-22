@@ -3,9 +3,11 @@ import { connect } from "react-redux";
 
 import path from 'ramda/src/path';
 
+import * as serviceWebRTC from 'services/WebRTC';
+
 import { getLocalUserInfo } from 'reducers/users/select';
 
-import { UsersActions } from 'actions';
+import { UsersActions, ConnectionActions } from 'actions';
 
 import {
   Input,
@@ -13,9 +15,9 @@ import {
 } from 'antd';
 import { Button } from 'components';
 
-import { AskActiveDevices } from './atomics';
+import { AskActiveDevices, ChatContainer, VideoContainer } from './atomics';
 
-import * as serviceWebRTC from 'services/WebRTC';
+import { StyledRoom } from './styled';
 
 const mapStateToProps = (state, props) => {
 	return {
@@ -24,7 +26,8 @@ const mapStateToProps = (state, props) => {
 };
 
 const mapDispatchToProps = {
-  setLocalStream: UsersActions.setLocalStream
+  enhancerSetLocalStream: ConnectionActions.enhancerSetLocalStream,
+  enhancerGetLocalStream: ConnectionActions.enhancerGetLocalStream
 };
 
 @connect(mapStateToProps, mapDispatchToProps)
@@ -36,6 +39,10 @@ class MeetingRoomContainer extends React.Component {
   constructor(props) {
     super(props);
 
+    this.connectionEnhancer = {
+      localStream: null,
+    };
+
     this.state = {
       readyToMeeting: false
     };
@@ -44,7 +51,7 @@ class MeetingRoomContainer extends React.Component {
   componentDidMount() {
     serviceWebRTC.getUserMedia({ video: true, audio: true })
       .then((stream) => {
-        this.props.setLocalStream(this.props.localUserInfo.id, stream);
+        this.props.enhancerSetLocalStream(this.props.localUserInfo.id, stream);
       })
       .catch((error) => {
         message.warning(error.name);
@@ -56,11 +63,33 @@ class MeetingRoomContainer extends React.Component {
       })
   }
 
+  componentDidUpdate(prevProps) {
+    if (
+      this.props.localUserInfo.localStream !== prevProps.localUserInfo.localStream
+      && this.props.enhancerGetLocalStream()
+    ) {
+      // this.connectionEnhancer.localStream = this.props.enhancerGetLocalStream();
+      // this.$video.srcObject = this.connectionEnhancer.localStream;
+      // this.$video.play()
+    }
+  }
+
   render() {
     return (
       <React.Fragment>
         {!this.state.readyToMeeting && (
           <AskActiveDevices />
+        )}
+
+        {this.state.readyToMeeting && (
+          <StyledRoom.Wrapper>
+            <StyledRoom.Video>
+              <VideoContainer />
+            </StyledRoom.Video>
+            <StyledRoom.Chat>
+              <ChatContainer />
+            </StyledRoom.Chat>
+          </StyledRoom.Wrapper>
         )}
       </React.Fragment>
     )

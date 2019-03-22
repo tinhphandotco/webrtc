@@ -10,13 +10,12 @@ export const initLocalUser = (config) => {
   };
 }
 
-export const setLocalStream = (localUserId, stream) => {
-  console.log('actions: setLocalStream ', JSON.stringify(stream))
+export const setLocalStream = (localUserId, fakeStream) => {
   return {
     type: ActionTypes.SET_LOCAL_STREAM,
     payload: {
       localUserId,
-      stream
+      stream: fakeStream
     }
   }
 }

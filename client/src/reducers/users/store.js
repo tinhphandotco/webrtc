@@ -32,6 +32,14 @@ const byId = (state = INITIAL_STATE.byId, { type, payload }) => {
           ...payload
         }
       }
+    case UsersTypes.SET_LOCAL_STREAM:
+      return {
+        ...state,
+        [payload.localUserId]: {
+          ...state[payload.localUserId],
+          localStream: payload.stream
+        }
+      }
     default:
       return state;
   }

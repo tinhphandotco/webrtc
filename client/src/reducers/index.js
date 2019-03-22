@@ -8,3 +8,5 @@ export default combineReducers({
   room,
   users
 })
+
+export { default as connectionEnhancer } from './connectionEnhancer/store';
