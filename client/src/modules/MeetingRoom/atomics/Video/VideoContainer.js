@@ -1,9 +1,15 @@
 import React from 'react';
+import { StyledVideo } from './styled';
+import { ParticipantsContainer } from './atomics';
 
 class VideoContainer extends React.Component {
   render() {
     return  (
-      <h1>This is video</h1>
+      <StyledVideo>
+        <StyledVideo.Participants>
+          <ParticipantsContainer />
+        </StyledVideo.Participants>
+      </StyledVideo>
     );
   }
 }

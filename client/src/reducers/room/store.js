@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import { RoomTypes, UsersTypes } from 'actions';
+import { RoomTypes, ParticipantsTypes } from 'actions';
 
 const INITIAL_STATE = {
   roomName: '',
@@ -17,7 +17,7 @@ const roomName = (state = INITIAL_STATE.roomName, { type, payload }) => {
 
 const users = (state = INITIAL_STATE.users, { type, payload }) => {
   switch (type) {
-    case UsersTypes.INIT_LOCAL_USER:
+    case ParticipantsTypes.INIT_LOCAL_USER:
       return [payload.id]
     default:
       return state;

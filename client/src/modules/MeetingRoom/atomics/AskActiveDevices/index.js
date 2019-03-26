@@ -1,2 +1,1 @@
-import AskActiveDevices from './AskActiveDevices';
-export default AskActiveDevices;
+export { default } from './AskActiveDevices';

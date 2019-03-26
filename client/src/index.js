@@ -5,6 +5,7 @@ import { PersistGate } from 'redux-persist/integration/react'
 import { BrowserRouter, Route } from "react-router-dom";
 
 import configStore from "store";
+import { participantsListener } from 'reducers';
 import { App } from 'modules';
 import { BASE_PATH } from "config";
 
@@ -16,6 +17,8 @@ import './styles/main.scss';
 const { store, persistor } = configStore();
 
 export const _store = store;
+
+participantsListener.subscribe(_store);
 
 ReactDOM.render(
     <Provider store={_store}>

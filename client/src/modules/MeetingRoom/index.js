@@ -1,3 +1,1 @@
-import MeetingRoomContainer from './MeetingRoomContainer';
-
-export default MeetingRoomContainer;
+export { default } from './MeetingRoomContainer';

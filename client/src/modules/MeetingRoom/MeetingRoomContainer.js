@@ -5,9 +5,9 @@ import path from 'ramda/src/path';
 
 import * as serviceWebRTC from 'services/WebRTC';
 
-import { getLocalUserInfo } from 'reducers/users/select';
+import { getLocalUserInfo } from 'reducers/participants/select';
 
-import { UsersActions, ConnectionActions } from 'actions';
+import { ParticipantsActions, ParticipantsEnhancerActions } from 'actions';
 
 import {
   Input,
@@ -19,16 +19,18 @@ import { AskActiveDevices, ChatContainer, VideoContainer } from './atomics';
 
 import { StyledRoom } from './styled';
 
+import { participantsListener } from 'reducers';
+
 const mapStateToProps = (state, props) => {
 	return {
-    localUserInfo: getLocalUserInfo(state)
+    localUserInfo: getLocalUserInfo(state),
 	}
 };
 
 const mapDispatchToProps = {
-  enhancerSetLocalStream: ConnectionActions.enhancerSetLocalStream,
-  enhancerGetLocalStream: ConnectionActions.enhancerGetLocalStream
-};
+  enhancerSetLocalStream: ParticipantsEnhancerActions.enhancerSetLocalStream,
+  enhancerGetLocalStream: ParticipantsEnhancerActions.enhancerGetLocalStream,
+}
 
 @connect(mapStateToProps, mapDispatchToProps)
 class MeetingRoomContainer extends React.Component {
@@ -39,13 +41,12 @@ class MeetingRoomContainer extends React.Component {
   constructor(props) {
     super(props);
 
-    this.connectionEnhancer = {
-      localStream: null,
+    this.state = {
+      readyToMeeting: false,
     };
 
-    this.state = {
-      readyToMeeting: false
-    };
+    participantsListener.register((state) => {
+    })
   }
 
   componentDidMount() {
@@ -54,6 +55,7 @@ class MeetingRoomContainer extends React.Component {
         this.props.enhancerSetLocalStream(this.props.localUserInfo.id, stream);
       })
       .catch((error) => {
+        console.error(error)
         message.warning(error.name);
       })
       .finally(() => {
@@ -61,17 +63,6 @@ class MeetingRoomContainer extends React.Component {
           readyToMeeting: true
         });
       })
-  }
-
-  componentDidUpdate(prevProps) {
-    if (
-      this.props.localUserInfo.localStream !== prevProps.localUserInfo.localStream
-      && this.props.enhancerGetLocalStream()
-    ) {
-      // this.connectionEnhancer.localStream = this.props.enhancerGetLocalStream();
-      // this.$video.srcObject = this.connectionEnhancer.localStream;
-      // this.$video.play()
-    }
   }
 
   render() {

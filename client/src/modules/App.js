@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Switch, Route } from "react-router-dom";
 import { connect } from "react-redux";
 
-import { UsersActions } from 'actions';
+import { ParticipantsActions } from 'actions';
 
 import {
   ConnectRoomContainer,
@@ -30,7 +30,7 @@ const mapStateToProps = (state, props) => {
 };
 
 const mapDispatchToProps = {
-  initLocalUser: UsersActions.initLocalUser
+  initLocalUser: ParticipantsActions.initLocalUser
 };
 
 @connect(mapStateToProps, mapDispatchToProps)

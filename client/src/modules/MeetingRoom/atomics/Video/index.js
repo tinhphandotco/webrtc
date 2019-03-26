@@ -1,3 +1,1 @@
-import VideoContainer from './VideoContainer';
-
-export default VideoContainer;
+export { default } from './VideoContainer';

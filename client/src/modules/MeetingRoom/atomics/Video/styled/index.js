@@ -1,0 +1,1 @@
+export { default as StyledVideo } from './Video';

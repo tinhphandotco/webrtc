@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import { UsersTypes } from 'actions';
+import { ParticipantsTypes } from 'actions';
 
 const INIT_USER = {
   id: null,
@@ -25,14 +25,14 @@ const INITIAL_STATE = {
 
 const byId = (state = INITIAL_STATE.byId, { type, payload }) => {
   switch (type) {
-    case UsersTypes.INIT_LOCAL_USER:
+    case ParticipantsTypes.INIT_LOCAL_USER:
       return {
         [payload.id]: {
           ...INIT_USER,
           ...payload
         }
       }
-    case UsersTypes.SET_LOCAL_STREAM:
+    case ParticipantsTypes.SET_LOCAL_STREAM:
       return {
         ...state,
         [payload.localUserId]: {
@@ -47,7 +47,7 @@ const byId = (state = INITIAL_STATE.byId, { type, payload }) => {
 
 const allIds = (state = INITIAL_STATE.allIds, { type, payload }) => {
   switch (type) {
-    case UsersTypes.INIT_LOCAL_USER:
+    case ParticipantsTypes.INIT_LOCAL_USER:
       return [payload.id]
     default:
       return state;
@@ -56,7 +56,7 @@ const allIds = (state = INITIAL_STATE.allIds, { type, payload }) => {
 
 const localUser = (state = INITIAL_STATE.localUser, { type, payload }) => {
   switch (type) {
-    case UsersTypes.INIT_LOCAL_USER:
+    case ParticipantsTypes.INIT_LOCAL_USER:
       return payload.id;
     default:
       return state;
