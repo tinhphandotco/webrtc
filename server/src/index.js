@@ -18,7 +18,6 @@ io.on('connection', function(socket){
   socket.on('disconnecting', () => {
     const rooms = omit([socket.id], socket.rooms);
     Object.keys(rooms).forEach(room => {
-      
       console.log('disconnecting: ', room)
     })
   })

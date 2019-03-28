@@ -1,41 +1,43 @@
 import React from "react";
+import PropTypes from 'prop-types';
 import { connect } from "react-redux";
-
-import path from 'ramda/src/path';
 
 import * as serviceWebRTC from 'services/WebRTC';
 
 import { getLocalUserInfo } from 'reducers/participants/select';
 
-import { ParticipantsActions, ParticipantsEnhancerActions } from 'actions';
+import { ParticipantsEnhancerActions } from 'actions';
 
 import {
-  Input,
   message,
 } from 'antd';
-import { Button } from 'components';
 
 import { AskActiveDevices, ChatContainer, VideoContainer } from './atomics';
 
 import { StyledRoom } from './styled';
 
-import { participantsListener } from 'reducers';
-
-const mapStateToProps = (state, props) => {
+const mapStateToProps = (state) => {
 	return {
     localUserInfo: getLocalUserInfo(state),
-	}
+	};
 };
 
 const mapDispatchToProps = {
   enhancerSetLocalStream: ParticipantsEnhancerActions.enhancerSetLocalStream,
   enhancerGetLocalStream: ParticipantsEnhancerActions.enhancerGetLocalStream,
-}
+};
 
 @connect(mapStateToProps, mapDispatchToProps)
 class MeetingRoomContainer extends React.Component {
-  get everyDevicesActive() {
-    return path(['video', 'active'], this.localUserSettings) && path(['audio', 'active'], this.localUserSettings);
+  static propTypes = {
+    enhancerSetLocalStream: PropTypes.func,
+    localUserInfo: PropTypes.object,
+    match: PropTypes.object.isRequired,
+  }
+
+  static defaultProps = {
+    enhancerSetLocalStream: () => null,
+    localUserInfo: {},
   }
 
   constructor(props) {
@@ -44,25 +46,25 @@ class MeetingRoomContainer extends React.Component {
     this.state = {
       readyToMeeting: false,
     };
-
-    participantsListener.register((state) => {
-    })
   }
 
   componentDidMount() {
-    serviceWebRTC.getUserMedia({ video: true, audio: true })
+    const { roomName } = this.props.match.params;
+    serviceWebRTC.joinRoom(roomName)
+      .then(() => serviceWebRTC.getUserMedia({ video: true, audio: true }))
       .then((stream) => {
         this.props.enhancerSetLocalStream(this.props.localUserInfo.id, stream);
       })
       .catch((error) => {
-        console.error(error)
         message.warning(error.name);
       })
       .finally(() => {
+        serviceWebRTC.peerConnected();
+
         this.setState({
           readyToMeeting: true
         });
-      })
+      });
   }
 
   render() {
@@ -83,8 +85,8 @@ class MeetingRoomContainer extends React.Component {
           </StyledRoom.Wrapper>
         )}
       </React.Fragment>
-    )
+    );
   }
 }
 
-export default MeetingRoomContainer
+export default MeetingRoomContainer;

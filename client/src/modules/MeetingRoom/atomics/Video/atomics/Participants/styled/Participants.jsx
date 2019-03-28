@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { Video } from '../atomics';
 
 const Participant = styled.div`
   display: flex;
@@ -6,7 +7,7 @@ const Participant = styled.div`
   height: 100%;
 `;
 
-Participant.Video = styled.video`
+Participant.Video = styled(Video)`
   flex-grow: 1;
   height: 100%;
 `;

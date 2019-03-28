@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from "react-redux";
 
 import { ParticipantsEnhancerActions } from 'actions';
@@ -6,18 +7,26 @@ import { getLocalUserInfo } from 'reducers/participants/select';
 
 import { StyledParticipants } from './styled';
 
-const mapStateToProps = (state, props) => {
+const mapStateToProps = (state) => {
 	return {
     localUserInfo: getLocalUserInfo(state),
-	}
+	};
 };
 
 const mapDispatchToProps = {
   enhancerGetParticipantsStream: ParticipantsEnhancerActions.enhancerGetParticipantsStream,
-}
+};
 
 @connect(mapStateToProps, mapDispatchToProps)
 class ParticipantsContainer extends React.Component {
+  static propTypes = {
+    enhancerGetParticipantsStream: PropTypes.func,
+  }
+
+  static defaultProps = {
+    enhancerGetParticipantsStream: () => null,
+  }
+
   constructor(props) {
     super(props);
   }
@@ -26,17 +35,11 @@ class ParticipantsContainer extends React.Component {
     return this.props.enhancerGetParticipantsStream();
   }
 
-  componentDidMount() {
-    this.getAllStreams.forEach(item => {
-      document.getElementById(item.id).srcObject = item.stream;
-    })
-  }
-
   render() {
     return (
       <StyledParticipants>
         {this.getAllStreams.map(item => (
-          <StyledParticipants.Video key={item.id} id={item.id} playsInline autoPlay muted />
+          <StyledParticipants.Video srcObject={item.stream} key={item.id} id={item.id} playsInline autoPlay muted />
         ))}
       </StyledParticipants>
     );

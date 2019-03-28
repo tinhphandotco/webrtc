@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Switch, Route } from "react-router-dom";
 import { connect } from "react-redux";
 
@@ -21,12 +22,12 @@ function NotFound() {
     <div>
       <h1>404 - NOT FOUND</h1>
     </div>
-  )
+  );
 }
 
-const mapStateToProps = (state, props) => {
+const mapStateToProps = () => {
 	return {
-	}
+	};
 };
 
 const mapDispatchToProps = {
@@ -35,6 +36,14 @@ const mapDispatchToProps = {
 
 @connect(mapStateToProps, mapDispatchToProps)
 class App extends Component {
+  static propTypes = {
+    initLocalUser: PropTypes.func,
+  }
+
+  static defaultProps = {
+    initLocalUser: () => null
+  }
+
   constructor(props) {
     super(props);
   }

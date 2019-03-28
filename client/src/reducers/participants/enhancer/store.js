@@ -1,7 +1,6 @@
 import stateHandler from './handlers/stateHandle';
 import returnHandler from './handlers/returnHandle';
 import callbackHandler from './handlers/callbackHandle';
-import path from 'ramda/src/path';
 
 export let patricipantsEnhancerState = {
   byId: {},
@@ -20,14 +19,14 @@ const patricipantsEnhancer = () => {
       ...stateHandle
     };
 
-    console.log('patricipantsEnhancerState: ', { action, patricipantsEnhancerState, stateHandle, returnHandle });
+    console.log('patricipantsEnhancerState: ', action, { patricipantsEnhancerState, stateHandle, returnHandle });
 
     if (returnHandle) { return returnHandle; }
     next(action);
 
     const callbackHandle = callbackHandler[action.type];
     if (callbackHandle) { callbackHandle(store, action, patricipantsEnhancerState); }
-  }
-}
+  };
+};
 
 export default patricipantsEnhancer;

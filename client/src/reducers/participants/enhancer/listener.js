@@ -10,9 +10,9 @@ const listener = {
 
   handler(store) {
     if (this.prevHashUpdate !== patricipantsEnhancerState.hashUpdate) {
-      console.log('subscribe: ', this.prevHashUpdate, patricipantsEnhancerState.hashUpdate, this.listHandler)
+      console.log('subscribe: ', this.prevHashUpdate, patricipantsEnhancerState.hashUpdate, this.listHandler, store);
       this.listHandler.forEach(handle => {
-        handle(patricipantsEnhancerState)
+        handle(patricipantsEnhancerState);
       });
       this.prevHashUpdate = patricipantsEnhancerState.hashUpdate;
     }
@@ -21,6 +21,6 @@ const listener = {
   subscribe(store) {
     store.subscribe(this.handler.bind(this, store));
   },
-}
+};
 
 export default listener;
