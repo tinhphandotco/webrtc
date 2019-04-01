@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 class Maybe {
   static of (value) {
     return new Just(value);
@@ -95,4 +96,4 @@ export {
   Maybe,
   Just,
   Nothing
-}
+};

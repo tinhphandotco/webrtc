@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyledAskActive } from './styled';
 
-const AskActiveDevices = (props) => {
+const AskActiveDevices = () => {
   return (
     <StyledAskActive.Wrapper>
       <StyledAskActive.Content>
@@ -18,6 +18,6 @@ const AskActiveDevices = (props) => {
       </StyledAskActive.Content>
     </StyledAskActive.Wrapper>
   );
-}
+};
 
 export default AskActiveDevices;

@@ -15,12 +15,13 @@ const INIT_USER = {
       enable: false,
     }
   }
-}
+};
 
 const INITIAL_STATE = {
   byId: {},
   allIds: [],
   localUser: null,
+  selectedUser: null
 };
 
 const byId = (state = INITIAL_STATE.byId, { type, payload }) => {
@@ -31,7 +32,7 @@ const byId = (state = INITIAL_STATE.byId, { type, payload }) => {
           ...INIT_USER,
           ...payload
         }
-      }
+      };
     case ParticipantsTypes.SET_LOCAL_STREAM:
       return {
         ...state,
@@ -39,20 +40,20 @@ const byId = (state = INITIAL_STATE.byId, { type, payload }) => {
           ...state[payload.localUserId],
           localStream: payload.stream
         }
-      }
+      };
     default:
       return state;
   }
-}
+};
 
 const allIds = (state = INITIAL_STATE.allIds, { type, payload }) => {
   switch (type) {
     case ParticipantsTypes.INIT_LOCAL_USER:
-      return [payload.id]
+      return [payload.id];
     default:
       return state;
   }
-}
+};
 
 const localUser = (state = INITIAL_STATE.localUser, { type, payload }) => {
   switch (type) {
@@ -61,7 +62,7 @@ const localUser = (state = INITIAL_STATE.localUser, { type, payload }) => {
     default:
       return state;
   }
-}
+};
 
 export default combineReducers({
   byId,

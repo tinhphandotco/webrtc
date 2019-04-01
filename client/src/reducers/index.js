@@ -7,8 +7,8 @@ export default combineReducers({
   routing,
   room,
   participants,
-  lastActionType: (state = null, action) => action.type
-})
+  lastActionType: (state, action) => action.type
+});
 
 export { default as patricipantsEnhancer } from './participants/enhancer/store';
 export { default as participantsListener } from './participants/enhancer/listener';

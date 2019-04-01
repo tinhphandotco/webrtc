@@ -5,13 +5,29 @@ import PropTypes from 'prop-types';
 import { Spin, Icon } from 'antd';
 
 class ImageLoader extends React.Component {
+  static propTypes = {
+    className: PropTypes.string,
+    fallback: PropTypes.string,
+    src: PropTypes.string,
+    hideLoading: PropTypes.bool,
+    style: PropTypes.object
+  };
+
+  static defaultProps = {
+    className: '',
+    fallback: '',
+    src: '',
+    hideLoading: false,
+    style: {}
+  };
+
   constructor(props) {
     super(props);
 
     this.state = {
       isLoaded: false,
       hasError: false
-    }
+    };
   }
 
   componentDidMount() {
@@ -19,13 +35,13 @@ class ImageLoader extends React.Component {
     img.src = this.props.src;
     img.onload = () => {
       this.setState({ isLoaded: true });
-    }
+    };
     img.onerror = () => {
       this.setState({
         isLoaded: true,
         hasError: true
       });
-    }
+    };
   }
 
   render() {
@@ -45,7 +61,7 @@ class ImageLoader extends React.Component {
           : <span style={this.props.style}>Has error when load image...</span>
           }
         </React.Fragment>
-      )
+      );
     }
 
     return (
@@ -58,15 +74,4 @@ class ImageLoader extends React.Component {
   }
 }
 
-ImageLoader.propTypes = {
-  className: PropTypes.string,
-  fallback: PropTypes.string,
-  src: PropTypes.string,
-  hideLoading: PropTypes.bool,
-  style: PropTypes.object
-};
-
-ImageLoader.defaultProps = {
-};
-
-export default ImageLoader
+export default ImageLoader;

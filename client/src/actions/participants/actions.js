@@ -1,4 +1,3 @@
-import { PlayerAPI } from 'api';
 import * as ActionTypes from './constants';
 
 export const initLocalUser = (config) => {
@@ -8,7 +7,7 @@ export const initLocalUser = (config) => {
       ...config
     }
   };
-}
+};
 
 export const setLocalStream = (localUserId, fakeStream) => {
   return {
@@ -17,5 +16,5 @@ export const setLocalStream = (localUserId, fakeStream) => {
       localUserId,
       stream: fakeStream
     }
-  }
-}
+  };
+};

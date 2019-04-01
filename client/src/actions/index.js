@@ -14,7 +14,7 @@ export default {
   ParticipantsTypes,
   ParticipantsEnhancerActions,
   ParticipantsEnhancerTypes,
-}
+};
 
 export {
   RoomActions,
@@ -23,4 +23,4 @@ export {
   ParticipantsTypes,
   ParticipantsEnhancerActions,
   ParticipantsEnhancerTypes,
-}
+};

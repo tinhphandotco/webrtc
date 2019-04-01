@@ -13,16 +13,16 @@ const roomName = (state = INITIAL_STATE.roomName, { type, payload }) => {
     default:
       return state;
   }
-}
+};
 
 const users = (state = INITIAL_STATE.users, { type, payload }) => {
   switch (type) {
     case ParticipantsTypes.INIT_LOCAL_USER:
-      return [payload.id]
+      return [payload.id];
     default:
       return state;
   }
-}
+};
 
 export default combineReducers({
   roomName,

@@ -8,6 +8,6 @@ const PlayerAPI = {
       .then(response => response.data && Promise.resolve(Normalize.getListPlayers(response.data)))
       .catch(Promise.reject);
   }
-}
+};
 
 export default PlayerAPI;

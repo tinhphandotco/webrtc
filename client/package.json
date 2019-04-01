@@ -70,7 +70,8 @@
     "dev": "HTTPS=true node scripts/start.js",
     "prod": "node scripts/prod.js",
     "build": "node scripts/build.js",
-    "test": "node scripts/test.js --env=jsdom"
+    "test": "node scripts/test.js --env=jsdom",
+    "eslint": "./node_modules/.bin/eslint --ext .jsx,.js src/"
   },
   "jest": {
     "collectCoverageFrom": [

@@ -1,10 +1,11 @@
 import React from "react";
+import PropTypes from 'prop-types';
 import { connect } from "react-redux";
 
 import { RoomActions } from 'actions';
 
 import {
-  Input, 
+  Input,
 } from 'antd';
 import { Button } from 'components';
 
@@ -12,9 +13,9 @@ import { ConnectRoom as StyledConnectRoom } from './styled';
 
 import * as serviceWebRTC from 'services/WebRTC';
 
-const mapStateToProps = (state, props) => {
+const mapStateToProps = () => {
 	return {
-	}
+	};
 };
 
 const { joinRoom } = RoomActions;
@@ -24,12 +25,21 @@ const mapDispatchToProps = {
 
 @connect(mapStateToProps, mapDispatchToProps)
 class ConnectRoomContainer extends React.Component {
+  static propTypes = {
+    joinRoom: PropTypes.func,
+    history: PropTypes.object.isRequired,
+  }
+
+  static defaultProps = {
+    joinRoom: () => null,
+  }
+
   constructor(props) {
     super(props);
 
     this.state = {
       roomName: ''
-    }
+    };
   }
 
   handleChangeRoomName = (e) => {
@@ -61,8 +71,8 @@ class ConnectRoomContainer extends React.Component {
           </StyledConnectRoom.Form>
         </StyledConnectRoom.EnterRoom>
       </StyledConnectRoom.Wrapper>
-    )
+    );
   }
 }
 
-export default ConnectRoomContainer
+export default ConnectRoomContainer;

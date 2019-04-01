@@ -1,8 +1,8 @@
-import { uuidv4, mapByIds } from 'utils/common';
+import { mapByIds } from 'utils/common';
 
 const Normalize = {
   getListPlayers(response) {
-    const avatars = response.playerAvatars.split(',')
+    const avatars = response.playerAvatars.split(',');
     const birthYears = response.playerBirthYears.split(',');
     const levels = response.playerLevels.split(',');
     const items = response.data.split(',').map((name, index) => ({
@@ -18,6 +18,6 @@ const Normalize = {
       allIds: items.map(item => item.id)
     };
   }
-}
+};
 
 export default Normalize;

@@ -45,6 +45,9 @@
     "console": true,
     "Promise": true,
     "RTCPeerConnection": true,
+    "navigator": true,
+    "process": true,
+    "Image": true
   },
   "rules": {
     "no-console": "warn",
