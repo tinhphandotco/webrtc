@@ -12,3 +12,4 @@ export default combineReducers({
 
 export { default as patricipantsEnhancer } from './participants/enhancer/store';
 export { default as participantsListener } from './participants/enhancer/listener';
+export { default as roomMiddleware } from './room/middleware';

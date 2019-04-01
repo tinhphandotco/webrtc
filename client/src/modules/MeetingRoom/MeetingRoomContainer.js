@@ -12,7 +12,13 @@ import {
   message,
 } from 'antd';
 
-import { AskActiveDevices, ChatContainer, VideoContainer } from './atomics';
+import {
+  Toolbar,
+  Participants,
+  Chat,
+} from 'components';
+
+import { AskActiveDevices } from './atomics';
 
 import { StyledRoom } from './styled';
 
@@ -75,14 +81,11 @@ class MeetingRoomContainer extends React.Component {
         )}
 
         {this.state.readyToMeeting && (
-          <StyledRoom.Wrapper>
-            <StyledRoom.Video>
-              <VideoContainer />
-            </StyledRoom.Video>
-            <StyledRoom.Chat>
-              <ChatContainer />
-            </StyledRoom.Chat>
-          </StyledRoom.Wrapper>
+          <StyledRoom>
+            <Toolbar />
+            <Participants />
+            <Chat />
+          </StyledRoom>
         )}
       </React.Fragment>
     );

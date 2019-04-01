@@ -9,7 +9,7 @@ import {
 } from 'antd';
 import { Button } from 'components';
 
-import { ConnectRoom as StyledConnectRoom } from './styled';
+import { StyledConnectRoom } from './styled';
 
 import * as serviceWebRTC from 'services/WebRTC';
 
@@ -62,7 +62,7 @@ class ConnectRoomContainer extends React.Component {
 
   render() {
     return (
-      <StyledConnectRoom.Wrapper>
+      <StyledConnectRoom>
         <StyledConnectRoom.EnterRoom>
           <h3>Start a new meeting</h3>
           <StyledConnectRoom.Form onSubmit={this.handleCreateOrJoinRoom}>
@@ -70,7 +70,7 @@ class ConnectRoomContainer extends React.Component {
             <Button htmlType="submit" type="primary" mgx={2}>OK</Button>
           </StyledConnectRoom.Form>
         </StyledConnectRoom.EnterRoom>
-      </StyledConnectRoom.Wrapper>
+      </StyledConnectRoom>
     );
   }
 }

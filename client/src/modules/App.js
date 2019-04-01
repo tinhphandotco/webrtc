@@ -13,9 +13,7 @@ import {
 import {
   AuthRoute,
   hasRoomMiddleware
-} from 'middlewares';
-
-import * as serviceWebRTC from 'services/WebRTC';
+} from 'AuthMiddlewares';
 
 function NotFound() {
   return (
@@ -46,10 +44,6 @@ class App extends Component {
 
   constructor(props) {
     super(props);
-  }
-
-  componentDidMount() {
-    serviceWebRTC.connect().then(id => this.props.initLocalUser({ id }));
   }
 
   render() {

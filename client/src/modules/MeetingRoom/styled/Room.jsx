@@ -1,17 +1,11 @@
 import styled from 'styled-components';
 
-export const Wrapper = styled.div`
+const Room = styled.div`
   background: cadetblue;
   display: flex;
-  min-height: 100vh;
+  height: 100vh;
   overflow: hidden;
+  position: relative;
 `;
 
-export const Video = styled.div`
-  flex-basis: 1px;
-  flex-grow: 1;
-`;
-
-export const Chat = styled.div`
-  flex-basis: 20%
-`;
+export default Room;

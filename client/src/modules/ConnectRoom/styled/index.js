@@ -1,5 +1,1 @@
-import * as ConnectRoom from './ConnectRoom';
-
-export {
-  ConnectRoom
-};
+export { default as StyledConnectRoom } from './ConnectRoom';

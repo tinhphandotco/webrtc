@@ -1,5 +1,1 @@
-import * as StyledRoom from './Room';
-
-export {
-  StyledRoom
-};
+export { default as StyledRoom } from './Room';

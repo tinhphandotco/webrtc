@@ -9,6 +9,7 @@
     "moment": "^2.24.0",
     "ramda": "^0.25.0",
     "react": "^16.5.1",
+    "react-custom-scrollbars": "^4.2.1",
     "react-dev-utils": "^5.0.2",
     "react-dom": "^16.5.1",
     "react-redux": "^5.0.7",
