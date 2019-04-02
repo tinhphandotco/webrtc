@@ -8,10 +8,14 @@ import { StyledParticipants } from './styled';
 export default class ParticipantsComponent extends React.Component {
   static propTypes = {
     allStreams: PropTypes.array,
+    toggleGridLayout: PropTypes.func,
+    isShowGridParticipants: PropTypes.bool,
   }
 
   static defaultProps = {
     allStreams: [],
+    toggleGridLayout: () => null,
+    isShowGridParticipants: false
   }
 
   constructor(props) {
@@ -20,8 +24,14 @@ export default class ParticipantsComponent extends React.Component {
     this.state = {
       isShowListParticipants: true
     };
+  }
 
-    this.data = Array(10).fill();
+  get streams() {
+    return this.props.allStreams;
+  }
+
+  get isHideListParticipants() {
+    return (!this.props.isShowGridParticipants && !this.state.isShowListParticipants) ? 1 : 0;
   }
 
   toggleListParticipants = () => {
@@ -31,11 +41,10 @@ export default class ParticipantsComponent extends React.Component {
   }
 
   render() {
-    console.log(this.props);
     return (
-      <StyledParticipants>
+      <StyledParticipants gridLayout={this.props.isShowGridParticipants} totalParticipants={this.streams.length}>
         <StyledParticipants.Header>
-          <StyledParticipants.ChangeView>
+          <StyledParticipants.ChangeView onClick={this.props.toggleGridLayout}>
             <Icon type="appstore" />
             <span className="u-mgl-5">Change View</span>
           </StyledParticipants.ChangeView>
@@ -44,11 +53,15 @@ export default class ParticipantsComponent extends React.Component {
           </StyledParticipants.Toggler>
         </StyledParticipants.Header>
 
-        <StyledParticipants.List autoHide hiding={this.state.isShowListParticipants ? 0 : 1}>
-          {this.props.allStreams.map(item => (
-            <Participant key={item.id} stream={item.stream} />
-          ))}
-        </StyledParticipants.List>
+        <StyledParticipants.ListScrollbar autoHide hiding={this.isHideListParticipants}>
+          <StyledParticipants.List>
+            {this.streams.map(item => (
+              <StyledParticipants.Participant key={item.id}>
+                <Participant stream={item.stream} />
+              </StyledParticipants.Participant>
+            ))}
+          </StyledParticipants.List>
+        </StyledParticipants.ListScrollbar>
       </StyledParticipants>
     );
   }

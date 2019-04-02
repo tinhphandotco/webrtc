@@ -10,7 +10,6 @@ const InputBox = styled.div`
 InputBox.Control = styled.div`
   display: flex;
   justify-content: space-between;
-  padding: 5px 0;
 `;
 
 InputBox.Emotion = styled.button`
@@ -37,10 +36,11 @@ InputBox.Send = styled(Button).attrs({
 InputBox.InputWrapper = styled.div`
   flex-basis: 1px;
   flex-grow: 1;
-  margin-top: 5px;
+  margin-top: 10px;
 `;
 
 InputBox.Input = styled.textarea`
+  border: 2px solid #cccccc;
   display: block;
   height: 100%;
   padding: 10px;

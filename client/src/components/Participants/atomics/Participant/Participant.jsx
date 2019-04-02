@@ -20,17 +20,17 @@ export default class Participant extends React.Component {
     };
   }
 
-  toggleInfo = () => {
-    this.setState((prevState) => ({
-      isShowInfo: !prevState.isShowInfo
-    }));
+  toggleInfo = state => () => {
+    this.setState({
+      isShowInfo: state
+    });
   }
 
   render() {
     return (
       <StyledParticipantItem
-        onMouseEnter={this.toggleInfo}
-        onMouseLeave={this.toggleInfo}
+        onMouseEnter={this.toggleInfo(true)}
+        onMouseLeave={this.toggleInfo(false)}
         selected={false}
         showInfo={this.state.isShowInfo}
       >
