@@ -4,7 +4,7 @@ import { path } from 'ramda';
 
 export default class Video extends React.Component {
   static propTypes = {
-    srcObject: PropTypes.any.isRequired,
+    srcObject: PropTypes.any,
     playsInline: PropTypes.bool,
     autoPlay: PropTypes.bool,
     muted: PropTypes.bool,
@@ -12,6 +12,7 @@ export default class Video extends React.Component {
   }
 
   static defaultProps = {
+    srcObject: null,
     playsInline: false,
     autoPlay: false,
     muted: false,
@@ -26,10 +27,20 @@ export default class Video extends React.Component {
     };
   }
 
-  componentDidMount() {
+  injectSrcObject = () => {
     const $video = path(['video', 'current'], this.$ref);
     if ($video) {
       $video.srcObject = this.props.srcObject;
+    }
+  }
+
+  componentDidMount() {
+    this.injectSrcObject();
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.srcObject !== prevProps.srcObject) {
+      this.injectSrcObject();
     }
   }
 

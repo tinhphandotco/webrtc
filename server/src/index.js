@@ -1,7 +1,11 @@
-const app = require('express')();
-const http = require('http').Server(app);
-const io = require('socket.io')(http);
 const omit = require('ramda/src/omit');
+
+const fs = require('fs');
+const server = require('https').createServer({
+  key: fs.readFileSync('server-key.pem'),
+  cert: fs.readFileSync('server-cert.pem')
+});
+const io = require('socket.io')(server);
 
 io.on('connection', function(socket){
   console.log('a user connected: ', socket.id);
@@ -20,9 +24,12 @@ io.on('connection', function(socket){
     Object.keys(rooms).forEach(room => {
       console.log('disconnecting: ', room)
     })
-  })
+  });
+
+  socket.on('peer:msg', (data) => {
+    console.log('peer:msg - ' + data.type + ' from ' + data.from + ' to ' + data.to);
+    io.to(data.to).emit('peer:msg', data);
+  });
 });
 
-http.listen(9999, function(){
-  console.log('listening on *:9999');
-});
+server.listen(9999);

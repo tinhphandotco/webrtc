@@ -1,5 +1,4 @@
 import styled, { css } from 'styled-components';
-import { Scrollbars } from 'react-custom-scrollbars';
 
 const HeaderActionMixin = css`
   background: #333;
@@ -26,15 +25,15 @@ const Participants = styled.div.attrs((props) => {
     '26_30': { rows: 6, cols: 5 },
   };
   const participantStyles = {
-    '1': `
-      padding: 5% 0;
-    `,
-    '2': `
-      padding: 10% 0;
-    `,
-    '3_16': `
-      padding: 5% 0;
-    `,
+    // '1': `
+    //   padding: 5% 0;
+    // `,
+    // '2': `
+    //   padding: 10% 0;
+    // `,
+    // '3_16': `
+    //   padding: 5% 0;
+    // `,
   };
   const findKey = obj => Object.keys(obj).find((key) => {
     const min = Number(key.split('_').shift());
@@ -50,15 +49,17 @@ const Participants = styled.div.attrs((props) => {
     styles: (participantStyles[keyStyles] || ''),
   };
 })`
-  bottom: 0;
   display: flex;
   flex-direction: column;
-  padding-right: 30px;
+  max-height: 100%;
+  margin-right: 30px;
+  overflow: hidden;
   position: absolute;
   top: 0;
   transition: all .3s;
   right: 0;
   width: 250px;
+  z-index: 5;;
 
   ${props => props.gridLayout && css`
     background: cadetblue;
@@ -90,18 +91,12 @@ const Participants = styled.div.attrs((props) => {
     }
 
     ${Participants.ListScrollbar} {
-      > div:first-child {
-        margin: 0 !important;
-        overflow: hidden !important;
-      }
-    }
-
-    ${Participants.List} {
       align-items: center;
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
       height: 100%;
+      max-height: 100%;
       padding: 0 50px;
     }
 
@@ -140,19 +135,17 @@ Participants.Toggler = styled.button`
   margin-left: 10px;
 `;
 
-Participants.ListScrollbar = styled(Scrollbars)`
-  flex-basis: 1px;
-  flex-grow: 1;
-  transition: transform .3s, opacity .3s;
+Participants.ListScrollbar = styled.div`
+  max-height: calc(100% - 70px);
+  margin-right: -15px;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  transition: all .3s;
 
   ${props => props.hiding && css`
     transform: translateX(100%);
     opacity: 0;
   `}
-`;
-
-Participants.List = styled.div`
-  padding-right: 10px;
 `;
 
 export default Participants;

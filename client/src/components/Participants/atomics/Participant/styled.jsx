@@ -4,7 +4,6 @@ import Video from 'elements/Video';
 const ParticipantItem = styled.div`
   border-radius: 10px;
   height: 100%;
-  margin-bottom: 15px;
   overflow: hidden;
   position: relative;
   width: 100%;

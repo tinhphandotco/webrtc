@@ -3,13 +3,14 @@ import PropTypes from 'prop-types';
 import { connect } from "react-redux";
 
 import { ParticipantsEnhancerActions, UIStateActions } from 'actions';
-import { getLocalUserInfo } from 'reducers/participants/select';
+import { getLocalUserInfo, getAllStreams } from 'reducers/participants/select';
 import { isShowGridParticipants } from 'reducers/uiState/select';
 
 import ParticipantsComponent from './ParticipantsComponent';
 
 const mapStateToProps = (state) => {
 	return {
+    allStreams: getAllStreams(state),
     localUserInfo: getLocalUserInfo(state),
     isShowGridParticipants: isShowGridParticipants(state)
 	};
@@ -48,6 +49,7 @@ class ParticipantsContainer extends React.Component {
   }
 
   render() {
+    console.log('ParticipantsContainer: ', this.getAllStreams);
     return (
       <ParticipantsComponent
         isShowGridParticipants={this.props.isShowGridParticipants}

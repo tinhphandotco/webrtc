@@ -18,3 +18,13 @@ export const setLocalStream = (localUserId, fakeStream) => {
     }
   };
 };
+
+export const setRemoteStream = (remoteUserId, fakeStream) => {
+  return {
+    type: ActionTypes.SET_REMOTE_STREAM,
+    payload: {
+      remoteUserId,
+      stream: fakeStream
+    }
+  };
+};

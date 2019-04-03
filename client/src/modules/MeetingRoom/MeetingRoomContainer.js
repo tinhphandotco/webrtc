@@ -65,7 +65,7 @@ class MeetingRoomContainer extends React.Component {
         message.warning(error.name);
       })
       .finally(() => {
-        serviceWebRTC.peerConnected();
+        // serviceWebRTC.peerConnected();
 
         this.setState({
           readyToMeeting: true

@@ -54,13 +54,11 @@ export default class ParticipantsComponent extends React.Component {
         </StyledParticipants.Header>
 
         <StyledParticipants.ListScrollbar autoHide hiding={this.isHideListParticipants}>
-          <StyledParticipants.List>
-            {this.streams.map(item => (
-              <StyledParticipants.Participant key={item.id}>
-                <Participant stream={item.stream} />
-              </StyledParticipants.Participant>
-            ))}
-          </StyledParticipants.List>
+          {this.streams.map(item => (
+            <StyledParticipants.Participant key={item.id}>
+              <Participant stream={item.stream} />
+            </StyledParticipants.Participant>
+          ))}
         </StyledParticipants.ListScrollbar>
       </StyledParticipants>
     );

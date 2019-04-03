@@ -45,6 +45,8 @@
     "console": true,
     "Promise": true,
     "RTCPeerConnection": true,
+    "RTCSessionDescription": true,
+    "RTCIceCandidate": true,
     "navigator": true,
     "process": true,
     "Image": true

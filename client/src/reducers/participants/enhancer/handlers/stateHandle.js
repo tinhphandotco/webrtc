@@ -3,7 +3,7 @@ import { ParticipantsTypes, ParticipantsEnhancerTypes } from 'actions';
 
 const INIT_LOCAL_USER = {
   id: null,
-  localStream: null,
+  stream: null,
   settings: {
     video: {
       active: false,
@@ -19,7 +19,7 @@ const INIT_LOCAL_USER = {
 const INIT_REMOTE_USER = {
   id: null,
   peerConnection: null,
-  remoteStream: null,
+  stream: null,
   settings: {
     video: {
       active: false,
@@ -53,7 +53,7 @@ const setLocalStream = (store, action, state) => {
     byId: {
       [state.localUser]: {
         ...state.byId[state.localUser],
-        localStream: action.payload.stream
+        stream: action.payload.stream
       }
     },
     // hashUpdate: uuidv4()
@@ -74,10 +74,25 @@ const initRemoteUser = (store, action, state) => ({
   // hashUpdate: uuidv4()
 });
 
+const setRemoteStream = (store, action, state) => {
+  return {
+    ...state,
+    byId: {
+      ...state.byId,
+      [action.payload.remoteUserId]: {
+        ...state.byId[action.payload.remoteUserId],
+        stream: action.payload.stream
+      }
+    },
+    // hashUpdate: uuidv4()
+  };
+};
+
 const handler = {
   [ParticipantsTypes.INIT_LOCAL_USER]: initLocalUser,
   [ParticipantsEnhancerTypes.ENHANCER_SET_LOCAL_STREAM]: setLocalStream,
-  [ParticipantsEnhancerTypes.ENHANCER_INITE_REMOTE_USER]: initRemoteUser
+  [ParticipantsEnhancerTypes.ENHANCER_INITE_REMOTE_USER]: initRemoteUser,
+  [ParticipantsEnhancerTypes.ENHANCER_SET_REMOTE_STREAM]: setRemoteStream,
 };
 
 export default handler;

@@ -33,6 +33,7 @@ const byId = (state = INITIAL_STATE.byId, { type, payload }) => {
           ...payload
         }
       };
+
     case ParticipantsTypes.SET_LOCAL_STREAM:
       return {
         ...state,
@@ -41,6 +42,15 @@ const byId = (state = INITIAL_STATE.byId, { type, payload }) => {
           localStream: payload.stream
         }
       };
+
+    case ParticipantsTypes.SET_REMOTE_STREAM:
+    return {
+      ...state,
+      [payload.remoteUserId]: {
+        ...state[payload.remoteUserId],
+        localStream: payload.stream
+      }
+    };
     default:
       return state;
   }
