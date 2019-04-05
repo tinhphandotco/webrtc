@@ -1,15 +1,19 @@
-// import io from 'socket.io-client';
-// import { SOCKET_URL } from 'config';
-import socket from 'services/WebRTC/socket';
-import { ParticipantsActions, ParticipantsEnhancerActions } from 'actions';
+import io from 'socket.io-client';
+import { SOCKET_URL } from 'config';
+import * as service from './service';
+
+import {
+  // RoomTypes,
+  ParticipantsActions,
+  ParticipantsTypes,
+  ParticipantsEnhancerActions
+} from 'actions';
 
 // OPTIMIZE: Need refactor this shit!
 const roomMiddleware = store => {
-  // const socket = io(SOCKET_URL);
+  const socket = io(SOCKET_URL);
 
-  socket.on('connect', () => {
-    store.dispatch(ParticipantsActions.initLocalUser({ id: socket.id }));
-  });
+  socket.on('connect', () => service.connect(store, socket.id));
 
   socket.on('peer:msg', (data) => {
     window.setTimeout(() => {
@@ -100,6 +104,10 @@ const roomMiddleware = store => {
   });
 
   return next => action => {
+    if (action.type === ParticipantsTypes.GET_USER_MEDIA) {
+      service.getUserMedia(store, socket.id, action.payload.constrains);
+    }
+
     next(action);
   };
 };

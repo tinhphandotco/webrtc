@@ -17,3 +17,8 @@ export const getAllStreams = compose(
   participantsState => participantsState.allIds.map(id => path('byId', id, 'stream'), participantsState),
   getParticipantsState
 );
+
+export const didGetUserMedia = compose(
+  participantsState => participantsState.appState.didGetUserMedia,
+  getParticipantsState
+);

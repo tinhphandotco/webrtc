@@ -21,7 +21,10 @@ const INITIAL_STATE = {
   byId: {},
   allIds: [],
   localUser: null,
-  selectedUser: null
+  appState: {
+    selectedUser: null,
+    didGetUserMedia: false,
+  }
 };
 
 const byId = (state = INITIAL_STATE.byId, { type, payload }) => {
@@ -74,8 +77,16 @@ const localUser = (state = INITIAL_STATE.localUser, { type, payload }) => {
   }
 };
 
+const appState = (state = INITIAL_STATE.appState, { type }) => {
+  switch (type) {
+    default:
+      return state;
+  }
+};
+
 export default combineReducers({
   byId,
   allIds,
-  localUser
+  localUser,
+  appState
 });

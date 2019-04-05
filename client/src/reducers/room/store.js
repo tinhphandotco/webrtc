@@ -3,7 +3,10 @@ import { RoomTypes, ParticipantsTypes } from 'actions';
 
 const INITIAL_STATE = {
   roomName: '',
-  users: []
+  users: [],
+  appState: {
+    didConnectToSocket: false,
+  }
 };
 
 const roomName = (state = INITIAL_STATE.roomName, { type, payload }) => {
@@ -24,7 +27,20 @@ const users = (state = INITIAL_STATE.users, { type, payload }) => {
   }
 };
 
+const appState = (state = INITIAL_STATE.appState, { type }) => {
+  switch (type) {
+    case ParticipantsTypes.INIT_LOCAL_USER:
+      return {
+        ...state,
+        didConnectToSocket: true,
+      };
+    default:
+      return state;
+  }
+};
+
 export default combineReducers({
   roomName,
-  users
+  users,
+  appState
 });

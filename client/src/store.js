@@ -8,8 +8,8 @@ import { KEY_PERSIST_STORE } from "config";
 const persistConfig = {
     key: KEY_PERSIST_STORE,
     storage,
-    blacklist: [],
-    // whitelist: [],
+    blacklist: ['room', 'participants'],
+    whitelist: ['room.roomName'],
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

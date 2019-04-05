@@ -1,19 +1,18 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
 import { Switch, Route } from "react-router-dom";
 import { connect } from "react-redux";
 
-import { ParticipantsActions } from 'actions';
 
 import {
   ConnectRoomContainer,
   MeetingRoomContainer,
 } from "modules";
 
-import {
-  AuthRoute,
-  hasRoomMiddleware
-} from 'AuthMiddlewares';
+// import {
+//   AuthRoute,
+//   hasRoomMiddleware
+// } from 'AuthMiddlewares';
 
 function NotFound() {
   return (
@@ -29,17 +28,14 @@ const mapStateToProps = () => {
 };
 
 const mapDispatchToProps = {
-  initLocalUser: ParticipantsActions.initLocalUser
 };
 
 @connect(mapStateToProps, mapDispatchToProps)
 class App extends Component {
   static propTypes = {
-    initLocalUser: PropTypes.func,
   }
 
   static defaultProps = {
-    initLocalUser: () => null
   }
 
   constructor(props) {
@@ -50,10 +46,10 @@ class App extends Component {
     return (
       <React.Fragment>
         <Switch>
-          <AuthRoute
+          <Route
             path="/meeting/:roomName"
             component={MeetingRoomContainer}
-            middlewares={[{ middleware: hasRoomMiddleware, redirect: '/' }]}
+            // middlewares={[{ middleware: hasRoomMiddleware, redirect: '/' }]}
           />
           <Route exact path="/" component={ConnectRoomContainer} />
           <Route path="*" component={NotFound} />

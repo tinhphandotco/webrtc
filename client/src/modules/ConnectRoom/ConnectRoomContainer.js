@@ -11,7 +11,7 @@ import { Button } from 'components';
 
 import { StyledConnectRoom } from './styled';
 
-import * as serviceWebRTC from 'services/WebRTC';
+// import * as serviceWebRTC from 'services/WebRTC';
 
 const mapStateToProps = () => {
 	return {
@@ -52,11 +52,8 @@ class ConnectRoomContainer extends React.Component {
     e.preventDefault();
 
     if (this.state.roomName) {
-      serviceWebRTC.joinRoom(this.state.roomName)
-        .then(roomName => {
-          this.props.joinRoom(roomName);
-          this.props.history.push('/meeting/' + roomName);
-        });
+      this.props.joinRoom(this.state.roomName);
+      this.props.history.push('/meeting/' + this.state.roomName);
     }
   }
 

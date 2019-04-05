@@ -28,3 +28,12 @@ export const setRemoteStream = (remoteUserId, fakeStream) => {
     }
   };
 };
+
+export const getUserMedia = (constrains) => {
+  return {
+    type: ActionTypes.GET_USER_MEDIA,
+    payload: {
+      constrains
+    }
+  };
+};

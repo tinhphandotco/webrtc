@@ -1,10 +1,10 @@
-import socket from './socket';
+// import socket from './socket';
 
-export const joinRoom = (roomName) => {
-  return new Promise((res) => {
-    socket.emit('user:join-room', roomName, res);
-  });
-};
+// export const joinRoom = (roomName) => {
+//   return new Promise((res) => {
+//     socket.emit('user:join-room', roomName, res);
+//   });
+// };
 
 // export const peerConnected = () => {
 //   return new Promise((res) => {
