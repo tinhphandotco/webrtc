@@ -1,10 +1,26 @@
 import { combineReducers } from 'redux';
-import { ParticipantsTypes } from 'actions';
+import { ParticipantsTypes, ParticipantsEnhancerTypes } from 'actions';
 
 const INIT_USER = {
   id: null,
   peerConnection: null,
   localStream: null,
+  settings: {
+    video: {
+      active: false,
+      enable: false,
+    },
+    audio: {
+      active: false,
+      enable: false,
+    }
+  }
+};
+
+const INIT_REMOTE_USER = {
+  id: null,
+  peerConnection: null,
+  stream: null,
   settings: {
     video: {
       active: false,
@@ -24,6 +40,7 @@ const INITIAL_STATE = {
   appState: {
     selectedUser: null,
     didGetUserMedia: false,
+    errorGetUserMedia: null
   }
 };
 
@@ -46,14 +63,23 @@ const byId = (state = INITIAL_STATE.byId, { type, payload }) => {
         }
       };
 
+    case ParticipantsTypes.INIT_REMOTE_USER:
+      return {
+        ...state,
+        [payload.localUserId]: {
+          ...INIT_REMOTE_USER,
+          ...payload
+        }
+      };
+
     case ParticipantsTypes.SET_REMOTE_STREAM:
-    return {
-      ...state,
-      [payload.remoteUserId]: {
-        ...state[payload.remoteUserId],
-        localStream: payload.stream
-      }
-    };
+      return {
+        ...state,
+        [payload.remoteUserId]: {
+          ...state[payload.remoteUserId],
+          localStream: payload.stream
+        }
+      };
     default:
       return state;
   }
@@ -77,8 +103,20 @@ const localUser = (state = INITIAL_STATE.localUser, { type, payload }) => {
   }
 };
 
-const appState = (state = INITIAL_STATE.appState, { type }) => {
+const appState = (state = INITIAL_STATE.appState, { type, payload }) => {
   switch (type) {
+    case ParticipantsEnhancerTypes.ENHANCER_SET_LOCAL_STREAM:
+      return {
+        ...state,
+        didGetUserMedia: true
+      };
+
+    case ParticipantsTypes.GET_ERROR_USER_MEDIA:
+      return {
+        ...state,
+        didGetUserMedia: true,
+        errorGetUserMedia: payload.error
+      };
     default:
       return state;
   }

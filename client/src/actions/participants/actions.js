@@ -19,6 +19,15 @@ export const setLocalStream = (localUserId, fakeStream) => {
   };
 };
 
+export const initRemoteUser = (config) => {
+  return {
+    type: ActionTypes.INIT_REMOTE_USER,
+    payload: {
+      ...config
+    }
+  };
+};
+
 export const setRemoteStream = (remoteUserId, fakeStream) => {
   return {
     type: ActionTypes.SET_REMOTE_STREAM,
@@ -37,3 +46,10 @@ export const getUserMedia = (constrains) => {
     }
   };
 };
+
+export const errorGetUserMedia = (error) => ({
+  type: ActionTypes.GET_ERROR_USER_MEDIA,
+  payload: {
+    error
+  }
+});

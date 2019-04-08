@@ -22,3 +22,8 @@ export const didGetUserMedia = compose(
   participantsState => participantsState.appState.didGetUserMedia,
   getParticipantsState
 );
+
+export const errorGetUserMedia = compose(
+  participantsState => participantsState.appState.errorGetUserMedia,
+  getParticipantsState
+);

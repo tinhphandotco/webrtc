@@ -1,4 +1,3 @@
-// import { uuidv4 } from 'utils/common';
 import { ParticipantsTypes, ParticipantsEnhancerTypes } from 'actions';
 
 const INIT_LOCAL_USER = {
@@ -43,7 +42,6 @@ const initLocalUser = (store, action, state) => {
     },
     localUser: action.payload.id,
     allIds: [action.payload.id],
-    // hashUpdate: uuidv4()
   };
 };
 
@@ -51,12 +49,12 @@ const setLocalStream = (store, action, state) => {
   return {
     ...state,
     byId: {
+      ...state.byId,
       [state.localUser]: {
         ...state.byId[state.localUser],
         stream: action.payload.stream
       }
     },
-    // hashUpdate: uuidv4()
   };
 };
 
@@ -71,7 +69,6 @@ const initRemoteUser = (store, action, state) => ({
     }
   },
   allIds: [...state.allIds, action.payload.userId],
-  // hashUpdate: uuidv4()
 });
 
 const setRemoteStream = (store, action, state) => {
@@ -84,7 +81,6 @@ const setRemoteStream = (store, action, state) => {
         stream: action.payload.stream
       }
     },
-    // hashUpdate: uuidv4()
   };
 };
 
