@@ -69,22 +69,22 @@ class MeetingRoomContainer extends React.Component {
 
   componentDidMount() {
     // NOTE: If join room from enter form
-    if (this.props.roomName) {
+    if (this.props.localUserInfo) {
       this.props.getUserMedia({ video: true, audio: true });
     }
 
-    if (this.props.localUserInfo) {
+    if (this.props.didGetUserMedia) {
       this.props.joinRoom(this.props.match.params.roomName);
     }
   }
 
   componentDidUpdate(prevProps) {
     // NOTE: If join room from url link, user need wait for connection to socket.io first
-    if (!prevProps.localUserInfo && this.props.localUserInfo) {
+    if (!prevProps.didGetUserMedia && this.props.didGetUserMedia) {
       this.props.joinRoom(this.props.match.params.roomName);
     }
 
-    if (!prevProps.roomName && this.props.roomName) {
+    if (!prevProps.localUserInfo && this.props.localUserInfo) {
       this.props.getUserMedia({ video: true, audio: true });
     }
 

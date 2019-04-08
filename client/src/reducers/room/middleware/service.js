@@ -31,9 +31,9 @@ const getOrCreateConnection = (store, participantId) => {
     }
   };
 
-  pc.onaddstream = function (evt) {
+  pc.ontrack = function (evt) {
     console.log('pc.onaddstream: ', evt);
-    store.dispatch(ParticipantsEnhancerActions.enhancerSetRemoteStream(participantId, evt.stream));
+    store.dispatch(ParticipantsEnhancerActions.enhancerSetRemoteStream(participantId, evt.streams[0]));
   };
 
   store.dispatch(ParticipantsEnhancerActions.enhancerInitRemoteUser(participantId, pc));
@@ -53,6 +53,10 @@ export const getUserMedia = (store, socketId, constrains) => {
     .catch((error) => {
       store.dispatch(ParticipantsActions.errorGetUserMedia(error));
     });
+};
+
+export const handlePeerDisconnecting = (store, data) => {
+  store.dispatch(ParticipantsEnhancerActions.enhancerParticipantDisconecting(data.id));
 };
 
 export const handlePeerConnected = (store, data) => {

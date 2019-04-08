@@ -21,6 +21,9 @@ io.on('connection', function(socket){
   socket.on('disconnecting', () => {
     const rooms = omit([socket.id], socket.rooms);
     Object.keys(rooms).forEach(room => {
+      socket.to(room).emit('peer:disconnecting', {
+        id: socket.id
+      });
       console.log('disconnecting: ', room)
     })
   });

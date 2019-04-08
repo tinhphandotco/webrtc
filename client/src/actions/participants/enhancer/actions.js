@@ -40,3 +40,10 @@ export const enhancerInitRemoteUser = (userId, peerConnection) => ({
     peerConnection
   }
 });
+
+export const enhancerParticipantDisconecting = (participantId) => ({
+  type: ActionTypes.ENHANCER_PARTICIPANT_DISCONECTING,
+  payload: {
+    participantId
+  }
+});

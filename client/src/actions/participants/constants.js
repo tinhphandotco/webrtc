@@ -11,3 +11,4 @@ export const SET_REMOTE_STREAM = prefixToastActions("SET_REMOTE_STREAM");
 export const GET_USER_MEDIA = prefixToastActions("GET_USER_MEDIA");
 export const GET_ERROR_USER_MEDIA = prefixToastActions("GET_ERROR_USER_MEDIA");
 export const INIT_REMOTE_USER = prefixToastActions("INIT_REMOTE_USER");
+export const PARTICIPANT_DISCONNECTING = prefixToastActions("PARTICIPANT_DISCONNECTING");

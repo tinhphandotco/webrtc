@@ -53,3 +53,10 @@ export const errorGetUserMedia = (error) => ({
     error
   }
 });
+
+export const participantDisconecting = (participantId) => ({
+  type: ActionTypes.PARTICIPANT_DISCONNECTING,
+  payload: {
+    participantId
+  }
+});

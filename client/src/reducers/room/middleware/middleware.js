@@ -20,6 +20,10 @@ const roomMiddleware = store => {
     service.handlePeerConnected(store, data);
   });
 
+  socket.on('peer:disconnecting', (data) => {
+    service.handlePeerDisconnecting(store, data);
+  });
+
   return next => action => {
     if (action.type === ParticipantsTypes.GET_USER_MEDIA) {
       service.getUserMedia(store, socket.id, action.payload.constrains);

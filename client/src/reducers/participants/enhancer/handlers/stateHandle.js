@@ -1,3 +1,4 @@
+import { omit } from 'ramda';
 import { ParticipantsTypes, ParticipantsEnhancerTypes } from 'actions';
 
 const INIT_LOCAL_USER = {
@@ -84,11 +85,20 @@ const setRemoteStream = (store, action, state) => {
   };
 };
 
+const participantDisconecting = (store, action, state) => {
+  return {
+    ...state,
+    byId: omit([action.payload.participantId], state.byId),
+    allIds: state.allIds.filter(id => id !== action.payload.participantId)
+  };
+};
+
 const handler = {
   [ParticipantsTypes.INIT_LOCAL_USER]: initLocalUser,
   [ParticipantsEnhancerTypes.ENHANCER_SET_LOCAL_STREAM]: setLocalStream,
   [ParticipantsEnhancerTypes.ENHANCER_INITE_REMOTE_USER]: initRemoteUser,
   [ParticipantsEnhancerTypes.ENHANCER_SET_REMOTE_STREAM]: setRemoteStream,
+  [ParticipantsEnhancerTypes.ENHANCER_PARTICIPANT_DISCONECTING]: participantDisconecting
 };
 
 export default handler;

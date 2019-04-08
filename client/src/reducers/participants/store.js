@@ -1,4 +1,5 @@
 import { combineReducers } from 'redux';
+import { omit } from 'ramda';
 import { ParticipantsTypes, ParticipantsEnhancerTypes } from 'actions';
 
 const INIT_USER = {
@@ -66,7 +67,7 @@ const byId = (state = INITIAL_STATE.byId, { type, payload }) => {
     case ParticipantsTypes.INIT_REMOTE_USER:
       return {
         ...state,
-        [payload.localUserId]: {
+        [payload.id]: {
           ...INIT_REMOTE_USER,
           ...payload
         }
@@ -80,6 +81,10 @@ const byId = (state = INITIAL_STATE.byId, { type, payload }) => {
           localStream: payload.stream
         }
       };
+
+    case ParticipantsTypes.PARTICIPANT_DISCONNECTING:
+      return omit([payload.participantId], state);
+
     default:
       return state;
   }
@@ -89,6 +94,13 @@ const allIds = (state = INITIAL_STATE.allIds, { type, payload }) => {
   switch (type) {
     case ParticipantsTypes.INIT_LOCAL_USER:
       return [payload.id];
+
+    case ParticipantsTypes.INIT_REMOTE_USER:
+      return [...state, payload.id];
+
+    case ParticipantsTypes.PARTICIPANT_DISCONNECTING:
+      return state.filter(id => id !== payload.participantId);
+
     default:
       return state;
   }
@@ -98,6 +110,7 @@ const localUser = (state = INITIAL_STATE.localUser, { type, payload }) => {
   switch (type) {
     case ParticipantsTypes.INIT_LOCAL_USER:
       return payload.id;
+
     default:
       return state;
   }
@@ -105,7 +118,7 @@ const localUser = (state = INITIAL_STATE.localUser, { type, payload }) => {
 
 const appState = (state = INITIAL_STATE.appState, { type, payload }) => {
   switch (type) {
-    case ParticipantsEnhancerTypes.ENHANCER_SET_LOCAL_STREAM:
+    case ParticipantsTypes.SET_LOCAL_STREAM:
       return {
         ...state,
         didGetUserMedia: true

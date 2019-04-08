@@ -41,7 +41,7 @@ export default class Chat extends React.Component {
 
   render() {
     return (
-      <StyledChat hiding={this.props.isShowChat}>
+      <StyledChat hiding={!this.props.isShowChat}>
         <StyledChat.MessagesScrollbar autoHide>
           <StyledChat.Messages>
             {this.data.map(item => (
