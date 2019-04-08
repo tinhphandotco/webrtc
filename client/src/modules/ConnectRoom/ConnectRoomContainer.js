@@ -52,7 +52,6 @@ class ConnectRoomContainer extends React.Component {
     e.preventDefault();
 
     if (this.state.roomName) {
-      this.props.joinRoom(this.state.roomName);
       this.props.history.push('/meeting/' + this.state.roomName);
     }
   }
