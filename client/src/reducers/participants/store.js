@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
 import { omit } from 'ramda';
-import { ParticipantsTypes, ParticipantsEnhancerTypes } from 'actions';
+import { ParticipantsTypes } from 'actions';
 
 const INIT_USER = {
   id: null,
@@ -118,6 +118,18 @@ const localUser = (state = INITIAL_STATE.localUser, { type, payload }) => {
 
 const appState = (state = INITIAL_STATE.appState, { type, payload }) => {
   switch (type) {
+    case ParticipantsTypes.INIT_LOCAL_USER:
+      return {
+        ...state,
+        selectedUser: payload.id
+      };
+
+    case ParticipantsTypes.SET_SELECT_PARTICIPANT:
+      return {
+        ...state,
+        selectedUser: payload.participantId
+      };
+
     case ParticipantsTypes.SET_LOCAL_STREAM:
       return {
         ...state,

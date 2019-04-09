@@ -9,13 +9,17 @@ export default class ParticipantsComponent extends React.Component {
   static propTypes = {
     allStreams: PropTypes.array,
     toggleGridLayout: PropTypes.func,
+    setSelectParticipant: PropTypes.func,
     isShowGridParticipants: PropTypes.bool,
+    selectedParticipantId: PropTypes.string
   }
 
   static defaultProps = {
     allStreams: [],
     toggleGridLayout: () => null,
-    isShowGridParticipants: false
+    setSelectParticipant: () => null,
+    isShowGridParticipants: false,
+    selectedParticipantId: ''
   }
 
   constructor(props) {
@@ -34,10 +38,20 @@ export default class ParticipantsComponent extends React.Component {
     return (!this.props.isShowGridParticipants && !this.state.isShowListParticipants) ? 1 : 0;
   }
 
+  isSelectedParticipant = (participantId) => {
+    return !this.props.isShowGridParticipants && this.props.selectedParticipantId === participantId;
+  }
+
   toggleListParticipants = () => {
     this.setState((prevState) => ({
       isShowListParticipants: !prevState.isShowListParticipants
     }));
+  }
+
+  handleSelectParticipant = (participantId) => {
+    if (!this.props.isShowGridParticipants) {
+      this.props.setSelectParticipant(participantId);
+    }
   }
 
   render() {
@@ -55,8 +69,12 @@ export default class ParticipantsComponent extends React.Component {
 
         <StyledParticipants.ListScrollbar autoHide hiding={this.isHideListParticipants}>
           {this.streams.map(item => (
-            <StyledParticipants.Participant key={item.id}>
-              <Participant stream={item.stream} />
+            <StyledParticipants.Participant key={item.id} >
+              <Participant
+                participant={item}
+                selected={this.isSelectedParticipant(item.id)}
+                handleSelectParticipant={this.handleSelectParticipant}
+              />
             </StyledParticipants.Participant>
           ))}
         </StyledParticipants.ListScrollbar>

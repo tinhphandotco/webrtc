@@ -60,3 +60,10 @@ export const participantDisconecting = (participantId) => ({
     participantId
   }
 });
+
+export const setSelectParticipant = (participantId) => ({
+  type: ActionTypes.SET_SELECT_PARTICIPANT,
+  payload: {
+    participantId
+  }
+});

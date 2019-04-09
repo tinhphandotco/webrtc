@@ -32,9 +32,8 @@ const INIT_REMOTE_USER = {
   }
 };
 
-const initLocalUser = (store, action, state) => {
+const initLocalUser = (store, action) => {
   return {
-    ...state,
     byId: {
       [action.payload.id]: {
         ...INIT_LOCAL_USER,
@@ -43,6 +42,9 @@ const initLocalUser = (store, action, state) => {
     },
     localUser: action.payload.id,
     allIds: [action.payload.id],
+    appState: {
+      selectedUser: action.payload.id
+    }
   };
 };
 
@@ -93,12 +95,20 @@ const participantDisconecting = (store, action, state) => {
   };
 };
 
+const setSelectParticipant = (store, action, state) => ({
+  ...state,
+  appState: {
+    selectedUser: action.payload.participantId
+  }
+});
+
 const handler = {
   [ParticipantsTypes.INIT_LOCAL_USER]: initLocalUser,
   [ParticipantsEnhancerTypes.ENHANCER_SET_LOCAL_STREAM]: setLocalStream,
   [ParticipantsEnhancerTypes.ENHANCER_INITE_REMOTE_USER]: initRemoteUser,
   [ParticipantsEnhancerTypes.ENHANCER_SET_REMOTE_STREAM]: setRemoteStream,
-  [ParticipantsEnhancerTypes.ENHANCER_PARTICIPANT_DISCONECTING]: participantDisconecting
+  [ParticipantsEnhancerTypes.ENHANCER_PARTICIPANT_DISCONECTING]: participantDisconecting,
+  [ParticipantsEnhancerTypes.ENHANCER_SET_SELECT_PARTICIPANT]: setSelectParticipant
 };
 
 export default handler;

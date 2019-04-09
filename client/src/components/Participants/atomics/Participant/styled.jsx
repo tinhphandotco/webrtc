@@ -18,10 +18,16 @@ const ParticipantItem = styled.div`
       display: flex;
     }
   `}
+
+  ${props => props.selected && css`
+    border: 2px solid rgb(68, 153, 238);
+    box-shadow: inset 0 0 3px rgb(68, 153, 238), 0 0 3px rgb(68, 153, 238);
+    border-radius: 4px;
+  `}
 `;
 
 ParticipantItem.Video = styled(Video)`
-  background: #333;
+  background: #26394f;
   height: 100%;
   width: 100%;
 `;

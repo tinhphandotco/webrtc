@@ -1,42 +1,22 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from "react-redux";
+
+import MyIcon from 'elements/MyIcon';
 
 import { InputBox, Message } from './atomics';
 
 import StyledChat from './styled';
 
-import { isShowChat, isShowToolbar } from 'reducers/uiState/select';
-
-const mapStateToProps = (state) => {
-	return {
-    isShowChat: isShowChat(state),
-    isShowToolbar: isShowToolbar(state)
-	};
-};
-
-const mapDispatchToProps = {
-
-};
-
-@connect(mapStateToProps, mapDispatchToProps)
-export default class Chat extends React.Component {
+export default class ChatComponent extends React.Component {
   static propTypes = {
     isShowChat: PropTypes.bool.isRequired,
     isShowToolbar: PropTypes.bool.isRequired,
+    closeChat: PropTypes.func.isRequired,
+    messages: PropTypes.array,
   }
 
   static defaultProps = {
-  }
-
-  constructor(props) {
-    super(props);
-
-    const randomIn = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
-    this.data = Array(15).fill().map(() => ({
-      message: Math.random().toString(16).slice(2, 8).repeat(randomIn(1, 15)),
-      me: Math.random() <= 0.5,
-    }));
+    messages: [],
   }
 
   render() {
@@ -44,14 +24,20 @@ export default class Chat extends React.Component {
       <StyledChat hiding={!this.props.isShowChat}>
         <StyledChat.MessagesScrollbar autoHide>
           <StyledChat.Messages>
-            {this.data.map(item => (
+            {this.props.messages.map(item => (
               <Message key={item.message} data={item} />
             ))}
           </StyledChat.Messages>
         </StyledChat.MessagesScrollbar>
+
         <StyledChat.InputBox hasToolbarDock={this.props.isShowToolbar}>
           <InputBox />
         </StyledChat.InputBox>
+
+        <StyledChat.Close show={this.props.isShowChat && !this.props.isShowToolbar} onClick={this.props.closeChat}>
+          <MyIcon type="iconchat-off" />
+          <span className="u-mgl-10">Close Chat</span>
+        </StyledChat.Close>
       </StyledChat>
     );
   }

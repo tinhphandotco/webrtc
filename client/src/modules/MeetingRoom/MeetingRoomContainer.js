@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from "react-redux";
 
 import { getLocalUserInfo, didGetUserMedia, errorGetUserMedia } from 'reducers/participants/select';
-import { getRoomName } from 'reducers/room/select';
+import { isShowGridParticipants } from 'reducers/uiState/select';
 
 import { ParticipantsEnhancerActions, ParticipantsActions, RoomActions } from 'actions';
 
@@ -15,6 +15,7 @@ import {
   Toolbar,
   Participants,
   Chat,
+  FullscreenParticipant,
 } from 'components';
 
 import { AskActiveDevices } from './atomics';
@@ -25,8 +26,8 @@ const mapStateToProps = (state) => {
 	return {
     localUserInfo: getLocalUserInfo(state),
     didGetUserMedia: didGetUserMedia(state),
-    roomName: getRoomName(state),
-    errorGetUserMedia: errorGetUserMedia(state)
+    errorGetUserMedia: errorGetUserMedia(state),
+    isShowGridParticipants: isShowGridParticipants(state)
 	};
 };
 
@@ -48,9 +49,9 @@ class MeetingRoomContainer extends React.Component {
     joinRoom: PropTypes.func,
     localUserInfo: PropTypes.object,
     match: PropTypes.object.isRequired,
-    didGetUserMedia: PropTypes.bool,
+    didGetUserMedia: PropTypes.bool.isRequired,
     errorGetUserMedia: PropTypes.any,
-    roomName: PropTypes.string,
+    isShowGridParticipants: PropTypes.bool.isRequired
   }
 
   static defaultProps = {
@@ -58,8 +59,6 @@ class MeetingRoomContainer extends React.Component {
     enhancerSetLocalStream: () => null,
     joinRoom: () => null,
     localUserInfo: null,
-    didGetUserMedia: false,
-    roomName: '',
     errorGetUserMedia: null
   }
 
@@ -105,6 +104,9 @@ class MeetingRoomContainer extends React.Component {
             <Toolbar />
             <Participants />
             <Chat />
+            {!this.props.isShowGridParticipants && (
+              <FullscreenParticipant />
+            )}
           </StyledRoom>
         )}
       </React.Fragment>

@@ -17,6 +17,21 @@ export const enhancerGetParticipantsStream = () => ({
   type: ActionTypes.ENHANCER_GET_PARTICIPANTS_STREAM
 });
 
+export const enhancerGetSelectedParticipant = () => ({
+  type: ActionTypes.ENHANCER_GET_SELECTED_PARTICIPANT
+});
+
+export const enhancerGetSelectedParticipantId = () => ({
+  type: ActionTypes.ENHANCER_GET_SELECTED_PARTICIPANT_ID
+});
+
+export const enhancerSetSelectParticipant = (participantId) => ({
+  type: ActionTypes.ENHANCER_SET_SELECT_PARTICIPANT,
+  payload: {
+    participantId
+  }
+});
+
 export const enhancerSetLocalStream = (localUserId, stream) => ({
   type: ActionTypes.ENHANCER_SET_LOCAL_STREAM,
   payload: {

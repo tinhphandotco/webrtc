@@ -5,11 +5,14 @@ import StyledParticipantItem from './styled';
 
 export default class Participant extends React.Component {
   static propTypes = {
-    stream: PropTypes.any,
+    participant: PropTypes.object,
+    selected: PropTypes.bool.isRequired,
+    handleSelectParticipant: PropTypes.func,
   }
 
   static defaultProps = {
-    stream: null
+    participant: {},
+    handleSelectParticipant: () => null
   }
 
   constructor(props) {
@@ -26,15 +29,22 @@ export default class Participant extends React.Component {
     });
   }
 
+  handleSelectParticipant = () => {
+    if (!this.props.selected) {
+      this.props.handleSelectParticipant(this.props.participant.id);
+    }
+  }
+
   render() {
     return (
       <StyledParticipantItem
         onMouseEnter={this.toggleInfo(true)}
         onMouseLeave={this.toggleInfo(false)}
-        selected={false}
+        onClick={this.handleSelectParticipant}
+        selected={this.props.selected}
         showInfo={this.state.isShowInfo}
       >
-        <StyledParticipantItem.Video srcObject={this.props.stream} playsInline autoPlay muted />
+        <StyledParticipantItem.Video srcObject={this.props.participant.stream} playsInline autoPlay muted />
 
         <StyledParticipantItem.Actions>
           <span>C</span>
