@@ -54,12 +54,15 @@ export const errorGetUserMedia = (error) => ({
   }
 });
 
-export const participantDisconecting = (participantId) => ({
-  type: ActionTypes.PARTICIPANT_DISCONNECTING,
-  payload: {
-    participantId
-  }
-});
+export const participantDisconecting = (participantId) => (dispatch, getState) => {
+  dispatch({
+    type: ActionTypes.PARTICIPANT_DISCONNECTING,
+    payload: {
+      participantId,
+      localUser: getState().participants.localUser,
+    }
+  });
+};
 
 export const setSelectParticipant = (participantId) => ({
   type: ActionTypes.SET_SELECT_PARTICIPANT,

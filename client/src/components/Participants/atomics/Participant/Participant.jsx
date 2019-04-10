@@ -44,7 +44,7 @@ export default class Participant extends React.Component {
         selected={this.props.selected}
         showInfo={this.state.isShowInfo}
       >
-        <StyledParticipantItem.Video srcObject={this.props.participant.stream} playsInline autoPlay muted />
+        <StyledParticipantItem.Video srcObject={this.props.participant.stream} playsInline autoPlay />
 
         <StyledParticipantItem.Actions>
           <span>C</span>

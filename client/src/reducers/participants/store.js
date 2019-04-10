@@ -142,6 +142,15 @@ const appState = (state = INITIAL_STATE.appState, { type, payload }) => {
         didGetUserMedia: true,
         errorGetUserMedia: payload.error
       };
+
+    case ParticipantsTypes.PARTICIPANT_DISCONNECTING:
+      return {
+        ...state,
+        selectedUser: payload.participantId === state.selectedUser
+          ? payload.localUser
+          : payload.participantId
+      };
+
     default:
       return state;
   }

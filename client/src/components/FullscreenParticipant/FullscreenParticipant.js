@@ -3,12 +3,13 @@ import PropTypes from 'prop-types';
 import { connect } from "react-redux";
 
 import { ParticipantsEnhancerActions } from 'actions';
+import { getSelectedParticipant } from 'reducers/participants/select';
 
 import StyledFullscreenParticipant from './styled';
 
-
-const mapStateToProps = () => {
+const mapStateToProps = (state) => {
 	return {
+    selectedParticipant: getSelectedParticipant(state),
 	};
 };
 
@@ -18,13 +19,14 @@ const mapDispatchToProps = {
 };
 
 @connect(mapStateToProps, mapDispatchToProps)
-
 export default class FullscreenParticipant extends React.Component {
   static propTypes = {
+    selectedParticipant: PropTypes.object,
     enhancerGetSelectedParticipant: PropTypes.func,
   }
 
   static defaultProps = {
+    selectedParticipant: {},
     enhancerGetSelectedParticipant: () => null
   }
 

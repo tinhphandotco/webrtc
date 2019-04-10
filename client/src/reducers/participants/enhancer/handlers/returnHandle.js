@@ -18,7 +18,7 @@ const getUserInfoById = (store, action, state) => {
 };
 
 const getSelectedParticipant = (store, action, state) => {
-  return path(['byId', state.appState.selectedUser], state);
+  return path(['byId', state.appState.selectedUser], state) || {};
 };
 
 const getSelectedParticipantId = (store, action, state) => {

@@ -27,3 +27,8 @@ export const errorGetUserMedia = compose(
   participantsState => participantsState.appState.errorGetUserMedia,
   getParticipantsState
 );
+
+export const getSelectedParticipant = compose(
+  participantsState => participantsState.byId[participantsState.appState.selectedUser],
+  getParticipantsState
+);

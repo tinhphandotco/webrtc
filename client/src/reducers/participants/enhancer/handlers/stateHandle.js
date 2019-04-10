@@ -91,7 +91,12 @@ const participantDisconecting = (store, action, state) => {
   return {
     ...state,
     byId: omit([action.payload.participantId], state.byId),
-    allIds: state.allIds.filter(id => id !== action.payload.participantId)
+    allIds: state.allIds.filter(id => id !== action.payload.participantId),
+    appState: {
+      selectedUser: state.appState.selectedUser === action.payload.participantId
+        ? state.localUser
+        : state.appState.selectedUser
+    }
   };
 };
 
