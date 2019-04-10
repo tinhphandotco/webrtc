@@ -52,6 +52,9 @@ export const getUserMedia = (store, socketId, constrains) => {
     })
     .catch((error) => {
       store.dispatch(ParticipantsActions.errorGetUserMedia(error));
+    })
+    .finally(() => {
+
     });
 };
 

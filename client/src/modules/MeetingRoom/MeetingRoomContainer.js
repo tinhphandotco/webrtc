@@ -33,12 +33,13 @@ const mapStateToProps = (state) => {
 
 const { getUserMedia } = ParticipantsActions;
 const { enhancerSetLocalStream, enhancerGetLocalStream } = ParticipantsEnhancerActions;
-const { joinRoom } = RoomActions;
+const { joinRoom, connectSocket } = RoomActions;
 const mapDispatchToProps = {
   getUserMedia,
   enhancerSetLocalStream,
   enhancerGetLocalStream,
-  joinRoom
+  joinRoom,
+  connectSocket
 };
 
 @connect(mapStateToProps, mapDispatchToProps)
@@ -46,6 +47,7 @@ class MeetingRoomContainer extends React.Component {
   static propTypes = {
     enhancerSetLocalStream: PropTypes.func,
     getUserMedia: PropTypes.func,
+    connectSocket: PropTypes.func,
     joinRoom: PropTypes.func,
     localUserInfo: PropTypes.object,
     match: PropTypes.object.isRequired,
@@ -56,6 +58,7 @@ class MeetingRoomContainer extends React.Component {
 
   static defaultProps = {
     getUserMedia: () => null,
+    connectSocket: () => null,
     enhancerSetLocalStream: () => null,
     joinRoom: () => null,
     localUserInfo: null,
@@ -67,28 +70,21 @@ class MeetingRoomContainer extends React.Component {
   }
 
   componentDidMount() {
-    // NOTE: If join room from enter form
-    if (this.props.localUserInfo) {
-      this.props.getUserMedia({ video: true, audio: true });
-    }
-
-    if (this.props.didGetUserMedia) {
-      this.props.joinRoom(this.props.match.params.roomName);
-    }
+    this.props.connectSocket();
   }
 
   componentDidUpdate(prevProps) {
-    // NOTE: If join room from url link, user need wait for connection to socket.io first
-    if (!prevProps.didGetUserMedia && this.props.didGetUserMedia) {
-      this.props.joinRoom(this.props.match.params.roomName);
-    }
-
+    // NOTE: Need to getUserMedia --> got localStream ---> joinRoom() --> attach localStream to peerConnection
     if (!prevProps.localUserInfo && this.props.localUserInfo) {
       this.props.getUserMedia({ video: true, audio: true });
     }
 
     if (!prevProps.errorGetUserMedia && this.props.errorGetUserMedia) {
       message.warning(this.props.errorGetUserMedia.name);
+    }
+
+    if (!prevProps.didGetUserMedia && this.props.didGetUserMedia) {
+      this.props.joinRoom(this.props.match.params.roomName);
     }
   }
 
