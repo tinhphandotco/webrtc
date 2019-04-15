@@ -3,7 +3,7 @@ import { UIStateTypes } from 'actions';
 const INITIAL_STATE = {
   isShowGridParticipants: true,
   isShowChat: false,
-  isShowToolbar: false
+  isShowToolbar: true
 };
 
 const uiState = (state = INITIAL_STATE, { type, payload }) => {

@@ -40,6 +40,7 @@ const INITIAL_STATE = {
   localUser: null,
   appState: {
     selectedUser: null,
+    isSharingScreen: false,
     didGetUserMedia: false,
     errorGetUserMedia: null
   }
@@ -149,6 +150,12 @@ const appState = (state = INITIAL_STATE.appState, { type, payload }) => {
         selectedUser: payload.participantId === state.selectedUser
           ? payload.localUser
           : payload.participantId
+      };
+
+    case ParticipantsTypes.SET_STATE_SHARE_SCREEN:
+      return {
+        ...state,
+        isSharingScreen: payload.state
       };
 
     default:

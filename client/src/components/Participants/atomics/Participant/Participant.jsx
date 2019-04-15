@@ -8,6 +8,7 @@ export default class Participant extends React.Component {
     participant: PropTypes.object,
     selected: PropTypes.bool.isRequired,
     handleSelectParticipant: PropTypes.func,
+    isLocalParticipant: PropTypes.bool.isRequired
   }
 
   static defaultProps = {
@@ -44,7 +45,12 @@ export default class Participant extends React.Component {
         selected={this.props.selected}
         showInfo={this.state.isShowInfo}
       >
-        <StyledParticipantItem.Video srcObject={this.props.participant.stream} playsInline autoPlay />
+        <StyledParticipantItem.Video
+          srcObject={this.props.participant.stream}
+          playsInline
+          autoPlay
+          muted={this.props.isLocalParticipant}
+        />
 
         <StyledParticipantItem.Actions>
           <span>C</span>
@@ -60,7 +66,11 @@ export default class Participant extends React.Component {
         </StyledParticipantItem.Actions>
 
         <StyledParticipantItem.UserInfo>
-          <StyledParticipantItem.Username>Name</StyledParticipantItem.Username>
+          <StyledParticipantItem.Username>
+            {this.props.isLocalParticipant
+              ? 'Me'
+              : 'Other'}
+          </StyledParticipantItem.Username>
         </StyledParticipantItem.UserInfo>
 
         <StyledParticipantItem.VideoInactive>

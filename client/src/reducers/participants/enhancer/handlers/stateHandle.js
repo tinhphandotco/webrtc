@@ -43,7 +43,8 @@ const initLocalUser = (store, action) => {
     localUser: action.payload.id,
     allIds: [action.payload.id],
     appState: {
-      selectedUser: action.payload.id
+      selectedUser: action.payload.id,
+      isSharingScreen: false
     }
   };
 };
@@ -107,13 +108,22 @@ const setSelectParticipant = (store, action, state) => ({
   }
 });
 
+const setStateShareScreen = (store, action ,state) => ({
+  ...state,
+  appState: {
+    ...state.appState,
+    isSharingScreen: action.payload.state
+  }
+});
+
 const handler = {
   [ParticipantsTypes.INIT_LOCAL_USER]: initLocalUser,
   [ParticipantsEnhancerTypes.ENHANCER_SET_LOCAL_STREAM]: setLocalStream,
   [ParticipantsEnhancerTypes.ENHANCER_INITE_REMOTE_USER]: initRemoteUser,
   [ParticipantsEnhancerTypes.ENHANCER_SET_REMOTE_STREAM]: setRemoteStream,
   [ParticipantsEnhancerTypes.ENHANCER_PARTICIPANT_DISCONECTING]: participantDisconecting,
-  [ParticipantsEnhancerTypes.ENHANCER_SET_SELECT_PARTICIPANT]: setSelectParticipant
+  [ParticipantsEnhancerTypes.ENHANCER_SET_SELECT_PARTICIPANT]: setSelectParticipant,
+  [ParticipantsEnhancerTypes.ENHANCER_SET_STATE_SHARE_SCREEN]: setStateShareScreen
 };
 
 export default handler;

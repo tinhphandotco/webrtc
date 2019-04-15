@@ -1,3 +1,4 @@
+import { ParticipantsEnhancerActions } from 'actions';
 import * as ActionTypes from './constants';
 
 export const initLocalUser = (config) => {
@@ -47,6 +48,10 @@ export const getUserMedia = (constrains) => {
   };
 };
 
+export const getShareScreen = () => ({
+  type: ActionTypes.GET_SHARE_SCREEN,
+});
+
 export const errorGetUserMedia = (error) => ({
   type: ActionTypes.GET_ERROR_USER_MEDIA,
   payload: {
@@ -54,12 +59,17 @@ export const errorGetUserMedia = (error) => ({
   }
 });
 
-export const participantDisconecting = (participantId) => (dispatch, getState) => {
+export const closeShareScreen = () => ({
+  type: ActionTypes.CLOSE_SHARE_SCREEN,
+});
+
+export const participantDisconecting = (participantId) => (dispatch) => {
+  const localParticipantId = dispatch(ParticipantsEnhancerActions.enhancerGetLocalParticipantId());
   dispatch({
     type: ActionTypes.PARTICIPANT_DISCONNECTING,
     payload: {
       participantId,
-      localUser: getState().participants.localUser,
+      localUser: localParticipantId,
     }
   });
 };
@@ -68,5 +78,12 @@ export const setSelectParticipant = (participantId) => ({
   type: ActionTypes.SET_SELECT_PARTICIPANT,
   payload: {
     participantId
+  }
+});
+
+export const setStateShareScreen = (state) => ({
+  type: ActionTypes.SET_STATE_SHARE_SCREEN,
+  payload: {
+    state
   }
 });

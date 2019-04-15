@@ -8,11 +8,12 @@ import { StyledToolbar } from '../styled';
 
 export default class LeftActions extends React.Component {
   static propTypes = {
-    toggleChat: PropTypes.func,
+    toggleChat: PropTypes.func.isRequired,
+    toggleShareCreen: PropTypes.func.isRequired,
+    isSharingScreen: PropTypes.bool.isRequired,
   }
 
   static defaultProps = {
-    toggleChat: () => null,
   }
 
   constructor(props) {
@@ -26,16 +27,18 @@ export default class LeftActions extends React.Component {
           <StyledToolbar.ActionItem onClick={this.props.toggleChat}>
             <StyledToolbar.ChatAction>
               <StyledToolbar.ActionBadge>12</StyledToolbar.ActionBadge>
-              <MyIcon className="u-fz-24" type="iconchatinput" />
+              <MyIcon className="u-fz-24" type="iconchat" />
               <StyledToolbar.ActionLabel>Chat</StyledToolbar.ActionLabel>
             </StyledToolbar.ChatAction>
           </StyledToolbar.ActionItem>
         </Tooltip>
 
         <Tooltip placement="top" title="Screen sharing is possible">
-          <StyledToolbar.ActionItem>
-            <StyledToolbar.ActionIcon type="laptop" />
-            <StyledToolbar.ActionLabel>Share screen</StyledToolbar.ActionLabel>
+          <StyledToolbar.ActionItem onClick={this.props.toggleShareCreen}>
+            <StyledToolbar.ActionMyIcon type={this.props.isSharingScreen ? 'iconlaptop-off' : 'iconlaptop'} />
+            <StyledToolbar.ActionLabel>
+              {this.props.isSharingScreen ? 'Stop share screen' : 'Share screen'}
+            </StyledToolbar.ActionLabel>
           </StyledToolbar.ActionItem>
         </Tooltip>
       </React.Fragment>

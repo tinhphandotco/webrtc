@@ -17,6 +17,7 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = {
+  enhancerGetLocalParticipantId: ParticipantsEnhancerActions.enhancerGetLocalParticipantId,
   enhancerGetParticipantsStream: ParticipantsEnhancerActions.enhancerGetParticipantsStream,
   enhancerGetSelectedParticipantId: ParticipantsEnhancerActions.enhancerGetSelectedParticipantId,
   enhancerSetSelectParticipant: ParticipantsEnhancerActions.enhancerSetSelectParticipant,
@@ -28,6 +29,7 @@ export default
 class ParticipantsContainer extends React.Component {
   static propTypes = {
     enhancerGetParticipantsStream: PropTypes.func,
+    enhancerGetLocalParticipantId: PropTypes.func,
     enhancerGetSelectedParticipantId: PropTypes.func,
     enhancerSetSelectParticipant: PropTypes.func,
     toggleGridLayout: PropTypes.func,
@@ -37,6 +39,7 @@ class ParticipantsContainer extends React.Component {
   static defaultProps = {
     enhancerGetParticipantsStream: () => [],
     enhancerGetSelectedParticipantId: () => null,
+    enhancerGetLocalParticipantId: () => null,
     enhancerSetSelectParticipant: () => null,
     toggleGridLayout: () => null,
     isShowGridParticipants: false
@@ -54,6 +57,10 @@ class ParticipantsContainer extends React.Component {
     return this.props.enhancerGetSelectedParticipantId();
   }
 
+  get localParticipantId() {
+    return this.props.enhancerGetLocalParticipantId();
+  }
+
   toggleGridLayout = () => {
     this.props.toggleGridLayout(!this.props.isShowGridParticipants);
   }
@@ -65,6 +72,7 @@ class ParticipantsContainer extends React.Component {
   render() {
     return (
       <ParticipantsComponent
+        localParticipantId={this.localParticipantId}
         isShowGridParticipants={this.props.isShowGridParticipants}
         toggleGridLayout={this.toggleGridLayout}
         allStreams={this.getAllStreams}

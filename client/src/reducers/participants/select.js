@@ -32,3 +32,8 @@ export const getSelectedParticipant = compose(
   participantsState => participantsState.byId[participantsState.appState.selectedUser],
   getParticipantsState
 );
+
+export const isSharingScreen = compose(
+  participantsState => participantsState.appState.isSharingScreen,
+  getParticipantsState
+);

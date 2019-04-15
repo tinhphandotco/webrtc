@@ -8,6 +8,10 @@ export const enhancerGetLocalUserInfo = () => ({
   type: ActionTypes.ENHANCER_GET_LOCAL_USER_INFO
 });
 
+export const enhancerGetLocalParticipantId = () => ({
+  type: ActionTypes.ENHANCER_GET_LOCAL_PARTICIPANT_ID
+});
+
 export const enhancerGetUserInfoById = (id) => ({
   type: ActionTypes.ENHANCER_GET_USER_INFOR_BY_ID,
   payload: { id }
@@ -30,6 +34,10 @@ export const enhancerSetSelectParticipant = (participantId) => ({
   payload: {
     participantId
   }
+});
+
+export const enhancerGetRemoteParticipants = () => ({
+  type: ActionTypes.ENHANCER_GET_REMOTE_PARTICIPANTS,
 });
 
 export const enhancerSetLocalStream = (localUserId, stream) => ({
@@ -61,4 +69,15 @@ export const enhancerParticipantDisconecting = (participantId) => ({
   payload: {
     participantId
   }
+});
+
+export const enhancerSetStateShareScreen = (state) => ({
+  type: ActionTypes.ENHANCER_SET_STATE_SHARE_SCREEN,
+  payload: {
+    state,
+  }
+});
+
+export const enhancerIsSharingScreen = () => ({
+  type: ActionTypes.ENHANCER_IS_SHARING_SCREEN,
 });

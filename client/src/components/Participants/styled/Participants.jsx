@@ -25,9 +25,9 @@ const Participants = styled.div.attrs((props) => {
     '26_30': { rows: 6, cols: 5 },
   };
   const participantStyles = {
-    // '1': `
-    //   padding: 5% 0;
-    // `,
+    '1': `
+      padding: 5% 0;
+    `,
     // '2': `
     //   padding: 10% 0;
     // `,

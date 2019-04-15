@@ -21,12 +21,17 @@ const setSelectParticipant = (store, action) => {
   store.dispatch(ParticipantsActions.setSelectParticipant(action.payload.participantId));
 };
 
+const setStateShareScreen = (store, action) => {
+  store.dispatch(ParticipantsActions.setStateShareScreen(action.payload.state));
+};
+
 const handler = {
   [ParticipantsEnhancerTypes.ENHANCER_SET_LOCAL_STREAM]: setLocalStream,
   [ParticipantsEnhancerTypes.ENHANCER_SET_REMOTE_STREAM]: setRemoteStream,
   [ParticipantsEnhancerTypes.ENHANCER_INITE_REMOTE_USER]: initRemoteUser,
   [ParticipantsEnhancerTypes.ENHANCER_PARTICIPANT_DISCONECTING]: participantDisconecting,
-  [ParticipantsEnhancerTypes.ENHANCER_SET_SELECT_PARTICIPANT]: setSelectParticipant
+  [ParticipantsEnhancerTypes.ENHANCER_SET_SELECT_PARTICIPANT]: setSelectParticipant,
+  [ParticipantsEnhancerTypes.ENHANCER_SET_STATE_SHARE_SCREEN]: setStateShareScreen
 };
 
 export default handler;

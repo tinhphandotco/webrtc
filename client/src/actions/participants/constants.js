@@ -13,3 +13,6 @@ export const GET_ERROR_USER_MEDIA = prefixToastActions("GET_ERROR_USER_MEDIA");
 export const INIT_REMOTE_USER = prefixToastActions("INIT_REMOTE_USER");
 export const PARTICIPANT_DISCONNECTING = prefixToastActions("PARTICIPANT_DISCONNECTING");
 export const SET_SELECT_PARTICIPANT = prefixToastActions("SET_SELECT_PARTICIPANT");
+export const GET_SHARE_SCREEN = prefixToastActions("GET_SHARE_SCREEN");
+export const CLOSE_SHARE_SCREEN = prefixToastActions("CLOSE_SHARE_SCREEN");
+export const SET_STATE_SHARE_SCREEN = prefixToastActions("SET_STATE_SHARE_SCREEN");

@@ -1,5 +1,6 @@
 import styled, { css } from 'styled-components';
 import { Icon } from 'antd';
+import MyIcon from 'elements/MyIcon';
 import { StyledControl } from '../atomics/Control';
 
 const Toolbar = styled.div`
@@ -43,8 +44,16 @@ Toolbar.ActionItem = styled.button`
   width: 95px;
 `;
 
-Toolbar.ActionIcon = styled(Icon)`
+const IconMixin = css`
   font-size: 24px;
+`;
+
+Toolbar.ActionIcon = styled(Icon)`
+  ${IconMixin}
+`;
+
+Toolbar.ActionMyIcon = styled(MyIcon)`
+  ${IconMixin}
 `;
 
 Toolbar.ActionLabel = styled.span`
@@ -83,21 +92,29 @@ Toolbar.Controls = styled.div`
   position: relative;
 `;
 
+Toolbar.TogglerWrapper = styled.div`
+  background: transparent;
+  bottom: 5px;
+  border-radius: 50%;
+  cursor: pointer;
+  height: 100px;
+  left: 50%;
+  overflow: hidden;
+  position: absolute;
+  transform: translate(-50%, 0%);
+  width: 100px;
+`;
+
 Toolbar.Toggler = styled.button`
   align-items: center;
   background: rgba(0,0,0,.8);
-  bottom: 100%;
   border: none;
-  border-radius: 50% 50% 0 0/ 100% 100% 0 0;
   cursor: pointer;
   display: flex;
   justify-content: center;
-  height: 20px;
-  left: 50%;
+  height: 25px;
   outline: none;
-  position: absolute;
-  transform: translate(-50%, 0%);
-  width: 40px;
+  width: 100%;
 `;
 
 export default Toolbar;

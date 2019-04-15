@@ -11,7 +11,8 @@ export default class ParticipantsComponent extends React.Component {
     toggleGridLayout: PropTypes.func,
     setSelectParticipant: PropTypes.func,
     isShowGridParticipants: PropTypes.bool,
-    selectedParticipantId: PropTypes.string
+    selectedParticipantId: PropTypes.string,
+    localParticipantId: PropTypes.string
   }
 
   static defaultProps = {
@@ -19,7 +20,8 @@ export default class ParticipantsComponent extends React.Component {
     toggleGridLayout: () => null,
     setSelectParticipant: () => null,
     isShowGridParticipants: false,
-    selectedParticipantId: ''
+    selectedParticipantId: '',
+    localParticipantId: null,
   }
 
   constructor(props) {
@@ -36,6 +38,10 @@ export default class ParticipantsComponent extends React.Component {
 
   get isHideListParticipants() {
     return (!this.props.isShowGridParticipants && !this.state.isShowListParticipants) ? 1 : 0;
+  }
+
+  isLocalParticipant(participantId) {
+    return this.props.localParticipantId === participantId;
   }
 
   isSelectedParticipant = (participantId) => {
@@ -71,6 +77,7 @@ export default class ParticipantsComponent extends React.Component {
           {this.streams.map(item => (
             <StyledParticipants.Participant key={item.id} >
               <Participant
+                isLocalParticipant={this.isLocalParticipant(item.id)}
                 participant={item}
                 selected={this.isSelectedParticipant(item.id)}
                 handleSelectParticipant={this.handleSelectParticipant}

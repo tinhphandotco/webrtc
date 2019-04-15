@@ -8,36 +8,36 @@ import { StyledToolbar } from './styled';
 
 export default class ToolbarComponent extends React.Component {
   static propTypes = {
-    isShowChat: PropTypes.bool,
-    isShowToolbar: PropTypes.bool,
-    toggleChat: PropTypes.func,
-    toggleToolbar: PropTypes.func,
+    isShowChat: PropTypes.bool.isRequired,
+    isShowToolbar: PropTypes.bool.isRequired,
+    toggleChat: PropTypes.func.isRequired,
+    toggleToolbar: PropTypes.func.isRequired,
+    toggleShareCreen: PropTypes.func.isRequired,
+    isSharingScreen: PropTypes.bool.isRequired
   }
 
   static defaultProps = {
-    isShowChat: false,
-    isShowToolbar: false,
-    toggleChat: () => null,
-    toggleToolbar: () => null,
   }
 
   constructor(props) {
     super(props);
   }
 
-  toggleToolbar = () => {
-    this.props.toggleToolbar(!this.props.isShowToolbar);
-  }
-
   render() {
     return (
       <StyledToolbar hiding={!this.props.isShowToolbar}>
-        <StyledToolbar.Toggler onClick={this.toggleToolbar}>
-          <Caret direction={this.props.isShowToolbar ? 'down' : 'up'} />
-        </StyledToolbar.Toggler>
+        <StyledToolbar.TogglerWrapper>
+          <StyledToolbar.Toggler onClick={this.props.toggleToolbar}>
+            <Caret direction={this.props.isShowToolbar ? 'down' : 'up'} />
+          </StyledToolbar.Toggler>
+        </StyledToolbar.TogglerWrapper>
 
         <StyledToolbar.Actions>
-          <LeftActions toggleChat={this.props.toggleChat} />
+          <LeftActions
+            toggleChat={this.props.toggleChat}
+            toggleShareCreen={this.props.toggleShareCreen}
+            isSharingScreen={this.props.isSharingScreen}
+          />
         </StyledToolbar.Actions>
 
         <StyledToolbar.Controls>

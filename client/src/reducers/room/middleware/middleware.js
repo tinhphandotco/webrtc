@@ -31,7 +31,15 @@ const roomMiddleware = store => {
 
     if (socket) {
       if (action.type === ParticipantsTypes.GET_USER_MEDIA) {
-        service.getUserMedia(store, socket.id, action.payload.constrains);
+        service.getUserMedia(store, action.payload.constrains);
+      }
+
+      if (action.type === ParticipantsTypes.GET_SHARE_SCREEN) {
+        service.getShareScreen(store);
+      }
+
+      if (action.type === ParticipantsTypes.CLOSE_SHARE_SCREEN) {
+        service.closeShareScreen(store);
       }
 
       if (action.type === RoomTypes.JOIN_ROOM) {
