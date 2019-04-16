@@ -21,7 +21,7 @@ const patricipantsEnhancer = () => {
 
     console.log('patricipantsEnhancerState: ', action, { patricipantsEnhancerState, stateHandle, returnHandle });
 
-    if (returnHandle) { return returnHandle; }
+    if (returnHandle !== undefined && returnHandle !== null) { return returnHandle; }
     next(action);
 
     const callbackHandle = callbackHandler[action.type];

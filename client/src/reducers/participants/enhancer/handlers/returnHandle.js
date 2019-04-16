@@ -35,6 +35,7 @@ const getRemoteParticipants = (store, action, state) => {
 };
 
 const isSharingScreen = (store, action, state) => {
+  console.log('isSharingScreen: ', JSON.stringify(state));
   return state.appState.isSharingScreen;
 };
 

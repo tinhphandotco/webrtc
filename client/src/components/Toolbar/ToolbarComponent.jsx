@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Caret from 'elements/Caret';
+import { Modal } from 'antd';
+import SettingsModal from 'modals/SettingsModal';
 import {
   LeftActions, RightActions, Control,
 } from './atomics';
@@ -21,6 +23,26 @@ export default class ToolbarComponent extends React.Component {
 
   constructor(props) {
     super(props);
+
+    this.state = {
+      isShowModalSettings: false,
+    };
+  }
+
+  openModalSettings = () => {
+    this.setState({
+      isShowModalSettings: true
+    });
+  }
+
+  closeModalSettings = () => {
+    this.setState({
+      isShowModalSettings: false
+    });
+  }
+
+  handleChangeStream = (stream) => {
+    console.log('handleChangeStream');
   }
 
   render() {
@@ -45,8 +67,20 @@ export default class ToolbarComponent extends React.Component {
         </StyledToolbar.Controls>
 
         <StyledToolbar.Actions>
-          <RightActions />
+          <RightActions
+            openModalSettings={this.openModalSettings}
+          />
         </StyledToolbar.Actions>
+
+        <Modal
+          title="Settings"
+          visible={this.state.isShowModalSettings}
+          onCancel={this.closeModalSettings}
+          footer={null}
+          width={600}
+        >
+          <SettingsModal onOk={this.handleChangeStream} onCancel={this.closeModalSettings} />
+        </Modal>
       </StyledToolbar>
     );
   }
