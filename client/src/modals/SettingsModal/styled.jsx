@@ -53,4 +53,8 @@ SettingsModal.Actions = styled.div`
   }
 `;
 
+SettingsModal.CheckMic = styled.div`
+  margin: 10px 0;
+`;
+
 export default SettingsModal;

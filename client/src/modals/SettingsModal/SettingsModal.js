@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { path } from 'ramda';
 import { message, Select, Button } from 'antd';
+import CheckMic from 'components/CheckMic';
 import StyledSettingsModal from './styled';
 
 export default class SettingsModal extends React.Component {
@@ -110,6 +111,9 @@ export default class SettingsModal extends React.Component {
         <StyledSettingsModal.Devices>
           <StyledSettingsModal.Preview>
             <StyledSettingsModal.Video srcObject={this.state.stream} playsInline autoPlay muted />
+            <StyledSettingsModal.CheckMic>
+              <CheckMic progress={30} />
+            </StyledSettingsModal.CheckMic>
           </StyledSettingsModal.Preview>
 
           <StyledSettingsModal.Selection>

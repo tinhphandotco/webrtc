@@ -74,6 +74,7 @@ export default class ToolbarComponent extends React.Component {
 
         <Modal
           title="Settings"
+          destroyOnClose
           visible={this.state.isShowModalSettings}
           onCancel={this.closeModalSettings}
           footer={null}

@@ -47,6 +47,10 @@
     "RTCPeerConnection": true,
     "RTCSessionDescription": true,
     "RTCIceCandidate": true,
+    "AudioContext": true,
+    "Uint8Array": true,
+    "setTimeout": true,
+    "clearTimeout": true,
     "navigator": true,
     "process": true,
     "Image": true
