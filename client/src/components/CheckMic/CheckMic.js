@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { path } from 'ramda';
 import { message } from 'antd';
 import StyledCheckMic from './styled';
 
@@ -24,6 +25,10 @@ export default class CheckMic extends React.Component {
     this.state = {
       progress: 0,
     };
+
+    this.$ref = {
+      progress: React.createRef(),
+    };
   }
 
   componentDidMount() {
@@ -33,6 +38,13 @@ export default class CheckMic extends React.Component {
 
   componentWillUnmount() {
     this.script.disconnect(this.context.destination);
+  }
+
+  setProgress = (progress) => {
+    const $progress = path(['progress', 'current'], this.$ref);
+    if ($progress) {
+      $progress.style.width = `${100 - progress}%`;
+    }
   }
 
   createContext = () => {
@@ -51,10 +63,7 @@ export default class CheckMic extends React.Component {
         }
       }
       const volume = Math.sqrt(sum / input.length);
-
-      this.setState({
-        progress: volume * 100
-      });
+      this.setProgress(volume * 100);
     };
   }
 
@@ -79,7 +88,7 @@ export default class CheckMic extends React.Component {
   render() {
     return (
       <StyledCheckMic>
-        <StyledCheckMic.Progress progress={100 - this.state.progress} />
+        <StyledCheckMic.Progress ref={this.$ref.progress} />
       </StyledCheckMic>
     );
   }
