@@ -10,6 +10,9 @@ import * as ParticipantsEnhancerTypes from './participants/enhancer/constants';
 import * as UIStateActions from './uiState/actions';
 import * as UIStateTypes from './uiState/constants';
 
+import * as DevicesActions from './devices/actions';
+import * as DevicesTypes from './devices/constants';
+
 export default {
   RoomActions,
   RoomTypes,
@@ -18,7 +21,9 @@ export default {
   ParticipantsEnhancerActions,
   ParticipantsEnhancerTypes,
   UIStateActions,
-  UIStateTypes
+  UIStateTypes,
+  DevicesActions,
+  DevicesTypes
 };
 
 export {
@@ -29,5 +34,7 @@ export {
   ParticipantsEnhancerActions,
   ParticipantsEnhancerTypes,
   UIStateActions,
-  UIStateTypes
+  UIStateTypes,
+  DevicesActions,
+  DevicesTypes
 };

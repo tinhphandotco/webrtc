@@ -5,6 +5,7 @@ import { connect } from "react-redux";
 import { ParticipantsEnhancerActions, UIStateActions } from 'actions';
 import { getLocalUserInfo, getAllStreams } from 'reducers/participants/select';
 import { isShowGridParticipants } from 'reducers/uiState/select';
+import { getSinkId } from 'reducers/devices/select';
 
 import ParticipantsComponent from './ParticipantsComponent';
 
@@ -12,7 +13,8 @@ const mapStateToProps = (state) => {
 	return {
     allStreams: getAllStreams(state),
     localUserInfo: getLocalUserInfo(state),
-    isShowGridParticipants: isShowGridParticipants(state)
+    isShowGridParticipants: isShowGridParticipants(state),
+    sinkId: getSinkId(state),
 	};
 };
 
@@ -34,6 +36,7 @@ class ParticipantsContainer extends React.Component {
     enhancerSetSelectParticipant: PropTypes.func,
     toggleGridLayout: PropTypes.func,
     isShowGridParticipants: PropTypes.bool,
+    sinkId: PropTypes.string,
   }
 
   static defaultProps = {
@@ -42,7 +45,8 @@ class ParticipantsContainer extends React.Component {
     enhancerGetLocalParticipantId: () => null,
     enhancerSetSelectParticipant: () => null,
     toggleGridLayout: () => null,
-    isShowGridParticipants: false
+    isShowGridParticipants: false,
+    sinkId: '',
   }
 
   constructor(props) {
@@ -78,6 +82,7 @@ class ParticipantsContainer extends React.Component {
         allStreams={this.getAllStreams}
         selectedParticipantId={this.selectedParticipantId}
         setSelectParticipant={this.setSelectParticipant}
+        sinkId={this.props.sinkId}
       />
     );
   }

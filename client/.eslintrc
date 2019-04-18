@@ -48,6 +48,7 @@
     "RTCSessionDescription": true,
     "RTCIceCandidate": true,
     "AudioContext": true,
+    "Audio": true,
     "Uint8Array": true,
     "setTimeout": true,
     "clearTimeout": true,

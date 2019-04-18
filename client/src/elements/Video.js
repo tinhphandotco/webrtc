@@ -9,6 +9,7 @@ export default class Video extends React.Component {
     autoPlay: PropTypes.bool,
     muted: PropTypes.bool,
     className: PropTypes.string,
+    sinkId: PropTypes.string,
   }
 
   static defaultProps = {
@@ -16,7 +17,8 @@ export default class Video extends React.Component {
     playsInline: false,
     autoPlay: false,
     muted: false,
-    className: ''
+    className: '',
+    sinkId: null
   }
 
   constructor(props) {
@@ -27,6 +29,21 @@ export default class Video extends React.Component {
     };
   }
 
+  componentDidMount() {
+    if (this.props.srcObject) { this.injectSrcObject(); }
+    if (this.props.sinkId) { this.attachSinkId(); }
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.srcObject !== prevProps.srcObject) {
+      this.injectSrcObject();
+    }
+
+    if (this.props.sinkId !== prevProps.sinkId) {
+      this.attachSinkId();
+    }
+  }
+
   injectSrcObject = () => {
     const $video = path(['video', 'current'], this.$ref);
     if ($video) {
@@ -34,13 +51,10 @@ export default class Video extends React.Component {
     }
   }
 
-  componentDidMount() {
-    this.injectSrcObject();
-  }
-
-  componentDidUpdate(prevProps) {
-    if (this.props.srcObject !== prevProps.srcObject) {
-      this.injectSrcObject();
+  attachSinkId = () => {
+    const $video = path(['video', 'current'], this.$ref);
+    if ($video) {
+      $video.setSinkId(this.props.sinkId);
     }
   }
 

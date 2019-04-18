@@ -85,8 +85,12 @@ export const getUserMedia = (store, constrains) => {
 };
 
 export const onEndedShareScreen = (store) => {
-  // FIXME: Get constraints from settings
-  navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+  const settings = store.getState().devices;
+  const constraints = {
+    audio: { deviceId: settings.audioinput ? { exact: settings.audioinput } : undefined },
+    video: { deviceId: settings.videoinput ? { exact: settings.videoinput } : undefined }
+  };
+  navigator.mediaDevices.getUserMedia(constraints)
     .then(stream => {
       replaceLocalStream(store, stream);
     })
@@ -115,6 +119,10 @@ export const closeShareScreen = (store) => {
   const localParticipant = store.dispatch(ParticipantsEnhancerActions.enhancerGetLocalUserInfo());
   localParticipant.stream.getTracks().forEach(track => track.stop());
   onEndedShareScreen(store);
+};
+
+export const setStream = (store, stream) => {
+  replaceLocalStream(store, stream);
 };
 
 export const handlePeerDisconnecting = (store, data) => {

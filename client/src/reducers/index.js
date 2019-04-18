@@ -3,12 +3,14 @@ import { combineReducers } from 'redux';
 import room from './room/store';
 import participants from './participants/store';
 import uiState from './uiState/store';
+import devices from './devices/store';
 
 export default combineReducers({
   routing,
   room,
   participants,
   uiState,
+  devices,
   lastActionType: (state, action) => action.type
 });
 

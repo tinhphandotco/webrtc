@@ -1,7 +1,7 @@
 import { UIStateTypes } from 'actions';
 
 const INITIAL_STATE = {
-  isShowGridParticipants: true,
+  isShowGridParticipants: false,
   isShowChat: false,
   isShowToolbar: true
 };

@@ -29,7 +29,7 @@ SettingsModal.Selection = styled.div`
 `;
 
 SettingsModal.SelectRow = styled.div`
-  margin-bottom: 15px;
+  margin-bottom: ${props => props.audiooutput ? '5px' : '15px'};
 `;
 
 SettingsModal.SelectLabel = styled.label`
@@ -55,6 +55,12 @@ SettingsModal.Actions = styled.div`
 
 SettingsModal.CheckMic = styled.div`
   margin: 10px 0;
+`;
+
+SettingsModal.TestSound = styled.div`
+  color: #2684FF;
+  cursor: pointer;
+  user-select: none;
 `;
 
 export default SettingsModal;

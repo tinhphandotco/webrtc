@@ -8,12 +8,14 @@ export default class Participant extends React.Component {
     participant: PropTypes.object,
     selected: PropTypes.bool.isRequired,
     handleSelectParticipant: PropTypes.func,
-    isLocalParticipant: PropTypes.bool.isRequired
+    isLocalParticipant: PropTypes.bool.isRequired,
+    sinkId: PropTypes.string,
   }
 
   static defaultProps = {
     participant: {},
-    handleSelectParticipant: () => null
+    handleSelectParticipant: () => null,
+    sinkId: '',
   }
 
   constructor(props) {
@@ -46,6 +48,7 @@ export default class Participant extends React.Component {
         showInfo={this.state.isShowInfo}
       >
         <StyledParticipantItem.Video
+          sinkId={this.props.sinkId}
           srcObject={this.props.participant.stream}
           playsInline
           autoPlay

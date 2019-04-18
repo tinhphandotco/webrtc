@@ -1,31 +1,69 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { path } from 'ramda';
+import { connect } from "react-redux";
+
+import { path, equals } from 'ramda';
+import { staticUrl } from 'utils/common';
+
+import { DevicesActions, ParticipantsEnhancerActions } from 'actions';
+import { getDevices } from 'reducers/devices/select';
+
+
 import { message, Select, Button } from 'antd';
 import CheckMic from 'components/CheckMic';
+
 import StyledSettingsModal from './styled';
 
+const mapStateToProps = (state) => {
+	return {
+    devices: getDevices(state),
+	};
+};
+
+const mapDispatchToProps = {
+  setDevices: DevicesActions.setDevices,
+  setStream: ParticipantsEnhancerActions.enhancerSetStream
+};
+
+@connect(mapStateToProps, mapDispatchToProps)
 export default class SettingsModal extends React.Component {
   static propTypes = {
     onOk: PropTypes.func,
     onCancel: PropTypes.func,
+    devices: PropTypes.shape({
+      audioinput: PropTypes.string,
+      audiooutput: PropTypes.string,
+      videoinput: PropTypes.string,
+    }),
+    setDevices: PropTypes.func,
+    setStream: PropTypes.func,
   }
 
   static defaultProps = {
     onOk: () => {},
     onCancel: () => {},
+    setDevices: () => {},
+    setStream: () => {},
+    devices: {
+      audioinput: '',
+      audiooutput: '',
+      videoinput: '',
+    }
   }
 
   constructor(props) {
     super(props);
 
+    this.didChangeDevices = false;
+    this.audio = new Audio(staticUrl('assets/audio/ring.wav'));
+
     this.state = {
       videoinput: [],
       audioinput: [],
       audiooutput: [],
-      selectedVideoInput: null,
-      selectedAudioInput: null,
-      selectedAudioOutput: null,
+      selectedVideoInput: path(['devices', 'videoinput'], this.props),
+      selectedAudioInput: path(['devices', 'audioinput'], this.props),
+      selectedAudioOutput: path(['devices', 'audiooutput'], this.props),
       stream: null,
     };
   }
@@ -54,9 +92,9 @@ export default class SettingsModal extends React.Component {
             ]
         }), {});
 
-        const selectedVideoInput = path(['id'], retvl.videoinput[0]) || null;
-        const selectedAudioInput = path(['id'], retvl.audioinput[0]) || null;
-        const selectedAudioOutput = path(['id'], retvl.audiooutput[0]) || null;
+        const selectedVideoInput = path(['devices', 'videoinput'], this.props) || path(['id'], retvl.videoinput[0]) || null;
+        const selectedAudioInput = path(['devices', 'audioinput'], this.props) || path(['id'], retvl.audioinput[0]) || null;
+        const selectedAudioOutput = path(['devices', 'audiooutput'], this.props) || path(['id'], retvl.audiooutput[0]) || null;
 
         this.setState({
           ...retvl,
@@ -87,10 +125,16 @@ export default class SettingsModal extends React.Component {
       });
   }
 
+  testSound = () => {
+    this.audio.play();
+  }
+
   handleSelectChange = (type) => (value) => {
     this.setState({
       [type]: value
     });
+
+    this.didChangeDevices = true;
 
     if (type === 'selectedVideoInput' || type === 'selectedAudioInput') {
       this.getUserMedia({
@@ -101,8 +145,15 @@ export default class SettingsModal extends React.Component {
   }
 
   onOk = () => {
-    this.props.onOk(this.state.stream);
     this.props.onCancel();
+    if (this.didChangeDevices) {
+      this.props.setDevices({
+        videoinput: this.state.selectedVideoInput,
+        audioinput: this.state.selectedAudioInput,
+        audiooutput: this.state.selectedAudioOutput,
+      });
+      this.props.setStream(this.state.stream);
+    }
   }
 
   render() {
@@ -110,7 +161,7 @@ export default class SettingsModal extends React.Component {
       <StyledSettingsModal>
         <StyledSettingsModal.Devices>
           <StyledSettingsModal.Preview>
-            <StyledSettingsModal.Video srcObject={this.state.stream} playsInline autoPlay muted />
+            <StyledSettingsModal.Video srcObject={this.state.stream} playsInline autoPlay muted sinkId={this.state.selectedAudioOutput} />
             <StyledSettingsModal.CheckMic>
               <CheckMic progress={30} />
             </StyledSettingsModal.CheckMic>
@@ -141,7 +192,7 @@ export default class SettingsModal extends React.Component {
               </StyledSettingsModal.Selector>
             </StyledSettingsModal.SelectRow>
 
-            <StyledSettingsModal.SelectRow>
+            <StyledSettingsModal.SelectRow audiooutput>
               <StyledSettingsModal.SelectLabel>Audio output</StyledSettingsModal.SelectLabel>
               <StyledSettingsModal.Selector
                 value={this.state.selectedAudioOutput}
@@ -152,6 +203,8 @@ export default class SettingsModal extends React.Component {
                 ))}
               </StyledSettingsModal.Selector>
             </StyledSettingsModal.SelectRow>
+
+            <StyledSettingsModal.TestSound onClick={this.testSound}>Play a test sound</StyledSettingsModal.TestSound>
           </StyledSettingsModal.Selection>
         </StyledSettingsModal.Devices>
 

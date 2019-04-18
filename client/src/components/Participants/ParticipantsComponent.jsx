@@ -12,7 +12,8 @@ export default class ParticipantsComponent extends React.Component {
     setSelectParticipant: PropTypes.func,
     isShowGridParticipants: PropTypes.bool,
     selectedParticipantId: PropTypes.string,
-    localParticipantId: PropTypes.string
+    localParticipantId: PropTypes.string,
+    sinkId: PropTypes.string,
   }
 
   static defaultProps = {
@@ -22,6 +23,7 @@ export default class ParticipantsComponent extends React.Component {
     isShowGridParticipants: false,
     selectedParticipantId: '',
     localParticipantId: null,
+    sinkId: '',
   }
 
   constructor(props) {
@@ -38,6 +40,10 @@ export default class ParticipantsComponent extends React.Component {
 
   get isHideListParticipants() {
     return (!this.props.isShowGridParticipants && !this.state.isShowListParticipants) ? 1 : 0;
+  }
+
+  getSinkIdNotForLocal(participantId) {
+    return this.isLocalParticipant(participantId) ? null : this.props.sinkId;
   }
 
   isLocalParticipant(participantId) {
@@ -78,6 +84,7 @@ export default class ParticipantsComponent extends React.Component {
             <StyledParticipants.Participant key={item.id} >
               <Participant
                 isLocalParticipant={this.isLocalParticipant(item.id)}
+                sinkId={this.getSinkIdNotForLocal(item.id)}
                 participant={item}
                 selected={this.isSelectedParticipant(item.id)}
                 handleSelectParticipant={this.handleSelectParticipant}

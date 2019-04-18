@@ -81,3 +81,10 @@ export const enhancerSetStateShareScreen = (state) => ({
 export const enhancerIsSharingScreen = () => ({
   type: ActionTypes.ENHANCER_IS_SHARING_SCREEN,
 });
+
+export const enhancerSetStream = (stream) => ({
+  type: ActionTypes.ENHANCER_SET_STREAM,
+  payload: {
+    stream,
+  }
+});
