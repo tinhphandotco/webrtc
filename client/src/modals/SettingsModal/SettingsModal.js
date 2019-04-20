@@ -120,7 +120,8 @@ export default class SettingsModal extends React.Component {
         return Promise.resolve();
       })
       .catch((error) => {
-        message.error(error.name);
+        console.log(error);
+        // message.error(error.name);
         return Promise.reject();
       });
   }

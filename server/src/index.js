@@ -10,11 +10,12 @@ const io = require('socket.io')(server);
 io.on('connection', function(socket){
   console.log('a user connected: ', socket.id);
 
-  socket.on('user:join-room', (roomName) => {
+  socket.on('user:join-room', (roomName, fn) => {
     socket.join(roomName);
     socket.to(roomName).emit('peer:connected', {
       id: socket.id
     });
+    fn();
     console.log('user:join-room: ', roomName);
   });
 

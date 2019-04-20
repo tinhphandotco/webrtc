@@ -37,7 +37,11 @@ export default class CheckMic extends React.Component {
   }
 
   componentWillUnmount() {
-    this.script.disconnect(this.context.destination);
+    try {
+      this.script.disconnect(this.context.destination);
+    } catch(e) {
+      console.error(e);
+    }
   }
 
   setProgress = (progress) => {
@@ -81,7 +85,7 @@ export default class CheckMic extends React.Component {
       this.mic.connect(this.script);
       this.script.connect(this.context.destination);
     } catch (error) {
-      message.error(error.name);
+      console.error(error);
     }
   }
 

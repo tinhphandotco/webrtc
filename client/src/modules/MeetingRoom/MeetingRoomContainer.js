@@ -76,7 +76,11 @@ class MeetingRoomContainer extends React.Component {
   componentDidUpdate(prevProps) {
     // NOTE: Need to getUserMedia --> got localStream ---> joinRoom() --> attach localStream to peerConnection
     if (!prevProps.localUserInfo && this.props.localUserInfo) {
-      this.props.getUserMedia({ video: true, audio: true });
+      this.props.getUserMedia([
+        { video: true, audio: true },
+        { video: true },
+        { audio: true },
+      ]);
     }
 
     if (!prevProps.errorGetUserMedia && this.props.errorGetUserMedia) {

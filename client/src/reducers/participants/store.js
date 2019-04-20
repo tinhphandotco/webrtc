@@ -86,6 +86,24 @@ const byId = (state = INITIAL_STATE.byId, { type, payload }) => {
     case ParticipantsTypes.PARTICIPANT_DISCONNECTING:
       return omit([payload.participantId], state);
 
+    case ParticipantsTypes.SET_SETTING_DEVICES:
+      return {
+        ...state,
+        [payload.participantId]: {
+          ...state[payload.participantId],
+          settings: {
+            video: {
+              ...state[payload.participantId].settings.video,
+              ...payload.settings.video
+            },
+            audio: {
+              ...state[payload.participantId].settings.audio,
+              ...payload.settings.audio
+            }
+          }
+        }
+      };
+
     default:
       return state;
   }

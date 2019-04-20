@@ -1,7 +1,9 @@
+import { path } from 'ramda';
 import {
   ParticipantsActions,
   ParticipantsEnhancerActions,
   RoomActions,
+  DevicesActions,
 } from 'actions';
 
 const iceConfig = {
@@ -73,14 +75,60 @@ export const connect = (store, socketId) => {
   store.dispatch(ParticipantsActions.initLocalUser({ id: socketId }));
 };
 
-export const getUserMedia = (store, constrains) => {
-  navigator.mediaDevices.getUserMedia(constrains)
+export const enumerateDevices = (store, constrains, localParticipantId) => {
+  return navigator.mediaDevices.enumerateDevices(constrains)
+    .then((deviceInfos) => {
+      const retvl = deviceInfos.reduce((acc, deviceInfo) => ({
+        ...acc,
+        [deviceInfo.kind]: [
+          ...(acc[deviceInfo.kind] || []),
+          {
+            id: deviceInfo.deviceId,
+            label: deviceInfo.label
+          }
+        ]
+      }), {});
+
+      const hasVideo = retvl.hasOwnProperty('videoinput');
+      const videoReady = hasVideo && path(['videoinput'], retvl).some(device => device.label);
+      const hasMic = retvl.hasOwnProperty('audioinput');
+      const micReady = hasMic && path(['audioinput'], retvl).some(device => device.label);
+
+      store.dispatch(DevicesActions.setDevices({
+        videoinput: path(['videoinput', '0', 'id'], retvl),
+        audioinput: path(['audioinput', '0', 'id'], retvl),
+        audiooutput: path(['audiooutput', '0', 'id'], retvl)
+      }));
+
+      store.dispatch(ParticipantsActions.setSettingDevices(localParticipantId, {
+        video: {
+          active: videoReady,
+          enable: videoReady
+        },
+        audio: {
+          active: micReady,
+          enable: micReady
+        },
+      }));
+    })
+    .catch(() => {});
+};
+
+export const getUserMedia = (store, listConstrains, index = 0) => {
+  navigator.mediaDevices.getUserMedia(listConstrains[index])
     .then((stream) => {
       const localParticipantId = store.dispatch(ParticipantsEnhancerActions.enhancerGetLocalParticipantId());
-      store.dispatch(ParticipantsEnhancerActions.enhancerSetLocalStream(localParticipantId, stream));
+      enumerateDevices(store, listConstrains[index], localParticipantId)
+        .finally(() => {
+          store.dispatch(ParticipantsEnhancerActions.enhancerSetLocalStream(localParticipantId, stream));
+        });
     })
     .catch((error) => {
-      store.dispatch(ParticipantsActions.errorGetUserMedia(error));
+      if (index < listConstrains.length) {
+        getUserMedia(store, listConstrains, index + 1);
+      } else {
+        store.dispatch(ParticipantsActions.errorGetUserMedia(error));
+      }
     });
 };
 
@@ -133,6 +181,10 @@ export const handlePeerConnected = (store, data) => {
   const localUserInfo = store.dispatch(ParticipantsEnhancerActions.enhancerGetLocalUserInfo());
   const participantConnection = getOrCreateConnection(store, data.id);
   createOffer(participantConnection, store, localUserInfo.id, data.id);
+};
+
+export const getSettingsById = (store, participantId) => {
+  return store.getState().participants.byId[participantId].settings;
 };
 
 export const handlePeerMsg = (store, data) => {

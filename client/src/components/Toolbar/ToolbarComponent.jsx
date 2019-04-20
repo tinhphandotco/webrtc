@@ -15,7 +15,8 @@ export default class ToolbarComponent extends React.Component {
     toggleChat: PropTypes.func.isRequired,
     toggleToolbar: PropTypes.func.isRequired,
     toggleShareCreen: PropTypes.func.isRequired,
-    isSharingScreen: PropTypes.bool.isRequired
+    isSharingScreen: PropTypes.bool.isRequired,
+    localParticipantSettings: PropTypes.object.isRequired,
   }
 
   static defaultProps = {
@@ -41,10 +42,6 @@ export default class ToolbarComponent extends React.Component {
     });
   }
 
-  handleChangeStream = (stream) => {
-    console.log('handleChangeStream');
-  }
-
   render() {
     return (
       <StyledToolbar hiding={!this.props.isShowToolbar}>
@@ -63,7 +60,7 @@ export default class ToolbarComponent extends React.Component {
         </StyledToolbar.Actions>
 
         <StyledToolbar.Controls>
-          <Control />
+          <Control settings={this.props.localParticipantSettings} />
         </StyledToolbar.Controls>
 
         <StyledToolbar.Actions>
@@ -80,7 +77,7 @@ export default class ToolbarComponent extends React.Component {
           footer={null}
           width={600}
         >
-          <SettingsModal onOk={this.handleChangeStream} onCancel={this.closeModalSettings} />
+          <SettingsModal onCancel={this.closeModalSettings} />
         </Modal>
       </StyledToolbar>
     );

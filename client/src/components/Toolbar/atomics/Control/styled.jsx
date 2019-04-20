@@ -12,6 +12,11 @@ const DeviceControlMixins = css`
   margin: 0 5px;
   outline: none;
   width: 50px;
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: .7;
+  }
 `;
 
 const Control = styled.div`

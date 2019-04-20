@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from "react-redux";
 
 import { UIStateActions, ParticipantsActions, ParticipantsEnhancerActions } from 'actions';
-import { isSharingScreen } from 'reducers/participants/select';
+import { isSharingScreen, localParticipantSettings } from 'reducers/participants/select';
 import { isShowChat, isShowToolbar } from 'reducers/uiState/select';
 
 import ToolbarComponent from './ToolbarComponent';
@@ -13,6 +13,7 @@ const mapStateToProps = (state) => {
     isShowChat: isShowChat(state),
     isShowToolbar: isShowToolbar(state),
     isSharingScreen: isSharingScreen(state),
+    localParticipantSettings: localParticipantSettings(state)
 	};
 };
 
@@ -34,6 +35,16 @@ export default class ToolbarContainer extends React.Component {
     getShareScreen: PropTypes.func,
     closeShareScreen: PropTypes.func,
     enhancerIsSharingScreen: PropTypes.func,
+    localParticipantSettings: PropTypes.shape({
+      video: PropTypes.shape({
+        active: PropTypes.bool,
+        enable: PropTypes.bool
+      }),
+      audio: PropTypes.shape({
+        active: PropTypes.bool,
+        enable: PropTypes.bool
+      })
+    }).isRequired
   }
 
   static defaultProps = {
@@ -78,6 +89,7 @@ export default class ToolbarContainer extends React.Component {
         toggleShareCreen={this.toggleShareCreen}
         getShareScreen={this.props.getShareScreen}
         isSharingScreen={this.isSharingScreen}
+        localParticipantSettings={this.props.localParticipantSettings}
       />
     );
   }

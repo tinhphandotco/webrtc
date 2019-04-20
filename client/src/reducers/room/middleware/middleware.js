@@ -32,7 +32,7 @@ const roomMiddleware = store => {
 
     if (socket) {
       if (action.type === ParticipantsTypes.GET_USER_MEDIA) {
-        service.getUserMedia(store, action.payload.constrains);
+        service.getUserMedia(store, action.payload.constrains)
       }
 
       if (action.type === ParticipantsTypes.GET_SHARE_SCREEN) {
@@ -48,7 +48,19 @@ const roomMiddleware = store => {
       }
 
       if (action.type === RoomTypes.JOIN_ROOM) {
-        socket.emit('user:join-room', action.payload.roomName);
+        socket.emit('user:join-room', action.payload.roomName, () => {
+          const mySettings = service.getSettingsById(store, socket.id);
+          socket.emit('participant:msg', {
+            from: socket.id,
+            to: 'all',
+            type: 'setting-devices',
+            settings: mySettings
+          });
+        });
+      }
+
+      if (action.type === ParticipantsTypes.SOCKET_MSG) {
+        socket.emit('participant:msg', action.payload.data);
       }
 
       if (action.type === RoomTypes.SOCKET_MSG) {

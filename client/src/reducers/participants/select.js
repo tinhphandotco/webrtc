@@ -8,11 +8,6 @@ export const getLocalUserInfo = compose(
   getParticipantsState
 );
 
-export const getLocalUserSettings = compose(
-  path(['settings']),
-  getLocalUserInfo
-);
-
 export const getAllStreams = compose(
   participantsState => participantsState.allIds.map(id => path('byId', id, 'stream'), participantsState),
   getParticipantsState
@@ -36,4 +31,9 @@ export const getSelectedParticipant = compose(
 export const isSharingScreen = compose(
   participantsState => participantsState.appState.isSharingScreen,
   getParticipantsState
+);
+
+export const localParticipantSettings = compose(
+  path(['settings']),
+  getLocalUserInfo
 );

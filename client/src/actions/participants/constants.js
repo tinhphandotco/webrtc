@@ -16,3 +16,5 @@ export const SET_SELECT_PARTICIPANT = prefixToastActions("SET_SELECT_PARTICIPANT
 export const GET_SHARE_SCREEN = prefixToastActions("GET_SHARE_SCREEN");
 export const CLOSE_SHARE_SCREEN = prefixToastActions("CLOSE_SHARE_SCREEN");
 export const SET_STATE_SHARE_SCREEN = prefixToastActions("SET_STATE_SHARE_SCREEN");
+export const SET_SETTING_DEVICES = prefixToastActions("SET_SETTING_DEVICES");
+export const SOCKET_MSG = prefixToastActions("SOCKET_MSG");

@@ -62,7 +62,6 @@ const Participants = styled.div.attrs((props) => {
   z-index: 5;;
 
   ${props => props.gridLayout && css`
-    background: cadetblue;
     bottom: 0;
     left: 0;
     padding-right: 0;

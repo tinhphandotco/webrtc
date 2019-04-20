@@ -87,3 +87,15 @@ export const setStateShareScreen = (state) => ({
     state
   }
 });
+
+export const setSettingDevices = (participantId, settings) => ({
+  type: ActionTypes.SET_SETTING_DEVICES,
+  payload: {
+    participantId,
+    settings,
+  }
+});
+
+export const socketMsg = (data) => {
+  return { type: ActionTypes.SOCKET_MSG, payload: { data } };
+};
