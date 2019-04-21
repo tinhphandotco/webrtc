@@ -133,33 +133,47 @@ export const getUserMedia = (store, listConstrains, index = 0) => {
 };
 
 export const onEndedShareScreen = (store) => {
-  const settings = store.getState().devices;
-  const constraints = {
-    audio: { deviceId: settings.audioinput ? { exact: settings.audioinput } : undefined },
-    video: { deviceId: settings.videoinput ? { exact: settings.videoinput } : undefined }
-  };
-  navigator.mediaDevices.getUserMedia(constraints)
-    .then(stream => {
-      replaceLocalStream(store, stream);
-    })
-    .finally(() => {
-      store.dispatch(ParticipantsEnhancerActions.enhancerSetStateShareScreen(false));
-    });
+  const constraintSettings = store.getState().devices;
+  const localParticipantId = store.getState().participants.localUser;
+  const settings = store.getState().participants.byId[localParticipantId].settings;
+
+  if (settings.audio.active || settings.video.active) {
+    const constraints = {
+      audio: settings.audio.active
+        ? { deviceId: constraintSettings.audioinput ? { exact: constraintSettings.audioinput } : undefined }
+        : false,
+      video: settings.video.active
+        ? { deviceId: constraintSettings.videoinput ? { exact: constraintSettings.videoinput } : undefined }
+        : false
+    };
+
+    navigator.mediaDevices.getUserMedia(constraints)
+      .then(stream => {
+        replaceLocalStream(store, stream);
+      })
+      .finally(() => {
+        store.dispatch(ParticipantsActions.setStateShareScreen(false));
+      });
+  }
 };
 
 export const getShareScreen = (store) => {
-  const gotStream = (mediaStream) => {
-    replaceLocalStream(store, mediaStream);
-    store.dispatch(ParticipantsEnhancerActions.enhancerSetStateShareScreen(true));
-    mediaStream.getVideoTracks()[0].onended = () => onEndedShareScreen(store);
-  };
+  try {
+    const gotStream = (mediaStream) => {
+      replaceLocalStream(store, mediaStream);
+      store.dispatch(ParticipantsActions.setStateShareScreen(true));
+      mediaStream.getVideoTracks()[0].onended = () => onEndedShareScreen(store);
+    };
 
-  if (navigator.getDisplayMedia) {
-    navigator.getDisplayMedia({video: true}).then(gotStream);
-  } else if (navigator.mediaDevices.getDisplayMedia) {
+    if (navigator.getDisplayMedia) {
+      navigator.getDisplayMedia({video: true}).then(gotStream);
+    } else if (navigator.mediaDevices.getDisplayMedia) {
       navigator.mediaDevices.getDisplayMedia({video: true}).then(gotStream);
-  } else {
+    } else {
       navigator.mediaDevices.getUserMedia({video: { mediaSource: 'screen' }}).then(gotStream);
+    }
+  } catch(err) {
+    console.log(err);
   }
 };
 
@@ -184,7 +198,7 @@ export const handlePeerConnected = (store, data) => {
 };
 
 export const getSettingsById = (store, participantId) => {
-  return store.getState().participants.byId[participantId].settings;
+  return path(['participants', 'byId', participantId, 'settings'], store.getState());
 };
 
 export const handlePeerMsg = (store, data) => {
@@ -202,18 +216,48 @@ export const handlePeerMsg = (store, data) => {
             sdp: sdp,
             type: 'sdp-answer'
           }));
+
+          // TODO: Don't re-send this when change to share screen
+          const mySettings = getSettingsById(store, data.to);
+          store.dispatch(ParticipantsActions.socketMsg({
+            from: data.to,
+            to: data.from,
+            type: 'setting-devices',
+            settings: mySettings
+          }));
         });
       break;
     }
 
     case 'sdp-answer': {
       participantConnection.setRemoteDescription(new RTCSessionDescription(data.sdp));
+
+      // TODO: Don't re-send this when change to share screen
+      const mySettings = getSettingsById(store, data.to);
+      store.dispatch(ParticipantsActions.socketMsg({
+        from: data.to,
+        to: data.from,
+        type: 'setting-devices',
+        settings: mySettings
+      }));
       break;
     }
 
     case 'ice':
       participantConnection.addIceCandidate(new RTCIceCandidate(data.ice));
       break;
+
+    default:
+  }
+};
+
+export const handleParticipantMsg = (store, data) => {
+  switch(data.type) {
+    case 'setting-devices': {
+      const participantId = data.from;
+      store.dispatch(ParticipantsActions.setSettingDevices(participantId, data.settings));
+      break;
+    }
 
     default:
   }

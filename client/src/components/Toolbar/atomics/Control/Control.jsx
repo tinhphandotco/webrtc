@@ -7,7 +7,10 @@ import StyledControl from './styled';
 export default
 class Toolbar extends React.Component {
   static propTypes = {
-    settings: PropTypes.object.isRequired,
+    settingDevices: PropTypes.object.isRequired,
+    toggleAudioDevice: PropTypes.func.isRequired,
+    toggleVideoDevice: PropTypes.func.isRequired,
+    isSharingScreen: PropTypes.bool.isRequired,
   }
 
   constructor(props) {
@@ -15,12 +18,12 @@ class Toolbar extends React.Component {
   }
 
   render() {
-    const { settings } = this.props;
+    const { settingDevices, isSharingScreen, toggleAudioDevice, toggleVideoDevice } = this.props;
 
     return (
       <StyledControl>
-        <StyledControl.DeviceControl disabled={!settings.audio.active}>
-          <MyIcon type={settings.audio.enable ? 'iconmic' : 'iconmic_off'} />
+        <StyledControl.DeviceControl disabled={!settingDevices.audio.active} onClick={toggleAudioDevice}>
+          <MyIcon type={settingDevices.audio.enable ? 'iconmic' : 'iconmic_off'} />
         </StyledControl.DeviceControl>
 
         <Tooltip placement="top" title="Exit from room" mouseLeaveDelay={0}>
@@ -29,8 +32,8 @@ class Toolbar extends React.Component {
           </StyledControl.LeaveControl>
         </Tooltip>
 
-        <StyledControl.DeviceControl disabled={!settings.video.active}>
-          <MyIcon type={settings.video.enable ? 'iconcamera' : 'iconcamera-off'} />
+        <StyledControl.DeviceControl disabled={!settingDevices.video.active || isSharingScreen} onClick={toggleVideoDevice}>
+          <MyIcon type={settingDevices.video.enable ? 'iconcamera' : 'iconcamera-off'} />
         </StyledControl.DeviceControl>
       </StyledControl>
     );

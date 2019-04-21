@@ -21,6 +21,10 @@ const roomMiddleware = store => {
         service.handlePeerMsg(store, data);
       });
 
+      socket.on('participant:msg', (data) => {
+        service.handleParticipantMsg(store, data);
+      });
+
       socket.on('peer:connected', (data) => {
         service.handlePeerConnected(store, data);
       });
@@ -32,7 +36,7 @@ const roomMiddleware = store => {
 
     if (socket) {
       if (action.type === ParticipantsTypes.GET_USER_MEDIA) {
-        service.getUserMedia(store, action.payload.constrains)
+        service.getUserMedia(store, action.payload.constrains);
       }
 
       if (action.type === ParticipantsTypes.GET_SHARE_SCREEN) {
@@ -47,16 +51,17 @@ const roomMiddleware = store => {
         service.closeShareScreen(store);
       }
 
-      if (action.type === RoomTypes.JOIN_ROOM) {
-        socket.emit('user:join-room', action.payload.roomName, () => {
-          const mySettings = service.getSettingsById(store, socket.id);
-          socket.emit('participant:msg', {
-            from: socket.id,
-            to: 'all',
-            type: 'setting-devices',
-            settings: mySettings
-          });
+      if (action.type === ParticipantsTypes.SET_LOCAL_SETTING_DEVICES) {
+        socket.emit('participant:msg', {
+          from: action.payload.participantId,
+          to: 'all',
+          type: 'setting-devices',
+          settings: action.payload.settings
         });
+      }
+
+      if (action.type === RoomTypes.JOIN_ROOM) {
+        socket.emit('user:join-room', action.payload.roomName);
       }
 
       if (action.type === ParticipantsTypes.SOCKET_MSG) {
@@ -67,7 +72,7 @@ const roomMiddleware = store => {
         socket.emit('peer:msg', action.payload.data);
       }
     } else {
-      console.log('socket hasnt created yet!!!');
+      console.error('socket hasnt created yet!!!', action);
     }
 
     next(action);

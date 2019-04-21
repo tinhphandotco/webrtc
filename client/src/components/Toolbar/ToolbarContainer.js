@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from "react-redux";
 
-import { UIStateActions, ParticipantsActions, ParticipantsEnhancerActions } from 'actions';
-import { isSharingScreen, localParticipantSettings } from 'reducers/participants/select';
+import { UIStateActions, ParticipantsActions } from 'actions';
+import { isSharingScreen, localParticipantSettings, getLocalUserInfo } from 'reducers/participants/select';
 import { isShowChat, isShowToolbar } from 'reducers/uiState/select';
 
 import ToolbarComponent from './ToolbarComponent';
@@ -13,7 +13,8 @@ const mapStateToProps = (state) => {
     isShowChat: isShowChat(state),
     isShowToolbar: isShowToolbar(state),
     isSharingScreen: isSharingScreen(state),
-    localParticipantSettings: localParticipantSettings(state)
+    localParticipantInfo: getLocalUserInfo(state),
+    localParticipantSettings: localParticipantSettings(state),
 	};
 };
 
@@ -22,7 +23,7 @@ const mapDispatchToProps = {
   toggleToolbar: UIStateActions.toggleToolbar,
   getShareScreen: ParticipantsActions.getShareScreen,
   closeShareScreen: ParticipantsActions.closeShareScreen,
-  enhancerIsSharingScreen: ParticipantsEnhancerActions.enhancerIsSharingScreen
+  setLocalSettingDevices: ParticipantsActions.setLocalSettingDevices
 };
 
 @connect(mapStateToProps, mapDispatchToProps)
@@ -34,17 +35,9 @@ export default class ToolbarContainer extends React.Component {
     toggleToolbar: PropTypes.func,
     getShareScreen: PropTypes.func,
     closeShareScreen: PropTypes.func,
-    enhancerIsSharingScreen: PropTypes.func,
-    localParticipantSettings: PropTypes.shape({
-      video: PropTypes.shape({
-        active: PropTypes.bool,
-        enable: PropTypes.bool
-      }),
-      audio: PropTypes.shape({
-        active: PropTypes.bool,
-        enable: PropTypes.bool
-      })
-    }).isRequired
+    isSharingScreen: PropTypes.bool.isRequired,
+    localParticipantInfo: PropTypes.object,
+    setLocalSettingDevices: PropTypes.func,
   }
 
   static defaultProps = {
@@ -52,19 +45,20 @@ export default class ToolbarContainer extends React.Component {
     toggleToolbar: () => null,
     getShareScreen: () => null,
     closeShareScreen: () => null,
-    enhancerIsSharingScreen: () => false
+    setLocalSettingDevices: () => null,
+    localParticipantInfo: {},
   }
 
   constructor(props) {
     super(props);
   }
 
-  get isSharingScreen() {
-    return this.props.enhancerIsSharingScreen();
+  get localParticipantSettings() {
+    return this.props.localParticipantInfo.settings;
   }
 
   toggleShareCreen = () => {
-    if (this.isSharingScreen) {
+    if (this.props.isSharingScreen) {
       this.props.closeShareScreen();
     } else {
       this.props.getShareScreen();
@@ -79,6 +73,16 @@ export default class ToolbarContainer extends React.Component {
     this.props.toggleToolbar(!this.props.isShowToolbar);
   }
 
+  toggleDevices = (device) => () => {
+    this.props.setLocalSettingDevices({
+      [device]: {
+        enable: !this.localParticipantSettings[device].enable
+      }
+    });
+  }
+  toggleAudioDevice = this.toggleDevices('audio');
+  toggleVideoDevice = this.toggleDevices('video');
+
   render() {
     return (
       <ToolbarComponent
@@ -88,8 +92,10 @@ export default class ToolbarContainer extends React.Component {
         toggleToolbar={this.toggleToolbar}
         toggleShareCreen={this.toggleShareCreen}
         getShareScreen={this.props.getShareScreen}
-        isSharingScreen={this.isSharingScreen}
-        localParticipantSettings={this.props.localParticipantSettings}
+        isSharingScreen={this.props.isSharingScreen}
+        localParticipantSettings={this.localParticipantSettings}
+        toggleAudioDevice={this.toggleAudioDevice}
+        toggleVideoDevice={this.toggleVideoDevice}
       />
     );
   }

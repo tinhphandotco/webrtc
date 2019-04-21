@@ -9,6 +9,7 @@ export default
 class RightActions extends React.Component {
   static propTypes = {
     openModalSettings: PropTypes.func,
+    settingDevices: PropTypes.object.isRequired,
   }
 
   static defaultProps = {
@@ -20,10 +21,22 @@ class RightActions extends React.Component {
   }
 
   render() {
+    const { settingDevices, openModalSettings } = this.props;
+
     return (
       <React.Fragment>
-        <Tooltip placement="top" title="Setting microphone, camera, speaker">
-          <StyledToolbar.ActionItem onClick={this.props.openModalSettings}>
+        <Tooltip
+          placement="top"
+          title={(
+            !settingDevices.video.active && !settingDevices.audio.active
+              ? "Permission not granted"
+              : "Setting microphone, camera, speaker"
+          )}
+        >
+          <StyledToolbar.ActionItem
+            onClick={openModalSettings}
+            disabled={!settingDevices.video.active && !settingDevices.audio.active}
+          >
             <StyledToolbar.ActionIcon type="setting" />
             <StyledToolbar.ActionLabel>Settings</StyledToolbar.ActionLabel>
           </StyledToolbar.ActionItem>

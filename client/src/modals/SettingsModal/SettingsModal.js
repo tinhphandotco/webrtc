@@ -2,10 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from "react-redux";
 
-import { path, equals } from 'ramda';
+import { path } from 'ramda';
 import { staticUrl } from 'utils/common';
 
 import { DevicesActions, ParticipantsEnhancerActions } from 'actions';
+import { localParticipantSettings } from 'reducers/participants/select';
 import { getDevices } from 'reducers/devices/select';
 
 
@@ -17,6 +18,7 @@ import StyledSettingsModal from './styled';
 const mapStateToProps = (state) => {
 	return {
     devices: getDevices(state),
+    settingDevices: localParticipantSettings(state)
 	};
 };
 
@@ -37,6 +39,16 @@ export default class SettingsModal extends React.Component {
     }),
     setDevices: PropTypes.func,
     setStream: PropTypes.func,
+    settingDevices: PropTypes.shape({
+      video: PropTypes.shape({
+        active: PropTypes.bool,
+        enable: PropTypes.bool
+      }),
+      audio: PropTypes.shape({
+        active: PropTypes.bool,
+        enable: PropTypes.bool
+      })
+    }).isRequired
   }
 
   static defaultProps = {
@@ -69,9 +81,14 @@ export default class SettingsModal extends React.Component {
   }
 
   componentDidMount() {
+    const { settingDevices } = this.props;
+
     this.getUserMedia({
       videoinput: this.state.selectedVideoInput,
       audioinput: this.state.selectedAudioInput
+    }, {
+      video: settingDevices.video.active,
+      audio: settingDevices.audio.active
     })
       .then(() => {
         this.enumerateDevices();
@@ -104,14 +121,19 @@ export default class SettingsModal extends React.Component {
         });
       })
       .catch((error) => {
+        console.log('enu: ', error);
         message.error(error.name);
       });
   }
 
-  getUserMedia = (settings) => {
+  getUserMedia = (constraintSettings, settings) => {
     const constraints = {
-      audio: { deviceId: settings.audioinput ? { exact: settings.audioinput } : undefined },
-      video: { deviceId: settings.videoinput ? { exact: settings.videoinput } : undefined }
+      audio: settings.audio
+        ? { deviceId: constraintSettings.audioinput ? { exact: constraintSettings.audioinput } : undefined }
+        : false,
+      video: settings.video
+        ? { deviceId: constraintSettings.videoinput ? { exact: constraintSettings.videoinput } : undefined }
+        : false
     };
 
     return navigator.mediaDevices.getUserMedia(constraints)
@@ -157,52 +179,78 @@ export default class SettingsModal extends React.Component {
     }
   }
 
+  _renderPermissionDenide = (condition) => (
+    <If condition={condition}>
+      <StyledSettingsModal.Selector disabled defaultValue="">
+        <Select.Option value="">Permission not granted</Select.Option>
+      </StyledSettingsModal.Selector>
+    </If>
+  )
+
   render() {
+    const { settingDevices } = this.props;
+
     return (
       <StyledSettingsModal>
         <StyledSettingsModal.Devices>
           <StyledSettingsModal.Preview>
             <StyledSettingsModal.Video srcObject={this.state.stream} playsInline autoPlay muted sinkId={this.state.selectedAudioOutput} />
             <StyledSettingsModal.CheckMic>
-              <CheckMic progress={30} />
+              <CheckMic progress={0} />
             </StyledSettingsModal.CheckMic>
           </StyledSettingsModal.Preview>
 
           <StyledSettingsModal.Selection>
             <StyledSettingsModal.SelectRow>
               <StyledSettingsModal.SelectLabel>Camera</StyledSettingsModal.SelectLabel>
-              <StyledSettingsModal.Selector
-                value={this.state.selectedVideoInput}
-                onChange={this.handleSelectChange('selectedVideoInput')}
-              >
-                {this.state.videoinput.map((video, idx) => (
-                  <Select.Option key={idx} value={video.id}>{video.label}</Select.Option>
-                ))}
-              </StyledSettingsModal.Selector>
+
+              <If condition={settingDevices.video.active}>
+                <StyledSettingsModal.Selector
+                  value={this.state.selectedVideoInput}
+                  onChange={this.handleSelectChange('selectedVideoInput')}
+                >
+                  {this.state.videoinput.map((video, idx) => (
+                    <Select.Option key={idx} value={video.id}>{video.label}</Select.Option>
+                  ))}
+                </StyledSettingsModal.Selector>
+              </If>
+
+              {this._renderPermissionDenide(!settingDevices.video.active)}
             </StyledSettingsModal.SelectRow>
 
             <StyledSettingsModal.SelectRow>
               <StyledSettingsModal.SelectLabel>Microphone</StyledSettingsModal.SelectLabel>
-              <StyledSettingsModal.Selector
-                value={this.state.selectedAudioInput}
-                onChange={this.handleSelectChange('selectedAudioInput')}
-              >
-                {this.state.audioinput.map((audio, idx) => (
-                  <Select.Option key={idx} value={audio.id}>{audio.label}</Select.Option>
-                ))}
-              </StyledSettingsModal.Selector>
+
+              <If condition={settingDevices.audio.active}>
+                <StyledSettingsModal.Selector
+                  value={this.state.selectedAudioInput}
+                  onChange={this.handleSelectChange('selectedAudioInput')}
+                  disabled={!settingDevices.audio.active}
+                >
+                  {this.state.audioinput.map((audio, idx) => (
+                    <Select.Option key={idx} value={audio.id}>{audio.label}</Select.Option>
+                  ))}
+                </StyledSettingsModal.Selector>
+              </If>
+
+              {this._renderPermissionDenide(!settingDevices.audio.active)}
             </StyledSettingsModal.SelectRow>
 
             <StyledSettingsModal.SelectRow audiooutput>
               <StyledSettingsModal.SelectLabel>Audio output</StyledSettingsModal.SelectLabel>
-              <StyledSettingsModal.Selector
-                value={this.state.selectedAudioOutput}
-                onChange={this.handleSelectChange('selectedAudioOutput')}
-              >
-                {this.state.audiooutput.map((audio, idx) => (
-                  <Select.Option key={idx} value={audio.id}>{audio.label}</Select.Option>
-                ))}
-              </StyledSettingsModal.Selector>
+
+              <If condition={settingDevices.audio.active}>
+                <StyledSettingsModal.Selector
+                  value={this.state.selectedAudioOutput}
+                  onChange={this.handleSelectChange('selectedAudioOutput')}
+                >
+                  {this.state.audiooutput.map((audio, idx) => (
+                    <Select.Option key={idx} value={audio.id}>{audio.label}</Select.Option>
+                  ))}
+                </StyledSettingsModal.Selector>
+              </If>
+
+              {this._renderPermissionDenide(!settingDevices.audio.active)}
             </StyledSettingsModal.SelectRow>
 
             <StyledSettingsModal.TestSound onClick={this.testSound}>Play a test sound</StyledSettingsModal.TestSound>

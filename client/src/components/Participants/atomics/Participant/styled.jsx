@@ -30,6 +30,8 @@ ParticipantItem.Video = styled(Video)`
   background: #26394f;
   height: 100%;
   width: 100%;
+
+  ${props => props.hiding && 'display: none'};
 `;
 
 ParticipantItem.VideoInactive = styled.div`
@@ -37,15 +39,16 @@ ParticipantItem.VideoInactive = styled.div`
   background: rgba(0, 0, 0, 0.8);
   display: flex;
   justify-content: center;
+  left: 0;
   height: 100%;
+  position: absolute;
+  top: 0;
   width: 100%;
 `;
 
 ParticipantItem.VideoInactiveAvatar = styled.img`
   border-radius: 50%;
-  height: 70px;
-  object-fit: cover;
-  width: 70px;
+  height: 40%;
 `;
 
 ParticipantItem.UserInfo = styled.div`
@@ -78,19 +81,16 @@ ParticipantItem.Actions = styled.div`
 `;
 
 ParticipantItem.Devices = styled.div`
+  align-items: center;
+  display: flex;
   color: #fff;
   visibility: hidden;
 `;
 
-ParticipantItem.DeviceItem = styled.button`
-  background: transparent;
-  border: none;
+ParticipantItem.DeviceItem = styled.div`
   color: #fff;
-  cursor: pointer;
   font-size: 18px;
   margin: 0 3px;
-  outline: none;
-  padding: 0 3px;
 `;
 
 export default ParticipantItem;

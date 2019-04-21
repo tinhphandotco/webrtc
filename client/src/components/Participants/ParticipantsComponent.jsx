@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { path } from 'ramda';
 import { Icon } from 'antd';
 import Caret from 'elements/Caret';
 import { Participant } from './atomics';
@@ -14,6 +15,7 @@ export default class ParticipantsComponent extends React.Component {
     selectedParticipantId: PropTypes.string,
     localParticipantId: PropTypes.string,
     sinkId: PropTypes.string,
+    listParticipantSetting: PropTypes.object.isRequired,
   }
 
   static defaultProps = {
@@ -40,6 +42,20 @@ export default class ParticipantsComponent extends React.Component {
 
   get isHideListParticipants() {
     return (!this.props.isShowGridParticipants && !this.state.isShowListParticipants) ? 1 : 0;
+  }
+
+  // NOTE: Because we store participant in enhancer so when other connected --> store reducer hasnt updated yet
+  getParticipantSettingById = (participantId) => {
+    return path([participantId, 'settings'], this.props.listParticipantSetting) || {
+      video: {
+        active: false,
+        enable: false,
+      },
+      audio: {
+        active: false,
+        enable: false,
+      }
+    };
   }
 
   getSinkIdNotForLocal(participantId) {
@@ -83,6 +99,7 @@ export default class ParticipantsComponent extends React.Component {
           {this.streams.map(item => (
             <StyledParticipants.Participant key={item.id} >
               <Participant
+                settingDevices={this.getParticipantSettingById(item.id)}
                 isLocalParticipant={this.isLocalParticipant(item.id)}
                 sinkId={this.getSinkIdNotForLocal(item.id)}
                 participant={item}

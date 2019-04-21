@@ -53,6 +53,7 @@
     "setTimeout": true,
     "clearTimeout": true,
     "navigator": true,
+    "If": true,
     "process": true,
     "Image": true
   },
@@ -61,6 +62,7 @@
     "semi": "error",
     "react/prop-types": "error",
     "react/default-props-match-prop-types": "error",
-    "react/require-default-props": "error"
+    "react/require-default-props": "error",
+    "react/jsx-no-undef": ["error", { "allowGlobals": true }]
   }
 }

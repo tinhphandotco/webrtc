@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from "react-redux";
 
 import { ParticipantsEnhancerActions, UIStateActions } from 'actions';
-import { getLocalUserInfo, getAllStreams } from 'reducers/participants/select';
+import { getAllStreams, listParticipantSetting } from 'reducers/participants/select';
 import { isShowGridParticipants } from 'reducers/uiState/select';
 import { getSinkId } from 'reducers/devices/select';
 
@@ -12,9 +12,9 @@ import ParticipantsComponent from './ParticipantsComponent';
 const mapStateToProps = (state) => {
 	return {
     allStreams: getAllStreams(state),
-    localUserInfo: getLocalUserInfo(state),
     isShowGridParticipants: isShowGridParticipants(state),
     sinkId: getSinkId(state),
+    listParticipantSetting: listParticipantSetting(state)
 	};
 };
 
@@ -37,6 +37,7 @@ class ParticipantsContainer extends React.Component {
     toggleGridLayout: PropTypes.func,
     isShowGridParticipants: PropTypes.bool,
     sinkId: PropTypes.string,
+    listParticipantSetting: PropTypes.object.isRequired,
   }
 
   static defaultProps = {
@@ -83,6 +84,7 @@ class ParticipantsContainer extends React.Component {
         selectedParticipantId={this.selectedParticipantId}
         setSelectParticipant={this.setSelectParticipant}
         sinkId={this.props.sinkId}
+        listParticipantSetting={this.props.listParticipantSetting}
       />
     );
   }

@@ -18,6 +18,7 @@ SettingsModal.Preview = styled.div`
 `;
 
 SettingsModal.Video = styled(Video)`
+  background: #ccc;
   border-radius: 5px;
   width: 100%;
 `;

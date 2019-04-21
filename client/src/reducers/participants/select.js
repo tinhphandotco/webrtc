@@ -1,4 +1,4 @@
-import compose from 'ramda/src/compose';
+import { compose } from 'ramda';
 import path from 'ramda/src/path';
 
 export const getParticipantsState = state => state.participants;
@@ -9,7 +9,7 @@ export const getLocalUserInfo = compose(
 );
 
 export const getAllStreams = compose(
-  participantsState => participantsState.allIds.map(id => path('byId', id, 'stream'), participantsState),
+  participantsState => participantsState.allIds.map(id => path(['byId', id, 'stream'], participantsState)),
   getParticipantsState
 );
 
@@ -36,4 +36,20 @@ export const isSharingScreen = compose(
 export const localParticipantSettings = compose(
   path(['settings']),
   getLocalUserInfo
+);
+
+export const listParticipantSetting = compose(
+  participantsState => participantsState.allIds.reduce((acc, id) => ({
+    ...acc,
+    [id]: {
+      id,
+      settings: path(['byId', id, 'settings'], participantsState)
+    }
+  }), {}),
+  getParticipantsState
+);
+
+export const getParticipantSettingById = (participantId) => compose(
+  participantsState => path(['byId', participantId, 'settings'], participantsState),
+  getParticipantsState
 );

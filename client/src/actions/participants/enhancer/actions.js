@@ -71,17 +71,6 @@ export const enhancerParticipantDisconecting = (participantId) => ({
   }
 });
 
-export const enhancerSetStateShareScreen = (state) => ({
-  type: ActionTypes.ENHANCER_SET_STATE_SHARE_SCREEN,
-  payload: {
-    state,
-  }
-});
-
-export const enhancerIsSharingScreen = () => ({
-  type: ActionTypes.ENHANCER_IS_SHARING_SCREEN,
-});
-
 export const enhancerSetStream = (stream) => ({
   type: ActionTypes.ENHANCER_SET_STREAM,
   payload: {

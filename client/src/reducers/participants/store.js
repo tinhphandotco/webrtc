@@ -83,9 +83,10 @@ const byId = (state = INITIAL_STATE.byId, { type, payload }) => {
         }
       };
 
-    case ParticipantsTypes.PARTICIPANT_DISCONNECTING:
+    case ParticipantsTypes.ENHANCER_PARTICIPANT_DISCONECTING:
       return omit([payload.participantId], state);
 
+    case ParticipantsTypes.SET_LOCAL_SETTING_DEVICES:
     case ParticipantsTypes.SET_SETTING_DEVICES:
       return {
         ...state,

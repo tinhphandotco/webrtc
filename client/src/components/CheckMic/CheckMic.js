@@ -6,10 +6,12 @@ import StyledCheckMic from './styled';
 
 export default class CheckMic extends React.Component {
   static propTypes = {
+    progress: PropTypes.number,
     audioinput: PropTypes.string,
   };
 
   static defaultProps = {
+    progress: 0,
     audioinput: '',
   };
 
@@ -23,7 +25,7 @@ export default class CheckMic extends React.Component {
     this.visualizeTimer = null;
 
     this.state = {
-      progress: 0,
+      progress: props.progress,
     };
 
     this.$ref = {
@@ -34,6 +36,7 @@ export default class CheckMic extends React.Component {
   componentDidMount() {
     this.createContext();
     this.getMicrophoneInput();
+    this.setProgress(this.state.progress);
   }
 
   componentWillUnmount() {

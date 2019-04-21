@@ -63,8 +63,8 @@ export const closeShareScreen = () => ({
   type: ActionTypes.CLOSE_SHARE_SCREEN,
 });
 
-export const participantDisconecting = (participantId) => (dispatch) => {
-  const localParticipantId = dispatch(ParticipantsEnhancerActions.enhancerGetLocalParticipantId());
+export const participantDisconecting = (participantId) => (dispatch, getState) => {
+  const localParticipantId = getState().participants.localUser;
   dispatch({
     type: ActionTypes.PARTICIPANT_DISCONNECTING,
     payload: {
@@ -95,6 +95,17 @@ export const setSettingDevices = (participantId, settings) => ({
     settings,
   }
 });
+
+export const setLocalSettingDevices = (settings) => (dispatch, getState) => {
+  const localParticipantId = getState().participants.localUser;
+  dispatch({
+    type: ActionTypes.SET_LOCAL_SETTING_DEVICES,
+    payload: {
+      participantId: localParticipantId,
+      settings,
+    }
+  });
+};
 
 export const socketMsg = (data) => {
   return { type: ActionTypes.SOCKET_MSG, payload: { data } };

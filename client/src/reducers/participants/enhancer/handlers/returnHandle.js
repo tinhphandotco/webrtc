@@ -34,11 +34,6 @@ const getRemoteParticipants = (store, action, state) => {
   return remoteIds.map(id => path(['byId', id], state));
 };
 
-const isSharingScreen = (store, action, state) => {
-  console.log('isSharingScreen: ', JSON.stringify(state));
-  return state.appState.isSharingScreen;
-};
-
 const handler = {
   [ParticipantsEnhancerTypes.ENHANCER_GET_LOCAL_STREAM]: getLocalStream,
   [ParticipantsEnhancerTypes.ENHANCER_GET_PARTICIPANTS_STREAM]: getParticipantsStream,
@@ -48,7 +43,6 @@ const handler = {
   [ParticipantsEnhancerTypes.ENHANCER_GET_SELECTED_PARTICIPANT]: getSelectedParticipant,
   [ParticipantsEnhancerTypes.ENHANCER_GET_SELECTED_PARTICIPANT_ID]: getSelectedParticipantId,
   [ParticipantsEnhancerTypes.ENHANCER_GET_REMOTE_PARTICIPANTS]: getRemoteParticipants,
-  [ParticipantsEnhancerTypes.ENHANCER_IS_SHARING_SCREEN]: isSharingScreen
 };
 
 export default handler;

@@ -17,6 +17,8 @@ export default class ToolbarComponent extends React.Component {
     toggleShareCreen: PropTypes.func.isRequired,
     isSharingScreen: PropTypes.bool.isRequired,
     localParticipantSettings: PropTypes.object.isRequired,
+    toggleAudioDevice: PropTypes.func.isRequired,
+    toggleVideoDevice: PropTypes.func.isRequired,
   }
 
   static defaultProps = {
@@ -60,11 +62,17 @@ export default class ToolbarComponent extends React.Component {
         </StyledToolbar.Actions>
 
         <StyledToolbar.Controls>
-          <Control settings={this.props.localParticipantSettings} />
+          <Control
+            settingDevices={this.props.localParticipantSettings}
+            toggleAudioDevice={this.props.toggleAudioDevice}
+            toggleVideoDevice={this.props.toggleVideoDevice}
+            isSharingScreen={this.props.isSharingScreen}
+          />
         </StyledToolbar.Controls>
 
         <StyledToolbar.Actions>
           <RightActions
+            settingDevices={this.props.localParticipantSettings}
             openModalSettings={this.openModalSettings}
           />
         </StyledToolbar.Actions>

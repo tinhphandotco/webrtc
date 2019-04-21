@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Icon } from 'antd';
+import { staticUrl } from 'utils/common';
+import MyIcon from 'elements/MyIcon';
 import StyledParticipantItem from './styled';
 
 export default class Participant extends React.Component {
@@ -10,6 +11,7 @@ export default class Participant extends React.Component {
     handleSelectParticipant: PropTypes.func,
     isLocalParticipant: PropTypes.bool.isRequired,
     sinkId: PropTypes.string,
+    settingDevices: PropTypes.object.isRequired
   }
 
   static defaultProps = {
@@ -26,6 +28,10 @@ export default class Participant extends React.Component {
     };
   }
 
+  get dontHasVideo() {
+    return !this.props.participant.stream || !this.props.settingDevices.video.active || !this.props.settingDevices.video.enable;
+  }
+
   toggleInfo = state => () => {
     this.setState({
       isShowInfo: state
@@ -39,6 +45,8 @@ export default class Participant extends React.Component {
   }
 
   render() {
+    const { settingDevices } = this.props;
+
     return (
       <StyledParticipantItem
         onMouseEnter={this.toggleInfo(true)}
@@ -48,6 +56,7 @@ export default class Participant extends React.Component {
         showInfo={this.state.isShowInfo}
       >
         <StyledParticipantItem.Video
+          hiding={this.dontHasVideo}
           sinkId={this.props.sinkId}
           srcObject={this.props.participant.stream}
           playsInline
@@ -60,10 +69,10 @@ export default class Participant extends React.Component {
           <span>A</span>
           <StyledParticipantItem.Devices>
             <StyledParticipantItem.DeviceItem>
-              <Icon type="phone" />
+              <MyIcon type={settingDevices.audio.enable ? 'iconmic' : 'iconmic_off'} />
             </StyledParticipantItem.DeviceItem>
             <StyledParticipantItem.DeviceItem>
-              <Icon type="video-camera" />
+              <MyIcon type={settingDevices.video.enable ? 'iconcamera' : 'iconcamera-off'} />
             </StyledParticipantItem.DeviceItem>
           </StyledParticipantItem.Devices>
         </StyledParticipantItem.Actions>
@@ -76,9 +85,11 @@ export default class Participant extends React.Component {
           </StyledParticipantItem.Username>
         </StyledParticipantItem.UserInfo>
 
-        <StyledParticipantItem.VideoInactive>
-          <StyledParticipantItem.VideoInactiveAvatar src="https://www.ischool.berkeley.edu/sites/default/files/styles/fullscreen/public/default_images/avatar.jpeg?itok=x4ls-bFQ" />
-        </StyledParticipantItem.VideoInactive>
+        <If condition={this.dontHasVideo}>
+          <StyledParticipantItem.VideoInactive>
+            <StyledParticipantItem.VideoInactiveAvatar src={staticUrl('assets/images/avatar-default.svg')} />
+          </StyledParticipantItem.VideoInactive>
+        </If>
       </StyledParticipantItem>
     );
   }

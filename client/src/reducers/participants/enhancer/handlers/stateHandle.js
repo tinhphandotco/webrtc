@@ -1,4 +1,4 @@
-import { omit } from 'ramda';
+import { omit, path } from 'ramda';
 import { ParticipantsTypes, ParticipantsEnhancerTypes } from 'actions';
 
 const INIT_LOCAL_USER = {
@@ -108,13 +108,18 @@ const setSelectParticipant = (store, action, state) => ({
   }
 });
 
-const setStateShareScreen = (store, action ,state) => ({
-  ...state,
-  appState: {
-    ...state.appState,
-    isSharingScreen: action.payload.state
+const setLocalSettingDevices = (store, action, state) => {
+  const stream = path(['byId', state.localUser, 'stream'], state);
+  if (stream) {
+    if (action.payload.settings.hasOwnProperty('video')) {
+      stream.getVideoTracks().forEach(track => track.enabled = action.payload.settings.video.enable);
+    }
+
+    if (action.payload.settings.hasOwnProperty('audio')) {
+      stream.getAudioTracks().forEach(track => track.enabled = action.payload.settings.audio.enable);
+    }
   }
-});
+};
 
 const handler = {
   [ParticipantsTypes.INIT_LOCAL_USER]: initLocalUser,
@@ -123,7 +128,7 @@ const handler = {
   [ParticipantsEnhancerTypes.ENHANCER_SET_REMOTE_STREAM]: setRemoteStream,
   [ParticipantsEnhancerTypes.ENHANCER_PARTICIPANT_DISCONECTING]: participantDisconecting,
   [ParticipantsEnhancerTypes.ENHANCER_SET_SELECT_PARTICIPANT]: setSelectParticipant,
-  [ParticipantsEnhancerTypes.ENHANCER_SET_STATE_SHARE_SCREEN]: setStateShareScreen
+  [ParticipantsTypes.SET_LOCAL_SETTING_DEVICES]: setLocalSettingDevices,
 };
 
 export default handler;

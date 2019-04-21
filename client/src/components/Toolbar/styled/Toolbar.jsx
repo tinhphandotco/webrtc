@@ -42,6 +42,11 @@ Toolbar.ActionItem = styled.button`
   outline: none;
   text-align: center;
   width: 95px;
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: .7;
+  }
 `;
 
 const IconMixin = css`
