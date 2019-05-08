@@ -19,7 +19,7 @@ const patricipantsEnhancer = () => {
       ...stateHandle
     };
 
-    console.log('patricipantsEnhancerState: ', action, { patricipantsEnhancerState, stateHandle, returnHandle });
+    // console.log('patricipantsEnhancerState: ', action, { patricipantsEnhancerState, stateHandle, returnHandle });
 
     if (returnHandle !== undefined && returnHandle !== null) { return returnHandle; }
     next(action);

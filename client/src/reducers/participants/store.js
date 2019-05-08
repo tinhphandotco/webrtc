@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
 import { omit } from 'ramda';
-import { ParticipantsTypes } from 'actions';
+import { ParticipantsTypes, ParticipantsEnhancerTypes } from 'actions';
 
 const INIT_USER = {
   id: null,
@@ -56,6 +56,15 @@ const byId = (state = INITIAL_STATE.byId, { type, payload }) => {
         }
       };
 
+    // case ParticipantsEnhancerTypes.ENHANCER_SET_LOCAL_STREAM:
+    //   return {
+    //     ...state,
+    //     [payload.localUserId]: {
+    //       ...state[payload.localUserId],
+    //       stream: payload.stream
+    //     }
+    //   };
+
     case ParticipantsTypes.SET_LOCAL_STREAM:
       return {
         ...state,
@@ -65,14 +74,24 @@ const byId = (state = INITIAL_STATE.byId, { type, payload }) => {
         }
       };
 
-    case ParticipantsTypes.INIT_REMOTE_USER:
+    case ParticipantsEnhancerTypes.ENHANCER_INITE_REMOTE_USER:
       return {
         ...state,
-        [payload.id]: {
+        [payload.userId]: {
           ...INIT_REMOTE_USER,
-          ...payload
+          id: payload.userId,
+          peerConnection: payload.peerConnection,
         }
       };
+
+    // case ParticipantsTypes.INIT_REMOTE_USER:
+    //   return {
+    //     ...state,
+    //     [payload.id]: {
+    //       ...INIT_REMOTE_USER,
+    //       ...payload
+    //     }
+    //   };
 
     case ParticipantsTypes.SET_REMOTE_STREAM:
       return {

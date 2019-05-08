@@ -11,8 +11,6 @@ import StyledFullscreenParticipant from './styled';
 
 const mapStateToProps = (state) => {
   const selectedParticipant = getSelectedParticipant(state);
-  console.log('selectedParticipant: ', selectedParticipant);
-
 	return {
     selectedParticipant: selectedParticipant,
     settingDevices: getParticipantSettingById(selectedParticipant.id)(state)
