@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import { getLocalUserInfo, didGetUserMedia, errorGetUserMedia } from 'reducers/participants/select';
 import { isShowGridParticipants } from 'reducers/uiState/select';
 
-import { ParticipantsEnhancerActions, ParticipantsActions, RoomActions } from 'actions';
+import { ParticipantsActions, RoomActions } from 'actions';
 
 import {
   message,
@@ -32,12 +32,9 @@ const mapStateToProps = (state) => {
 };
 
 const { getUserMedia } = ParticipantsActions;
-const { enhancerSetLocalStream, enhancerGetLocalStream } = ParticipantsEnhancerActions;
 const { joinRoom, connectSocket } = RoomActions;
 const mapDispatchToProps = {
   getUserMedia,
-  enhancerSetLocalStream,
-  enhancerGetLocalStream,
   joinRoom,
   connectSocket
 };
@@ -45,7 +42,6 @@ const mapDispatchToProps = {
 @connect(mapStateToProps, mapDispatchToProps)
 class MeetingRoomContainer extends React.Component {
   static propTypes = {
-    enhancerSetLocalStream: PropTypes.func,
     getUserMedia: PropTypes.func,
     connectSocket: PropTypes.func,
     joinRoom: PropTypes.func,
@@ -59,7 +55,6 @@ class MeetingRoomContainer extends React.Component {
   static defaultProps = {
     getUserMedia: () => null,
     connectSocket: () => null,
-    enhancerSetLocalStream: () => null,
     joinRoom: () => null,
     localUserInfo: null,
     errorGetUserMedia: null

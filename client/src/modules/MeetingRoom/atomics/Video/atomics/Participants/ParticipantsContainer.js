@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from "react-redux";
 
-import { ParticipantsEnhancerActions } from 'actions';
 import { getLocalUserInfo } from 'reducers/participants/select';
 
 import { StyledParticipants } from './styled';
@@ -14,7 +13,6 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = {
-  enhancerGetParticipantsStream: ParticipantsEnhancerActions.enhancerGetParticipantsStream,
 };
 
 @connect(mapStateToProps, mapDispatchToProps)

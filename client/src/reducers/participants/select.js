@@ -1,10 +1,15 @@
 import { compose } from 'ramda';
-import path from 'ramda/src/path';
+import { path } from 'ramda';
 
 export const getParticipantsState = state => state.participants;
 
 export const getLocalUserInfo = compose(
   participantsState => participantsState.byId[participantsState.localUser],
+  getParticipantsState
+);
+
+export const getLocalParticipantId = compose(
+  participantsState => participantsState.localUser,
   getParticipantsState
 );
 
@@ -49,7 +54,25 @@ export const listParticipantSetting = compose(
   getParticipantsState
 );
 
-export const getParticipantSettingById = (participantId) => compose(
-  participantsState => path(['byId', participantId, 'settings'], participantsState),
+export const getUserInfoById = (participantId) => compose(
+  participantsState => path(['byId', participantId], participantsState),
   getParticipantsState
+);
+
+export const getParticipantSettingById = (participantId) => compose(
+  participantInfo => path(['settings'], participantInfo),
+  getUserInfoById(participantId)
+);
+
+export const getRemoteParticipants = compose(
+  participantsState => participantsState.allIds
+    .filter(id => id !== participantsState.localUser)
+    .map(id => path(['byId', id], participantsState)),
+  getParticipantsState
+);
+
+export const getParticipantsStream = compose(
+  participantsState => participantsState.allIds
+    .map(id => ({ id, stream: path(['byId', id, 'stream'], participantsState) })),
+  getParticipantsState,
 );

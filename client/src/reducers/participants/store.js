@@ -1,11 +1,11 @@
 import { combineReducers } from 'redux';
-import { omit } from 'ramda';
+import { omit, path } from 'ramda';
 import { ParticipantsTypes, ParticipantsEnhancerTypes } from 'actions';
 
 const INIT_USER = {
   id: null,
   peerConnection: null,
-  localStream: null,
+  stream: null,
   settings: {
     video: {
       active: false,
@@ -56,25 +56,25 @@ const byId = (state = INITIAL_STATE.byId, { type, payload }) => {
         }
       };
 
-    // case ParticipantsEnhancerTypes.ENHANCER_SET_LOCAL_STREAM:
-    //   return {
-    //     ...state,
-    //     [payload.localUserId]: {
-    //       ...state[payload.localUserId],
-    //       stream: payload.stream
-    //     }
-    //   };
+    case ParticipantsEnhancerTypes.SET_STREAM:
+      return {
+        ...state,
+        [payload.localUserId]: {
+          ...state[payload.localUserId],
+          stream: payload.stream
+        }
+      };
 
     case ParticipantsTypes.SET_LOCAL_STREAM:
       return {
         ...state,
         [payload.localUserId]: {
           ...state[payload.localUserId],
-          localStream: payload.stream
+          stream: payload.stream
         }
       };
 
-    case ParticipantsEnhancerTypes.ENHANCER_INITE_REMOTE_USER:
+    case ParticipantsTypes.INIT_REMOTE_USER:
       return {
         ...state,
         [payload.userId]: {
@@ -84,28 +84,49 @@ const byId = (state = INITIAL_STATE.byId, { type, payload }) => {
         }
       };
 
-    // case ParticipantsTypes.INIT_REMOTE_USER:
-    //   return {
-    //     ...state,
-    //     [payload.id]: {
-    //       ...INIT_REMOTE_USER,
-    //       ...payload
-    //     }
-    //   };
-
     case ParticipantsTypes.SET_REMOTE_STREAM:
       return {
         ...state,
         [payload.remoteUserId]: {
           ...state[payload.remoteUserId],
-          localStream: payload.stream
+          stream: payload.stream
         }
       };
 
     case ParticipantsTypes.ENHANCER_PARTICIPANT_DISCONECTING:
       return omit([payload.participantId], state);
 
-    case ParticipantsTypes.SET_LOCAL_SETTING_DEVICES:
+    case ParticipantsTypes.SET_LOCAL_SETTING_DEVICES: {
+      const stream = path([payload.participantId, 'stream'], state);
+      if (stream) {
+        if (payload.settings.hasOwnProperty('video')) {
+          stream.getVideoTracks().forEach(track => track.enabled = payload.settings.video.enable);
+        }
+
+        if (payload.settings.hasOwnProperty('audio')) {
+          stream.getAudioTracks().forEach(track => track.enabled = payload.settings.audio.enable);
+        }
+      }
+
+      return {
+        ...state,
+        [payload.participantId]: {
+          ...state[payload.participantId],
+          stream,
+          settings: {
+            video: {
+              ...state[payload.participantId].settings.video,
+              ...payload.settings.video
+            },
+            audio: {
+              ...state[payload.participantId].settings.audio,
+              ...payload.settings.audio
+            }
+          }
+        }
+      };
+    }
+
     case ParticipantsTypes.SET_SETTING_DEVICES:
       return {
         ...state,
@@ -135,7 +156,7 @@ const allIds = (state = INITIAL_STATE.allIds, { type, payload }) => {
       return [payload.id];
 
     case ParticipantsTypes.INIT_REMOTE_USER:
-      return [...state, payload.id];
+      return [...state, payload.userId];
 
     case ParticipantsTypes.PARTICIPANT_DISCONNECTING:
       return state.filter(id => id !== payload.participantId);
@@ -187,7 +208,7 @@ const appState = (state = INITIAL_STATE.appState, { type, payload }) => {
         ...state,
         selectedUser: payload.participantId === state.selectedUser
           ? payload.localUser
-          : payload.participantId
+          : state.selectedUser
       };
 
     case ParticipantsTypes.SET_STATE_SHARE_SCREEN:

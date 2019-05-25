@@ -5,7 +5,6 @@ import * as service from './service';
 import {
   RoomTypes,
   ParticipantsTypes,
-  ParticipantsEnhancerTypes
 } from 'actions';
 
 const roomMiddleware = store => {
@@ -43,7 +42,7 @@ const roomMiddleware = store => {
         service.getShareScreen(store);
       }
 
-      if (action.type === ParticipantsEnhancerTypes.ENHANCER_SET_STREAM) {
+      if (action.type === ParticipantsTypes.SET_STREAM) {
         service.setStream(store, action.payload.stream);
       }
 

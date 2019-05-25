@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import { path } from 'ramda';
 import { staticUrl } from 'utils/common';
 
-import { DevicesActions, ParticipantsEnhancerActions } from 'actions';
+import { DevicesActions, ParticipantsActions } from 'actions';
 import { localParticipantSettings } from 'reducers/participants/select';
 import { getDevices } from 'reducers/devices/select';
 
@@ -24,7 +24,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = {
   setDevices: DevicesActions.setDevices,
-  setStream: ParticipantsEnhancerActions.enhancerSetStream
+  setStream: ParticipantsActions.setStream
 };
 
 @connect(mapStateToProps, mapDispatchToProps)
@@ -163,12 +163,14 @@ export default class SettingsModal extends React.Component {
       this.getUserMedia({
         videoinput: type === 'selectedVideoInput' ? value : this.state.selectedVideoInput,
         audioinput: type === 'selectedAudioInput' ? value : this.state.selectedAudioInput
+      }, {
+        video: this.props.settingDevices.video.active,
+        audio: this.props.settingDevices.audio.active
       });
     }
   }
 
   onOk = () => {
-    this.props.onCancel();
     if (this.didChangeDevices) {
       this.props.setDevices({
         videoinput: this.state.selectedVideoInput,
@@ -177,6 +179,7 @@ export default class SettingsModal extends React.Component {
       });
       this.props.setStream(this.state.stream);
     }
+    this.props.onCancel();
   }
 
   _renderPermissionDenide = (condition) => (

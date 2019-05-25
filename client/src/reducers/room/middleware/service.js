@@ -1,10 +1,15 @@
 import { path } from 'ramda';
 import {
   ParticipantsActions,
-  ParticipantsEnhancerActions,
   RoomActions,
   DevicesActions,
 } from 'actions';
+import {
+  getLocalParticipantId,
+  getRemoteParticipants,
+  getUserInfoById,
+  getLocalUserInfo
+} from 'reducers/participants/select';
 
 const iceConfig = {
   'iceServers': [
@@ -13,10 +18,10 @@ const iceConfig = {
 };
 
 const getOrCreateConnection = (store, participantId) => {
-  const participantInfo = store.dispatch(ParticipantsEnhancerActions.enhancerGetUserInfoById(participantId));
+  const participantInfo = getUserInfoById(participantId)(store.getState());
   if (participantInfo) { return participantInfo.peerConnection; }
 
-  const localUserInfo = store.dispatch(ParticipantsEnhancerActions.enhancerGetLocalUserInfo());
+  const localUserInfo = getLocalUserInfo(store.getState());
   const pc = new RTCPeerConnection(iceConfig);
 
   if (localUserInfo.stream) {
@@ -35,10 +40,10 @@ const getOrCreateConnection = (store, participantId) => {
 
   pc.ontrack = (evt) => {
     console.log('pc.onaddstream: ', evt);
-    store.dispatch(ParticipantsEnhancerActions.enhancerSetRemoteStream(participantId, evt.streams[0]));
+    store.dispatch(ParticipantsActions.setRemoteStream(participantId, evt.streams[0]));
   };
 
-  store.dispatch(ParticipantsEnhancerActions.enhancerInitRemoteUser(participantId, pc));
+  store.dispatch(ParticipantsActions.initRemoteUser(participantId, pc));
 
   return pc;
 };
@@ -60,9 +65,9 @@ const createOffer = (pc, store, localId, remoteId) => {
 };
 
 const replaceLocalStream = (store, newStream) => {
-  const localParticipantId = store.dispatch(ParticipantsEnhancerActions.enhancerGetLocalParticipantId());
-  const remoteParticipants = store.dispatch(ParticipantsEnhancerActions.enhancerGetRemoteParticipants());
-  store.dispatch(ParticipantsEnhancerActions.enhancerSetLocalStream(localParticipantId, newStream));
+  const localParticipantId = getLocalParticipantId(store.getState());
+  const remoteParticipants = getRemoteParticipants(store.getState());
+  store.dispatch(ParticipantsActions.setLocalStream(localParticipantId, newStream));
 
   remoteParticipants.forEach(participant => {
     participant.peerConnection.removeStream(participant.peerConnection.getLocalStreams()[0]);
@@ -117,10 +122,10 @@ export const enumerateDevices = (store, constrains, localParticipantId) => {
 export const getUserMedia = (store, listConstrains, index = 0) => {
   navigator.mediaDevices.getUserMedia(listConstrains[index])
     .then((stream) => {
-      const localParticipantId = store.dispatch(ParticipantsEnhancerActions.enhancerGetLocalParticipantId());
+      const localParticipantId = getLocalParticipantId(store.getState());
       enumerateDevices(store, listConstrains[index], localParticipantId)
         .finally(() => {
-          store.dispatch(ParticipantsEnhancerActions.enhancerSetLocalStream(localParticipantId, stream));
+          store.dispatch(ParticipantsActions.setLocalStream(localParticipantId, stream));
         });
     })
     .catch((error) => {
@@ -178,7 +183,7 @@ export const getShareScreen = (store) => {
 };
 
 export const closeShareScreen = (store) => {
-  const localParticipant = store.dispatch(ParticipantsEnhancerActions.enhancerGetLocalUserInfo());
+  const localParticipant = getLocalUserInfo(store.getState());
   localParticipant.stream.getTracks().forEach(track => track.stop());
   onEndedShareScreen(store);
 };
@@ -188,11 +193,11 @@ export const setStream = (store, stream) => {
 };
 
 export const handlePeerDisconnecting = (store, data) => {
-  store.dispatch(ParticipantsEnhancerActions.enhancerParticipantDisconecting(data.id));
+  store.dispatch(ParticipantsActions.participantDisconecting(data.id));
 };
 
 export const handlePeerConnected = (store, data) => {
-  const localUserInfo = store.dispatch(ParticipantsEnhancerActions.enhancerGetLocalUserInfo());
+  const localUserInfo = getLocalUserInfo(store.getState());
   const participantConnection = getOrCreateConnection(store, data.id);
   createOffer(participantConnection, store, localUserInfo.id, data.id);
 };

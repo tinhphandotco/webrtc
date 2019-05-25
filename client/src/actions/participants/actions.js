@@ -1,4 +1,3 @@
-import { ParticipantsEnhancerActions } from 'actions';
 import * as ActionTypes from './constants';
 
 export const initLocalUser = (config) => {
@@ -10,31 +9,30 @@ export const initLocalUser = (config) => {
   };
 };
 
-export const setLocalStream = (localUserId, fakeStream) => {
+export const setLocalStream = (localUserId, stream) => {
   return {
     type: ActionTypes.SET_LOCAL_STREAM,
     payload: {
       localUserId,
-      stream: fakeStream
+      stream
     }
   };
 };
 
-export const initRemoteUser = (config) => {
-  return {
-    type: ActionTypes.INIT_REMOTE_USER,
-    payload: {
-      ...config
-    }
-  };
-};
+export const initRemoteUser = (userId, peerConnection) => ({
+  type: ActionTypes.INIT_REMOTE_USER,
+  payload: {
+    userId,
+    peerConnection
+  }
+});
 
-export const setRemoteStream = (remoteUserId, fakeStream) => {
+export const setRemoteStream = (remoteUserId, stream) => {
   return {
     type: ActionTypes.SET_REMOTE_STREAM,
     payload: {
       remoteUserId,
-      stream: fakeStream
+      stream
     }
   };
 };
@@ -65,6 +63,7 @@ export const closeShareScreen = () => ({
 
 export const participantDisconecting = (participantId) => (dispatch, getState) => {
   const localParticipantId = getState().participants.localUser;
+
   dispatch({
     type: ActionTypes.PARTICIPANT_DISCONNECTING,
     payload: {
@@ -78,6 +77,13 @@ export const setSelectParticipant = (participantId) => ({
   type: ActionTypes.SET_SELECT_PARTICIPANT,
   payload: {
     participantId
+  }
+});
+
+export const setStream = (stream) => ({
+  type: ActionTypes.SET_STREAM,
+  payload: {
+    stream,
   }
 });
 
@@ -98,6 +104,7 @@ export const setSettingDevices = (participantId, settings) => ({
 
 export const setLocalSettingDevices = (settings) => (dispatch, getState) => {
   const localParticipantId = getState().participants.localUser;
+
   dispatch({
     type: ActionTypes.SET_LOCAL_SETTING_DEVICES,
     payload: {

@@ -2,8 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from "react-redux";
 
-import { ParticipantsEnhancerActions, UIStateActions } from 'actions';
-import { getAllStreams, listParticipantSetting } from 'reducers/participants/select';
+import { ParticipantsActions, UIStateActions } from 'actions';
+import {
+  listParticipantSetting,
+  getParticipantsStream,
+  getLocalParticipantId,
+  getSelectedParticipant,
+} from 'reducers/participants/select';
 import { isShowGridParticipants } from 'reducers/uiState/select';
 import { getSinkId } from 'reducers/devices/select';
 
@@ -11,18 +16,17 @@ import ParticipantsComponent from './ParticipantsComponent';
 
 const mapStateToProps = (state) => {
 	return {
-    allStreams: getAllStreams(state),
+    allStreams: getParticipantsStream(state),
+    localParticipantId: getLocalParticipantId(state),
     isShowGridParticipants: isShowGridParticipants(state),
     sinkId: getSinkId(state),
-    listParticipantSetting: listParticipantSetting(state)
+    listParticipantSetting: listParticipantSetting(state),
+    selectedParticipant: getSelectedParticipant(state),
 	};
 };
 
 const mapDispatchToProps = {
-  enhancerGetLocalParticipantId: ParticipantsEnhancerActions.enhancerGetLocalParticipantId,
-  enhancerGetParticipantsStream: ParticipantsEnhancerActions.enhancerGetParticipantsStream,
-  enhancerGetSelectedParticipantId: ParticipantsEnhancerActions.enhancerGetSelectedParticipantId,
-  enhancerSetSelectParticipant: ParticipantsEnhancerActions.enhancerSetSelectParticipant,
+  setSelectParticipant: ParticipantsActions.setSelectParticipant,
   toggleGridLayout: UIStateActions.toggleGridLayout
 };
 
@@ -30,23 +34,19 @@ const mapDispatchToProps = {
 export default
 class ParticipantsContainer extends React.Component {
   static propTypes = {
-    enhancerGetParticipantsStream: PropTypes.func,
-    enhancerGetLocalParticipantId: PropTypes.func,
-    enhancerGetSelectedParticipantId: PropTypes.func,
-    enhancerSetSelectParticipant: PropTypes.func,
     toggleGridLayout: PropTypes.func,
-    isShowGridParticipants: PropTypes.bool,
+    isShowGridParticipants: PropTypes.bool.isRequired,
     sinkId: PropTypes.string,
     listParticipantSetting: PropTypes.object.isRequired,
+    allStreams: PropTypes.array.isRequired,
+    localParticipantId: PropTypes.string.isRequired,
+    selectedParticipant: PropTypes.object.isRequired,
+    setSelectParticipant: PropTypes.func,
   }
 
   static defaultProps = {
-    enhancerGetParticipantsStream: () => [],
-    enhancerGetSelectedParticipantId: () => null,
-    enhancerGetLocalParticipantId: () => null,
-    enhancerSetSelectParticipant: () => null,
+    setSelectParticipant: () => null,
     toggleGridLayout: () => null,
-    isShowGridParticipants: false,
     sinkId: '',
   }
 
@@ -54,34 +54,22 @@ class ParticipantsContainer extends React.Component {
     super(props);
   }
 
-  get getAllStreams() {
-    return this.props.enhancerGetParticipantsStream();
-  }
-
-  get selectedParticipantId() {
-    return this.props.enhancerGetSelectedParticipantId();
-  }
-
-  get localParticipantId() {
-    return this.props.enhancerGetLocalParticipantId();
-  }
-
   toggleGridLayout = () => {
     this.props.toggleGridLayout(!this.props.isShowGridParticipants);
   }
 
   setSelectParticipant = (participantId) => {
-    this.props.enhancerSetSelectParticipant(participantId);
+    this.props.setSelectParticipant(participantId);
   }
 
   render() {
     return (
       <ParticipantsComponent
-        localParticipantId={this.localParticipantId}
+        localParticipantId={this.props.localParticipantId}
         isShowGridParticipants={this.props.isShowGridParticipants}
         toggleGridLayout={this.toggleGridLayout}
-        allStreams={this.getAllStreams}
-        selectedParticipantId={this.selectedParticipantId}
+        allStreams={this.props.allStreams}
+        selectedParticipantId={this.props.selectedParticipant.id}
         setSelectParticipant={this.setSelectParticipant}
         sinkId={this.props.sinkId}
         listParticipantSetting={this.props.listParticipantSetting}
