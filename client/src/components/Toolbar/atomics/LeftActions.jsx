@@ -20,20 +20,26 @@ export default class LeftActions extends React.Component {
     super(props);
   }
 
+  shouldComponentUpdate(nextProps) {
+    const diffIsSharingScreen = this.props.isSharingScreen !== nextProps.isSharingScreen;
+
+    return diffIsSharingScreen;
+  }
+
   render() {
     return (
       <React.Fragment>
-        <Tooltip placement="top" title="Open chat">
+        <Tooltip placement="top" title="Open chat" mouseLeaveDelay={0}>
           <StyledToolbar.ActionItem onClick={this.props.toggleChat}>
             <StyledToolbar.ChatAction>
-              <StyledToolbar.ActionBadge>12</StyledToolbar.ActionBadge>
+              {/* <StyledToolbar.ActionBadge>12</StyledToolbar.ActionBadge> */}
               <MyIcon className="u-fz-24" type="iconchat" />
               <StyledToolbar.ActionLabel>Chat</StyledToolbar.ActionLabel>
             </StyledToolbar.ChatAction>
           </StyledToolbar.ActionItem>
         </Tooltip>
 
-        <Tooltip placement="top" title="Screen sharing is possible">
+        <Tooltip placement="top" title="Screen sharing is possible" mouseLeaveDelay={0}>
           <StyledToolbar.ActionItem onClick={this.props.toggleShareCreen}>
             <StyledToolbar.ActionMyIcon type={this.props.isSharingScreen ? 'iconlaptop-off' : 'iconlaptop'} />
             <StyledToolbar.ActionLabel>

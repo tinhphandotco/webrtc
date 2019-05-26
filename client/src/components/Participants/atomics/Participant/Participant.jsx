@@ -29,7 +29,12 @@ export default class Participant extends React.Component {
   }
 
   get dontHasVideo() {
-    return !this.props.participant.stream || !this.props.settingDevices.video.active || !this.props.settingDevices.video.enable;
+    return (
+      !this.props.participant.stream
+      || (
+        this.props.participant.stream && !this.props.settingDevices.video.enable
+      )
+    );
   }
 
   toggleInfo = state => () => {

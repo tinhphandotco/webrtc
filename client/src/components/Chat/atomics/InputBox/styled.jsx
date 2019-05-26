@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Button } from 'antd';
+import { Button, Input } from 'antd';
 
 const InputBox = styled.div`
   display: flex;
@@ -24,6 +24,7 @@ InputBox.Emotion = styled.button`
 InputBox.Actions = styled.div`
   align-items: center;
   display: flex;
+  margin-left: auto;
 `;
 
 InputBox.Send = styled(Button).attrs({
@@ -39,13 +40,8 @@ InputBox.InputWrapper = styled.div`
   margin-top: 10px;
 `;
 
-InputBox.Input = styled.textarea`
-  border: 2px solid #cccccc;
-  display: block;
-  height: 100%;
-  padding: 10px;
+InputBox.Input = styled(Input.TextArea)`
   resize: none;
-  width: 100%;
 `;
 
 export default InputBox;

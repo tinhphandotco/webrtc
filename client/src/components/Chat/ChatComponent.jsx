@@ -12,6 +12,7 @@ export default class ChatComponent extends React.Component {
     isShowChat: PropTypes.bool.isRequired,
     isShowToolbar: PropTypes.bool.isRequired,
     closeChat: PropTypes.func.isRequired,
+    sendChat: PropTypes.func.isRequired,
     messages: PropTypes.array,
   }
 
@@ -25,13 +26,13 @@ export default class ChatComponent extends React.Component {
         <StyledChat.MessagesScrollbar autoHide>
           <StyledChat.Messages>
             {this.props.messages.map(item => (
-              <Message key={item.message} data={item} />
+              <Message key={item.uniqueId} data={item} />
             ))}
           </StyledChat.Messages>
         </StyledChat.MessagesScrollbar>
 
         <StyledChat.InputBox hasToolbarDock={this.props.isShowToolbar}>
-          <InputBox />
+          <InputBox sendChat={this.props.sendChat} />
         </StyledChat.InputBox>
 
         <StyledChat.Close show={this.props.isShowChat && !this.props.isShowToolbar} onClick={this.props.closeChat}>

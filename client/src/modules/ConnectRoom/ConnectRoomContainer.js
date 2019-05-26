@@ -11,8 +11,6 @@ import { Button } from 'components';
 
 import { StyledConnectRoom } from './styled';
 
-// import * as serviceWebRTC from 'services/WebRTC';
-
 const mapStateToProps = () => {
 	return {
 	};

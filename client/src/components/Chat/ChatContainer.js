@@ -2,20 +2,23 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from "react-redux";
 
-import { UIStateActions } from 'actions';
+import { UIStateActions, ChatActions} from 'actions';
 import { isShowChat, isShowToolbar } from 'reducers/uiState/select';
+import { getListMessages } from 'reducers/chat/select';
 
 import ChatComponent from './ChatComponent';
 
 const mapStateToProps = (state) => {
 	return {
     isShowChat: isShowChat(state),
-    isShowToolbar: isShowToolbar(state)
+    isShowToolbar: isShowToolbar(state),
+    listMessages: getListMessages(state),
 	};
 };
 
 const mapDispatchToProps = {
   toggleChat: UIStateActions.toggleChat,
+  sendChat: ChatActions.sendChat
 };
 
 @connect(mapStateToProps, mapDispatchToProps)
@@ -24,20 +27,22 @@ export default class ChatContainer extends React.Component {
     isShowChat: PropTypes.bool.isRequired,
     isShowToolbar: PropTypes.bool.isRequired,
     toggleChat: PropTypes.func,
+    sendChat: PropTypes.func,
+    listMessages: PropTypes.array,
   }
 
   static defaultProps = {
+    listMessages: [],
     toggleChat: () => null,
+    sendChat: () => null,
   }
 
-  constructor(props) {
-    super(props);
+  shouldComponentUpdate(nextProps) {
+    const diffIsShowChat = this.props.isShowChat !== nextProps.isShowChat;
+    const diffIsShowToolbar = this.props.isShowToolbar !== nextProps.isShowToolbar;
+    const diffListMessages = this.props.listMessages !== nextProps.listMessages;
 
-    const randomIn = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
-    this.data = Array(15).fill().map(() => ({
-      message: Math.random().toString(16).slice(2, 8).repeat(randomIn(1, 15)),
-      me: Math.random() <= 0.5,
-    }));
+    return diffIsShowChat || diffIsShowToolbar || diffListMessages;
   }
 
   closeChat = () => {
@@ -50,7 +55,8 @@ export default class ChatContainer extends React.Component {
         isShowChat={this.props.isShowChat}
         isShowToolbar={this.props.isShowToolbar}
         closeChat={this.closeChat}
-        messages={this.data}
+        sendChat={this.props.sendChat}
+        messages={this.props.listMessages}
       />
     );
   }

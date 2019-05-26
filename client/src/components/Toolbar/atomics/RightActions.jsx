@@ -20,12 +20,20 @@ class RightActions extends React.Component {
     super(props);
   }
 
+  shouldComponentUpdate(nextProps) {
+    const diffVideoActive = this.props.settingDevices.video.active !== nextProps.settingDevices.video.active;
+    const diffAudioActive = this.props.settingDevices.audio.active !== nextProps.settingDevices.audio.active;
+
+    return diffVideoActive || diffAudioActive;
+  }
+
   render() {
     const { settingDevices, openModalSettings } = this.props;
 
     return (
       <React.Fragment>
         <Tooltip
+          mouseLeaveDelay={0}
           placement="top"
           title={(
             !settingDevices.video.active && !settingDevices.audio.active
@@ -42,7 +50,7 @@ class RightActions extends React.Component {
           </StyledToolbar.ActionItem>
         </Tooltip>
 
-        <Tooltip placement="top" title="Need some help?">
+        <Tooltip placement="top" title="Need some help?" mouseLeaveDelay={0}>
           <StyledToolbar.ActionItem>
             <StyledToolbar.ActionIcon type="question-circle" />
             <StyledToolbar.ActionLabel>Help</StyledToolbar.ActionLabel>

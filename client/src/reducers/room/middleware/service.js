@@ -1,4 +1,4 @@
-import { path } from 'ramda';
+import { head, path } from 'ramda';
 import {
   ParticipantsActions,
   RoomActions,
@@ -8,8 +8,11 @@ import {
   getLocalParticipantId,
   getRemoteParticipants,
   getUserInfoById,
-  getLocalUserInfo
+  getLocalUserInfo,
+  localParticipantSettings,
+  getParticipantSettingById
 } from 'reducers/participants/select';
+import { getDevices } from 'reducers/devices/select';
 
 const iceConfig = {
   'iceServers': [
@@ -70,7 +73,10 @@ const replaceLocalStream = (store, newStream) => {
   store.dispatch(ParticipantsActions.setLocalStream(localParticipantId, newStream));
 
   remoteParticipants.forEach(participant => {
-    participant.peerConnection.removeStream(participant.peerConnection.getLocalStreams()[0]);
+    const localStream = participant.peerConnection.getLocalStreams();
+    if (localStream.length) {
+      participant.peerConnection.removeStream(head(localStream));
+    }
     newStream.getTracks().forEach(track => participant.peerConnection.addTrack(track, newStream));
     createOffer(participant.peerConnection, store, localParticipantId, participant.id);
   });
@@ -138,9 +144,8 @@ export const getUserMedia = (store, listConstrains, index = 0) => {
 };
 
 export const onEndedShareScreen = (store) => {
-  const constraintSettings = store.getState().devices;
-  const localParticipantId = store.getState().participants.localUser;
-  const settings = store.getState().participants.byId[localParticipantId].settings;
+  const constraintSettings = getDevices(store.getState());
+  const settings = localParticipantSettings(store.getState());
 
   if (settings.audio.active || settings.video.active) {
     const constraints = {
@@ -158,6 +163,9 @@ export const onEndedShareScreen = (store) => {
       })
       .finally(() => {
         store.dispatch(ParticipantsActions.setStateShareScreen(false));
+        store.dispatch(ParticipantsActions.setLocalSettingDevices({
+          video: { enable: false }
+        }));
       });
   }
 };
@@ -167,6 +175,9 @@ export const getShareScreen = (store) => {
     const gotStream = (mediaStream) => {
       replaceLocalStream(store, mediaStream);
       store.dispatch(ParticipantsActions.setStateShareScreen(true));
+      store.dispatch(ParticipantsActions.setLocalSettingDevices({
+        video: { enable: true }
+      }));
       mediaStream.getVideoTracks()[0].onended = () => onEndedShareScreen(store);
     };
 
@@ -202,10 +213,6 @@ export const handlePeerConnected = (store, data) => {
   createOffer(participantConnection, store, localUserInfo.id, data.id);
 };
 
-export const getSettingsById = (store, participantId) => {
-  return path(['participants', 'byId', participantId, 'settings'], store.getState());
-};
-
 export const handlePeerMsg = (store, data) => {
   const participantConnection = getOrCreateConnection(store, data.from);
 
@@ -223,7 +230,7 @@ export const handlePeerMsg = (store, data) => {
           }));
 
           // TODO: Don't re-send this when change to share screen
-          const mySettings = getSettingsById(store, data.to);
+          const mySettings = getParticipantSettingById(data.to)(store.getState());
           store.dispatch(ParticipantsActions.socketMsg({
             from: data.to,
             to: data.from,
@@ -238,7 +245,7 @@ export const handlePeerMsg = (store, data) => {
       participantConnection.setRemoteDescription(new RTCSessionDescription(data.sdp));
 
       // TODO: Don't re-send this when change to share screen
-      const mySettings = getSettingsById(store, data.to);
+      const mySettings = getParticipantSettingById(data.to)(store.getState());
       store.dispatch(ParticipantsActions.socketMsg({
         from: data.to,
         to: data.from,

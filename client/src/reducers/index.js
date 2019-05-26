@@ -4,6 +4,7 @@ import room from './room/store';
 import participants from './participants/store';
 import uiState from './uiState/store';
 import devices from './devices/store';
+import chat from './chat/store';
 
 export default combineReducers({
   routing,
@@ -11,7 +12,7 @@ export default combineReducers({
   participants,
   uiState,
   devices,
-  lastActionType: (state, action) => action.type
+  chat,
 });
 
 export { default as patricipantsEnhancer } from './participants/enhancer/store';

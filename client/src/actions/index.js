@@ -13,6 +13,9 @@ import * as UIStateTypes from './uiState/constants';
 import * as DevicesActions from './devices/actions';
 import * as DevicesTypes from './devices/constants';
 
+import * as ChatActions from './chat/actions';
+import * as ChatTypes from './chat/constants';
+
 export default {
   RoomActions,
   RoomTypes,
@@ -23,7 +26,9 @@ export default {
   UIStateActions,
   UIStateTypes,
   DevicesActions,
-  DevicesTypes
+  DevicesTypes,
+  ChatActions,
+  ChatTypes
 };
 
 export {
@@ -36,5 +41,7 @@ export {
   UIStateActions,
   UIStateTypes,
   DevicesActions,
-  DevicesTypes
+  DevicesTypes,
+  ChatActions,
+  ChatTypes
 };

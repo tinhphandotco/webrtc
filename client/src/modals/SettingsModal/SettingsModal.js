@@ -155,19 +155,19 @@ export default class SettingsModal extends React.Component {
   handleSelectChange = (type) => (value) => {
     this.setState({
       [type]: value
+    }, () => {
+      if (type === 'selectedVideoInput' || type === 'selectedAudioInput') {
+        this.getUserMedia({
+          videoinput: type === 'selectedVideoInput' ? value : this.state.selectedVideoInput,
+          audioinput: type === 'selectedAudioInput' ? value : this.state.selectedAudioInput
+        }, {
+          video: this.props.settingDevices.video.active,
+          audio: this.props.settingDevices.audio.active
+        });
+      } else console.log(this.state.selectedAudioOutput);
     });
 
     this.didChangeDevices = true;
-
-    if (type === 'selectedVideoInput' || type === 'selectedAudioInput') {
-      this.getUserMedia({
-        videoinput: type === 'selectedVideoInput' ? value : this.state.selectedVideoInput,
-        audioinput: type === 'selectedAudioInput' ? value : this.state.selectedAudioInput
-      }, {
-        video: this.props.settingDevices.video.active,
-        audio: this.props.settingDevices.audio.active
-      });
-    }
   }
 
   onOk = () => {

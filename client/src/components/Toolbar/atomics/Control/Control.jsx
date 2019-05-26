@@ -17,6 +17,13 @@ class Toolbar extends React.Component {
     super(props);
   }
 
+  shouldComponentUpdate(nextProps) {
+    const diffSettingDevices = this.props.settingDevices !== nextProps.settingDevices;
+    const diffIsSharingScreen = this.props.isSharingScreen !== nextProps.isSharingScreen;
+
+    return diffSettingDevices || diffIsSharingScreen;
+  }
+
   render() {
     const { settingDevices, isSharingScreen, toggleAudioDevice, toggleVideoDevice } = this.props;
 
