@@ -21,3 +21,4 @@ export const SOCKET_MSG = prefixToastActions("SOCKET_MSG");
 export const IS_SHARING_SCREEN = prefixToastActions("IS_SHARING_SCREEN");
 export const SET_LOCAL_SETTING_DEVICES = prefixToastActions("SET_LOCAL_SETTING_DEVICES");
 export const SET_STREAM = prefixToastActions("SET_STREAM");
+export const SET_LOCAL_SETTING_SHARING_SCREEN = prefixToastActions("SET_LOCAL_SETTING_SHARING_SCREEN");

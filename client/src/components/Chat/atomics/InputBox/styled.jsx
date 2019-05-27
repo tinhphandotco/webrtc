@@ -32,6 +32,17 @@ InputBox.Send = styled(Button).attrs({
   type: 'primary',
 })`
   margin-left: 15px;
+
+  &:disabled {
+    && {
+      color: #fff;
+      background-color: #1890ff;
+      box-shadow: 0 2px 0 rgba(0, 0, 0, 0.045);
+      border-color: #1890ff;
+      opacity: .7;
+      text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.12);
+    }
+  }
 `;
 
 InputBox.InputWrapper = styled.div`

@@ -70,6 +70,7 @@ const createOffer = (pc, store, localId, remoteId) => {
 const replaceLocalStream = (store, newStream) => {
   const localParticipantId = getLocalParticipantId(store.getState());
   const remoteParticipants = getRemoteParticipants(store.getState());
+  const settings = localParticipantSettings(store.getState());
   store.dispatch(ParticipantsActions.setLocalStream(localParticipantId, newStream));
 
   remoteParticipants.forEach(participant => {
@@ -78,6 +79,8 @@ const replaceLocalStream = (store, newStream) => {
       participant.peerConnection.removeStream(head(localStream));
     }
     newStream.getTracks().forEach(track => participant.peerConnection.addTrack(track, newStream));
+    newStream.getVideoTracks().forEach(track => track.enabled = settings.video.enable || settings.video.isSharingScreen);
+    newStream.getAudioTracks().forEach(track => track.enabled = settings.audio.enable);
     createOffer(participant.peerConnection, store, localParticipantId, participant.id);
   });
 };
@@ -147,6 +150,11 @@ export const onEndedShareScreen = (store) => {
   const constraintSettings = getDevices(store.getState());
   const settings = localParticipantSettings(store.getState());
 
+  store.dispatch(ParticipantsActions.setStateShareScreen(false));
+  store.dispatch(ParticipantsActions.setLocalSettingSharingScreen({
+    video: { isSharingScreen: false }
+  }));
+
   if (settings.audio.active || settings.video.active) {
     const constraints = {
       audio: settings.audio.active
@@ -160,12 +168,6 @@ export const onEndedShareScreen = (store) => {
     navigator.mediaDevices.getUserMedia(constraints)
       .then(stream => {
         replaceLocalStream(store, stream);
-      })
-      .finally(() => {
-        store.dispatch(ParticipantsActions.setStateShareScreen(false));
-        store.dispatch(ParticipantsActions.setLocalSettingDevices({
-          video: { enable: false }
-        }));
       });
   }
 };
@@ -173,11 +175,11 @@ export const onEndedShareScreen = (store) => {
 export const getShareScreen = (store) => {
   try {
     const gotStream = (mediaStream) => {
-      replaceLocalStream(store, mediaStream);
       store.dispatch(ParticipantsActions.setStateShareScreen(true));
-      store.dispatch(ParticipantsActions.setLocalSettingDevices({
-        video: { enable: true }
+      store.dispatch(ParticipantsActions.setLocalSettingSharingScreen({
+        video: { isSharingScreen: true, }
       }));
+      replaceLocalStream(store, mediaStream);
       mediaStream.getVideoTracks()[0].onended = () => onEndedShareScreen(store);
     };
 

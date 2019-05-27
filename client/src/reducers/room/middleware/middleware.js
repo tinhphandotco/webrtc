@@ -97,6 +97,15 @@ const roomMiddleware = store => {
         });
       }
 
+      if (action.type === ParticipantsTypes.SET_LOCAL_SETTING_SHARING_SCREEN) {
+        socket.emit('participant:msg', {
+          from: action.payload.participantId,
+          to: 'all',
+          type: 'setting-devices',
+          settings: action.payload.settings
+        });
+      }
+
       if (action.type === RoomTypes.JOIN_ROOM) {
         socket.emit('user:join-room', action.payload.roomName);
       }

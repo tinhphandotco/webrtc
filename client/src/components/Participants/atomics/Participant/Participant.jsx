@@ -32,7 +32,9 @@ export default class Participant extends React.Component {
     return (
       !this.props.participant.stream
       || (
-        this.props.participant.stream && !this.props.settingDevices.video.enable
+        this.props.participant.stream
+        && !this.props.settingDevices.video.enable
+        && !this.props.settingDevices.video.isSharingScreen
       )
     );
   }

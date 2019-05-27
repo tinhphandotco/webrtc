@@ -114,6 +114,18 @@ export const setLocalSettingDevices = (settings) => (dispatch, getState) => {
   });
 };
 
+export const setLocalSettingSharingScreen = (settings) => (dispatch, getState) => {
+  const localParticipantId = getState().participants.localUser;
+
+  dispatch({
+    type: ActionTypes.SET_LOCAL_SETTING_SHARING_SCREEN,
+    payload: {
+      participantId: localParticipantId,
+      settings,
+    }
+  });
+};
+
 export const socketMsg = (data) => {
   return { type: ActionTypes.SOCKET_MSG, payload: { data } };
 };

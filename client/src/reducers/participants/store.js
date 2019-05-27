@@ -96,6 +96,21 @@ const byId = (state = INITIAL_STATE.byId, { type, payload }) => {
     case ParticipantsTypes.ENHANCER_PARTICIPANT_DISCONECTING:
       return omit([payload.participantId], state);
 
+    case ParticipantsTypes.SET_LOCAL_SETTING_SHARING_SCREEN:
+      return {
+        ...state,
+        [payload.participantId]: {
+          ...state[payload.participantId],
+          settings: {
+            ...state[payload.participantId].settings,
+            video: {
+              ...state[payload.participantId].settings.video,
+              ...payload.settings.video
+            },
+          }
+        }
+      };
+
     case ParticipantsTypes.SET_LOCAL_SETTING_DEVICES: {
       const stream = path([payload.participantId, 'stream'], state);
       if (stream) {
@@ -139,7 +154,7 @@ const byId = (state = INITIAL_STATE.byId, { type, payload }) => {
             },
             audio: {
               ...state[payload.participantId].settings.audio,
-              ...payload.settings.audio
+              ...(payload.settings.audio || {})
             }
           }
         }

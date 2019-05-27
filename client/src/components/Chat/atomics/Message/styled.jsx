@@ -107,7 +107,7 @@ Message.Text = styled.div`
 `;
 
 Message.Main = styled.div`
-  max-width: calc(100% - 45px);
+  max-width: calc(100% - 0px);
   min-width: 150px;
   overflow: hidden;
   position: relative;

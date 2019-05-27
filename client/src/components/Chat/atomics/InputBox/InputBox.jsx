@@ -42,10 +42,12 @@ class InputBox extends React.Component {
   }
 
   sendChat = () => {
-    this.props.sendChat(this.state.content);
-    this.setState({
-      content: ''
-    });
+    if (this.state.content) {
+      this.props.sendChat(this.state.content);
+      this.setState({
+        content: ''
+      });
+    }
   }
 
   render() {
@@ -60,7 +62,7 @@ class InputBox extends React.Component {
               value={this.state.isEnterToSend}
               onChange={this.handleChangeCheckbox}
             >Enter to send</Checkbox>
-            <StyledInputBox.Send onClick={this.sendChat}>
+            <StyledInputBox.Send onClick={this.sendChat} disabled={!this.state.content}>
               <MyIcon type="iconfasong" />
               <span>Send</span>
             </StyledInputBox.Send>
