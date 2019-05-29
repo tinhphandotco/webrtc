@@ -93,8 +93,24 @@ const byId = (state = INITIAL_STATE.byId, { type, payload }) => {
         }
       };
 
-    case ParticipantsTypes.ENHANCER_PARTICIPANT_DISCONECTING:
+    case ParticipantsTypes.PARTICIPANT_DISCONNECTING: {
+      const participant = path([payload.participantId], state);
+      const stream = path(['stream'], participant);
+      const connection = path(['peerConnection'], participant);
+
+      if (stream) {
+        console.log('stream: ', stream.getVideoTracks(), stream.getAudioTracks());
+        stream.getVideoTracks().forEach(track => track.stop());
+        stream.getAudioTracks().forEach(track => track.stop());
+      }
+
+      if (connection) {
+        console.log('connection: ', connection);
+        connection.close();
+      }
+
       return omit([payload.participantId], state);
+    }
 
     case ParticipantsTypes.SET_LOCAL_SETTING_SHARING_SCREEN:
       return {

@@ -8,3 +8,4 @@ export const prefixToastActions = makeActionsType(prefixType);
 export const CONNECT_SOCKET = prefixToastActions('CONNECT_SOCKET');
 export const JOIN_ROOM = prefixToastActions('JOIN_ROOM');
 export const SOCKET_MSG = prefixToastActions('SOCKET_MSG');
+export const LEAVE_ROOM = prefixToastActions('LEAVE_ROOM');

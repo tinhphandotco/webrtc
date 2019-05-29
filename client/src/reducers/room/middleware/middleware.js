@@ -110,6 +110,10 @@ const roomMiddleware = store => {
         socket.emit('user:join-room', action.payload.roomName);
       }
 
+      if (action.type === RoomTypes.LEAVE_ROOM) {
+        socket.disconnect();
+      }
+
       if (action.type === ParticipantsTypes.SOCKET_MSG) {
         socket.emit('participant:msg', action.payload.data);
       }

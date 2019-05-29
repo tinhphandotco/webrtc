@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { withRouter } from 'react-router-dom';
 import { connect } from "react-redux";
 
-import { UIStateActions, ParticipantsActions } from 'actions';
+import { UIStateActions, ParticipantsActions, RoomActions } from 'actions';
 import { isSharingScreen, localParticipantSettings, getLocalUserInfo } from 'reducers/participants/select';
 import { isShowChat, isShowToolbar } from 'reducers/uiState/select';
 
@@ -23,9 +24,11 @@ const mapDispatchToProps = {
   toggleToolbar: UIStateActions.toggleToolbar,
   getShareScreen: ParticipantsActions.getShareScreen,
   closeShareScreen: ParticipantsActions.closeShareScreen,
-  setLocalSettingDevices: ParticipantsActions.setLocalSettingDevices
+  setLocalSettingDevices: ParticipantsActions.setLocalSettingDevices,
+  leaveRoom: RoomActions.leaveRoom,
 };
 
+@withRouter
 @connect(mapStateToProps, mapDispatchToProps)
 export default class ToolbarContainer extends React.Component {
   static propTypes = {
@@ -38,6 +41,8 @@ export default class ToolbarContainer extends React.Component {
     isSharingScreen: PropTypes.bool.isRequired,
     localParticipantInfo: PropTypes.object,
     setLocalSettingDevices: PropTypes.func,
+    leaveRoom: PropTypes.func,
+    history: PropTypes.object.isRequired,
   }
 
   static defaultProps = {
@@ -46,6 +51,7 @@ export default class ToolbarContainer extends React.Component {
     getShareScreen: () => null,
     closeShareScreen: () => null,
     setLocalSettingDevices: () => null,
+    leaveRoom: () => null,
     localParticipantInfo: {},
   }
 
@@ -83,6 +89,11 @@ export default class ToolbarContainer extends React.Component {
   toggleAudioDevice = this.toggleDevices('audio');
   toggleVideoDevice = this.toggleDevices('video');
 
+  leaveRoom = () => {
+    this.props.leaveRoom();
+    this.props.history.push('/');
+  }
+
   render() {
     return (
       <ToolbarComponent
@@ -96,6 +107,7 @@ export default class ToolbarContainer extends React.Component {
         localParticipantSettings={this.localParticipantSettings}
         toggleAudioDevice={this.toggleAudioDevice}
         toggleVideoDevice={this.toggleVideoDevice}
+        leaveRoom={this.leaveRoom}
       />
     );
   }

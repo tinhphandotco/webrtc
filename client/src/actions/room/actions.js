@@ -1,4 +1,7 @@
 import * as ActionTypes from './constants';
+import {
+  getLocalParticipantId,
+} from 'reducers/participants/select';
 
 export const connectSocket = () => ({
   type: ActionTypes.CONNECT_SOCKET,
@@ -11,3 +14,7 @@ export const joinRoom = (roomName) => {
 export const socketMsg = (data) => {
   return { type: ActionTypes.SOCKET_MSG, payload: { data } };
 };
+
+export const leaveRoom = () => ({
+  type: ActionTypes.LEAVE_ROOM,
+});
