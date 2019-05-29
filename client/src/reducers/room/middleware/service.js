@@ -103,9 +103,9 @@ export const enumerateDevices = (store, constrains, localParticipantId) => {
         ]
       }), {});
 
-      const hasVideo = retvl.hasOwnProperty('videoinput');
+      const hasVideo = retvl.hasOwnProperty('videoinput') && constrains.hasOwnProperty('video');
       const videoReady = hasVideo && path(['videoinput'], retvl).some(device => device.label);
-      const hasMic = retvl.hasOwnProperty('audioinput');
+      const hasMic = retvl.hasOwnProperty('audioinput') && constrains.hasOwnProperty('audio');
       const micReady = hasMic && path(['audioinput'], retvl).some(device => device.label);
 
       store.dispatch(DevicesActions.setDevices({
