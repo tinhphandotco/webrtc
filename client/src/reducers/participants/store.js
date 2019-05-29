@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
 import { omit, path } from 'ramda';
-import { ParticipantsTypes, ParticipantsEnhancerTypes } from 'actions';
+import { ParticipantsTypes, RoomTypes } from 'actions';
 
 const INIT_USER = {
   id: null,
@@ -56,15 +56,6 @@ const byId = (state = INITIAL_STATE.byId, { type, payload }) => {
         }
       };
 
-    case ParticipantsEnhancerTypes.SET_STREAM:
-      return {
-        ...state,
-        [payload.localUserId]: {
-          ...state[payload.localUserId],
-          stream: payload.stream
-        }
-      };
-
     case ParticipantsTypes.SET_LOCAL_STREAM:
       return {
         ...state,
@@ -93,19 +84,18 @@ const byId = (state = INITIAL_STATE.byId, { type, payload }) => {
         }
       };
 
+    case RoomTypes.LEAVE_ROOM:
     case ParticipantsTypes.PARTICIPANT_DISCONNECTING: {
       const participant = path([payload.participantId], state);
       const stream = path(['stream'], participant);
       const connection = path(['peerConnection'], participant);
 
       if (stream) {
-        console.log('stream: ', stream.getVideoTracks(), stream.getAudioTracks());
         stream.getVideoTracks().forEach(track => track.stop());
         stream.getAudioTracks().forEach(track => track.stop());
       }
 
       if (connection) {
-        console.log('connection: ', connection);
         connection.close();
       }
 
@@ -189,6 +179,7 @@ const allIds = (state = INITIAL_STATE.allIds, { type, payload }) => {
     case ParticipantsTypes.INIT_REMOTE_USER:
       return [...state, payload.userId];
 
+    case RoomTypes.LEAVE_ROOM:
     case ParticipantsTypes.PARTICIPANT_DISCONNECTING:
       return state.filter(id => id !== payload.participantId);
 
@@ -201,6 +192,9 @@ const localUser = (state = INITIAL_STATE.localUser, { type, payload }) => {
   switch (type) {
     case ParticipantsTypes.INIT_LOCAL_USER:
       return payload.id;
+
+    case RoomTypes.LEAVE_ROOM:
+      return INITIAL_STATE.localUser;
 
     default:
       return state;
@@ -233,6 +227,9 @@ const appState = (state = INITIAL_STATE.appState, { type, payload }) => {
         didGetUserMedia: true,
         errorGetUserMedia: payload.error
       };
+
+    case RoomTypes.LEAVE_ROOM:
+      return INITIAL_STATE.appState;
 
     case ParticipantsTypes.PARTICIPANT_DISCONNECTING:
       return {

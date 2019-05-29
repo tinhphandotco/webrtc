@@ -1,5 +1,5 @@
 import { mapByProp } from 'utils/common';
-import { ChatTypes } from 'actions';
+import { ChatTypes, RoomTypes } from 'actions';
 
 const INITIAL_STATE = {
   byId: {},
@@ -8,6 +8,9 @@ const INITIAL_STATE = {
 
 export default function chat(state = INITIAL_STATE, { type, payload }) {
   switch (type) {
+    case RoomTypes.LEAVE_ROOM:
+      return INITIAL_STATE;
+
     case ChatTypes.LIST_MESSAGES:
       return {
         byId: {

@@ -15,6 +15,9 @@ export const socketMsg = (data) => {
   return { type: ActionTypes.SOCKET_MSG, payload: { data } };
 };
 
-export const leaveRoom = () => ({
+export const leaveRoom = () => (dispatch, getState) => dispatch({
   type: ActionTypes.LEAVE_ROOM,
+  payload: {
+    participantId: getLocalParticipantId(getState())
+  }
 });
