@@ -74,13 +74,27 @@ const replaceLocalStream = (store, newStream) => {
   store.dispatch(ParticipantsActions.setLocalStream(localParticipantId, newStream));
 
   remoteParticipants.forEach(participant => {
-    const localStream = participant.peerConnection.getLocalStreams();
-    if (localStream.length) {
-      participant.peerConnection.removeStream(head(localStream));
-    }
-    newStream.getTracks().forEach(track => participant.peerConnection.addTrack(track, newStream));
+    // const localStream = head(participant.peerConnection.getLocalStreams());
+    // if (localStream.length) {
+    //   participant.peerConnection.removeStream(head(localStream));
+    // }
+    // newStream.getVideoTracks().forEach(track => track.enabled = settings.video.enable || settings.video.isSharingScreen);
+    // newStream.getAudioTracks().forEach(track => track.enabled = settings.audio.enable);
+    // newStream.getTracks().forEach(track => participant.peerConnection.addTrack(track, newStream));
+    // createOffer(participant.peerConnection, store, localParticipantId, participant.id);
+
     newStream.getVideoTracks().forEach(track => track.enabled = settings.video.enable || settings.video.isSharingScreen);
     newStream.getAudioTracks().forEach(track => track.enabled = settings.audio.enable);
+    const videoTrack = newStream.getVideoTracks()[0];
+    const audioTrack = newStream.getAudioTracks()[0];
+    if (videoTrack) {
+      const videoSender = participant.peerConnection.getSenders().find(s => s.track.kind == videoTrack.kind);
+      videoSender.replaceTrack(videoTrack);
+    }
+    if (audioTrack) {
+      const audioSender = participant.peerConnection.getSenders().find(s => s.track.kind == audioTrack.kind);
+      audioSender.replaceTrack(audioTrack);
+    }
     createOffer(participant.peerConnection, store, localParticipantId, participant.id);
   });
 };
