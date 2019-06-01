@@ -4,7 +4,7 @@ import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
   import { BrowserRouter, Route, Switch } from "react-router-dom";
 
-import configStore from "store";
+import configStore, { history } from "store";
 import { participantsListener } from 'reducers';
 import { App } from 'modules';
 import { BASE_PATH } from "config";
@@ -20,12 +20,14 @@ export const _store = store;
 
 participantsListener.subscribe(_store);
 
+import { ConnectedRouter } from 'connected-react-router'
+
 ReactDOM.render(
   <Provider store={_store}>
     <PersistGate loading={(<h1>Loading...</h1>)} persistor={persistor}>
-      <BrowserRouter>
+      <ConnectedRouter history={history}>
         <App />
-      </BrowserRouter>
+      </ConnectedRouter>
     </PersistGate>
   </Provider>
   , document.getElementById('root')

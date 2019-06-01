@@ -1,7 +1,8 @@
 import io from 'socket.io-client';
-import { omit } from 'ramda';
+import { omit, path } from 'ramda';
 import { SOCKET_URL } from 'config';
 import * as service from './service';
+import { matchPath } from "react-router-dom";
 
 import {
   RoomTypes,
@@ -14,9 +15,11 @@ const roomMiddleware = store => {
 
   return next => action => {
     if (action.type === RoomTypes.CONNECT_SOCKET) {
-      socket = io(SOCKET_URL);
+      const match = matchPath(store.getState().router.location.pathname, {
+        path: '/meeting/:roomName',
+      });
 
-      console.log(store.getState().room.roomName)
+      socket = io(SOCKET_URL, { query: `roomName=${path(['params', 'roomName'], match)}` });
 
       socket.on('connect', () => service.connect(store, socket.id));
 
@@ -26,7 +29,16 @@ const roomMiddleware = store => {
 
       socket.on('room:config', (data) => {
         store.dispatch({
-          type: RoomTypes.GET_ROOM_PASSWORD_FROM_SERVER,
+          type: RoomTypes.ROOM_CONFIG,
+          payload: {
+            hasPassword: data.hasPassword,
+          }
+        });
+      });
+
+      socket.on('room:set-password', (data) => {
+        store.dispatch({
+          type: RoomTypes.SET_PASSWORD,
           payload: {
             password: data.password,
           }
@@ -97,6 +109,26 @@ const roomMiddleware = store => {
 
       if (action.type === ParticipantsTypes.CLOSE_SHARE_SCREEN) {
         service.closeShareScreen(store);
+      }
+
+      if (action.type === RoomTypes.LOGIN_ROOM) {
+        socket.emit('room:login', {
+          from: socket.id,
+          data: action.payload,
+        }, (isLogged) => {
+          if (isLogged) {
+            store.dispatch({
+              type: RoomTypes.LOGIN_SUCCESS,
+            });
+          } else {
+            store.dispatch({
+              type: RoomTypes.LOGIN_FAIL,
+              payload: {
+                messageError: 'Password incorrect'
+              }
+            });
+          }
+        });
       }
 
       if (action.type === ParticipantsTypes.SET_LOCAL_SETTING_DEVICES) {

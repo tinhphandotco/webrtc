@@ -4,13 +4,15 @@ import { connect } from "react-redux";
 
 import { getLocalUserInfo, didGetUserMedia, errorGetUserMedia } from 'reducers/participants/select';
 import { isShowGridParticipants } from 'reducers/uiState/select';
-import { didGetRoomPasswordFromServer, isLogged } from 'reducers/room/select';
+import { hasPassword, isLogged } from 'reducers/room/select';
 
 import { ParticipantsActions, RoomActions } from 'actions';
 
 import {
-  message,
+  message, Modal
 } from 'antd';
+
+import LoginModal from 'modals/LoginModal';
 
 import {
   Toolbar,
@@ -29,7 +31,7 @@ const mapStateToProps = (state) => {
     didGetUserMedia: didGetUserMedia(state),
     errorGetUserMedia: errorGetUserMedia(state),
     isShowGridParticipants: isShowGridParticipants(state),
-    didGetRoomPasswordFromServer: didGetRoomPasswordFromServer(state),
+    hasPassword: hasPassword(state),
     isLogged: isLogged(state),
 	};
 };
@@ -53,7 +55,7 @@ class MeetingRoomContainer extends React.Component {
     didGetUserMedia: PropTypes.bool.isRequired,
     errorGetUserMedia: PropTypes.any,
     isShowGridParticipants: PropTypes.bool.isRequired,
-    didGetRoomPasswordFromServer: PropTypes.bool.isRequired,
+    hasPassword: PropTypes.bool.isRequired,
     isLogged: PropTypes.bool.isRequired
   }
 
@@ -67,6 +69,10 @@ class MeetingRoomContainer extends React.Component {
 
   constructor(props) {
     super(props);
+
+    this.state = {
+      shouldShowModalLogin: false,
+    };
   }
 
   componentDidMount() {
@@ -87,13 +93,29 @@ class MeetingRoomContainer extends React.Component {
       message.warning(this.props.errorGetUserMedia.name);
     }
 
-    if (!prevProps.didGetUserMedia && this.props.didGetUserMedia) {
+    // NOTE: If room dont have password --> `isLogged = true` but `didGetUserMedia = false`
+    // If room have password --> Maybe `didGetUserMedia = true` but `isLogged = false`
+    // We need to wait both `didGetUserMedia` and `isLogged` to `true`
+    // Because RTCPeerConnection need set localStream first all
+    if (
+      (prevProps.isLogged !== this.props.isLogged || prevProps.didGetUserMedia !== this.props.didGetUserMedia)
+      && this.props.didGetUserMedia && this.props.isLogged
+    ) {
+      this.setState({
+        shouldShowModalLogin: false,
+      });
       this.props.joinRoom(this.props.match.params.roomName);
+    }
+
+    if (!prevProps.hasPassword && this.props.hasPassword) {
+      this.setState({
+        shouldShowModalLogin: true,
+      });
     }
   }
 
   render() {
-    const didConnectToRoom = this.props.didGetRoomPasswordFromServer && this.props.didGetUserMedia;
+    const didConnectToRoom = this.props.didGetUserMedia;
 
     return (
       <React.Fragment>
@@ -113,6 +135,16 @@ class MeetingRoomContainer extends React.Component {
             </StyledRoom>
           </When>
         </Choose>
+
+        <Modal
+          visible={this.state.shouldShowModalLogin}
+          destroyOnClose
+          footer={null}
+          maskClosable={false}
+          closable={false}
+        >
+          <LoginModal />
+        </Modal>
       </React.Fragment>
     );
   }

@@ -13,6 +13,8 @@ class RightActions extends React.Component {
     openModalSettings: PropTypes.func,
     updatePassword: PropTypes.func.isRequired,
     settingDevices: PropTypes.object.isRequired,
+    // eslint-disable-next-line react/require-default-props
+    roomPassword: PropTypes.string,
   }
 
   static defaultProps = {

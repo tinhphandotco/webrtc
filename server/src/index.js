@@ -11,19 +11,30 @@ const roomConfig = {};
 const listMesssages = {};
 
 io.on('connection', function(socket){
-  console.log('a user connected: ', socket.id);
+  const roomName = path(['roomName'], socket.handshake.query);
+  io.to(socket.id).emit('room:config', {
+    hasPassword: !!path([roomName, 'password'], roomConfig)
+  });
+
+  console.log('a user connected: ', socket.id, roomConfig[roomName]);
 
   socket.on('user:join-room', (roomName) => {
     socket.join(roomName);
-    io.to(socket.id).emit('room:config', {
-      listMesssages: listMesssages[roomName] || [],
+    io.to(socket.id).emit('room:set-password', {
       password: path([roomName, 'password'], roomConfig) || ''
     });
     io.to(socket.id).emit('chat:list-message', listMesssages[roomName] || []);
     socket.to(roomName).emit('peer:connected', {
       id: socket.id,
     });
-    console.log('user:join-room: ', roomName);
+    console.log('user:join-room: ', roomName, io.sockets.adapter.rooms[roomName].sockets);
+  });
+
+  socket.on('room:login', (requestData, callback) => {
+    const requestRoomName = path(['data', 'roomName'], requestData);
+    const requestPassword = path(['data', 'password'], requestData);
+    const roomPassword = path([requestRoomName, 'password'], roomConfig);
+    callback(requestPassword === roomPassword);
   });
 
   socket.on('disconnecting', () => {
@@ -36,6 +47,7 @@ io.on('connection', function(socket){
       if (Object.keys(io.sockets.adapter.rooms[room].sockets).length === 1) {
         console.log('Reset list message in: ', room);
         listMesssages[room] = [];
+        // roomConfig[room] = {};
       }
     })
   });
@@ -47,8 +59,7 @@ io.on('connection', function(socket){
         ...(roomConfig[room] || {}),
         password: data.password
       };
-      socket.to(room).emit('room:update-password', {
-        from: socket.id,
+      socket.to(room).emit('room:set-password', {
         password: data.password,
       });
     });
@@ -56,7 +67,7 @@ io.on('connection', function(socket){
   })
 
   socket.on('peer:msg', (data) => {
-    console.log('peer:msg - ' + data.type + ' from ' + data.from + ' to ' + data.to);
+    // console.log('peer:msg - ' + data.type + ' from ' + data.from + ' to ' + data.to);
     io.to(data.to).emit('peer:msg', data);
   });
 
@@ -79,10 +90,10 @@ io.on('connection', function(socket){
   });
 
   socket.on('participant:msg', (data) => {
-    console.log('participant:msg - ' + data.type + ' from ' + data.from + ' to ' + data.to);
+    // console.log('participant:msg - ' + data.type + ' from ' + data.from + ' to ' + data.to);
     if (data.to === 'all') {
       const rooms = omit([socket.id], socket.rooms);
-      console.log(rooms)
+      console.log('participant:msg - listRoom: ', rooms)
       Object.keys(rooms).forEach(room => socket.to(room).emit('participant:msg', data));
     } else {
       io.to(data.to).emit('participant:msg', data);

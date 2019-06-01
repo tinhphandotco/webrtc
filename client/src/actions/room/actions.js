@@ -28,3 +28,15 @@ export const updatePassword = (password) => ({
     password,
   }
 });
+
+export const loginRoom = (roomName, password) => ({
+  type: ActionTypes.LOGIN_ROOM,
+  payload: {
+    roomName,
+    password,
+  }
+});
+
+export const resetLoginMessageError = () => ({
+  type: ActionTypes.RESET_LOGIN_MESSAGE_ERROR,
+});

@@ -21,8 +21,11 @@ const iceConfig = {
 };
 
 const getOrCreateConnection = (store, participantId) => {
+  console.log('getOrCreateConnection have? ', participantId);
   const participantInfo = getUserInfoById(participantId)(store.getState());
   if (participantInfo) { return participantInfo.peerConnection; }
+
+  console.log('getOrCreateConnection dont have: ', participantId);
 
   const localUserInfo = getLocalUserInfo(store.getState());
   const pc = new RTCPeerConnection(iceConfig);
@@ -224,6 +227,7 @@ export const handlePeerDisconnecting = (store, data) => {
 };
 
 export const handlePeerConnected = (store, data) => {
+  console.log('peer connected: ', data.id, JSON.stringify(store.getState().participants.allIds));
   const localUserInfo = getLocalUserInfo(store.getState());
   const participantConnection = getOrCreateConnection(store, data.id);
   createOffer(participantConnection, store, localUserInfo.id, data.id);

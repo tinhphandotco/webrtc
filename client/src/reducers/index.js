@@ -6,8 +6,11 @@ import uiState from './uiState/store';
 import devices from './devices/store';
 import chat from './chat/store';
 
-export default combineReducers({
-  routing,
+
+import { connectRouter } from 'connected-react-router';
+
+export default (history) => combineReducers({
+  router: connectRouter(history),
   room,
   participants,
   uiState,

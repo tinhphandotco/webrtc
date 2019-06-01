@@ -11,6 +11,8 @@ export default
 class Infor extends React.Component {
   static propTypes = {
     updatePassword: PropTypes.func.isRequired,
+    // eslint-disable-next-line react/require-default-props
+    password: PropTypes.string,
   }
 
   static defaultProps = {
@@ -31,6 +33,14 @@ class Infor extends React.Component {
         password: this.props.password,
       });
     }
+  }
+
+  get editPasswordText() {
+    if (this.state.password && this.state.isEditPassword) return 'Cancel Edit';
+    if (this.state.password && !this.state.isEditPassword) return 'Edit Password';
+    if (!this.state.password && this.state.isEditPassword) return 'Cancel Add';
+    if (!this.state.password && !this.state.isEditPassword) return 'Add Password';
+    return '';
   }
 
   handleEditPassword = () => {
@@ -100,7 +110,7 @@ class Infor extends React.Component {
         <StyledInfor.Actions>
           <StyledInfor.ActionItem onClick={this.copyLink}>Copy</StyledInfor.ActionItem>
           <StyledInfor.ActionItem onClick={this.handleEditPassword}>
-            {this.state.isEditPassword ? 'Cancel Password' : 'Add Password'}
+            {this.editPasswordText}
           </StyledInfor.ActionItem>
         </StyledInfor.Actions>
       </StyledInfor>

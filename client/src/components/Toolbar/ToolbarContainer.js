@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { connect } from "react-redux";
 
+import { message } from 'antd';
+
 import { UIStateActions, ParticipantsActions, RoomActions } from 'actions';
 import { isSharingScreen, localParticipantSettings, getLocalUserInfo } from 'reducers/participants/select';
 import { isShowChat, isShowToolbar } from 'reducers/uiState/select';
@@ -47,6 +49,8 @@ export default class ToolbarContainer extends React.Component {
     updatePassword: PropTypes.func,
     leaveRoom: PropTypes.func,
     history: PropTypes.object.isRequired,
+    // eslint-disable-next-line react/require-default-props
+    roomPassword: PropTypes.string,
   }
 
   static defaultProps = {
@@ -62,6 +66,12 @@ export default class ToolbarContainer extends React.Component {
 
   constructor(props) {
     super(props);
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.roomPassword !== prevProps.roomPassword && prevProps.roomPassword) {
+      message.info('Password Updated!');
+    }
   }
 
   get localParticipantSettings() {

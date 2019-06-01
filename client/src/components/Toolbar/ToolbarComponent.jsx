@@ -21,6 +21,8 @@ export default class ToolbarComponent extends React.Component {
     toggleVideoDevice: PropTypes.func.isRequired,
     leaveRoom: PropTypes.func.isRequired,
     updatePassword: PropTypes.func.isRequired,
+    // eslint-disable-next-line react/require-default-props
+    roomPassword: PropTypes.string,
   }
 
   static defaultProps = {

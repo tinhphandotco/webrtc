@@ -12,12 +12,17 @@ export const getRoomPassword = compose(
   getRoomState
 );
 
-export const didGetRoomPasswordFromServer = compose(
-  roomState => roomState.password !== null,
+export const hasPassword = compose(
+  roomState => roomState.appState.hasPassword,
   getRoomState
 );
 
 export const isLogged = compose(
   roomState => roomState.appState.isLogged,
+  getRoomState
+);
+
+export const loginMessageError = compose(
+  roomState => roomState.appState.messageError,
   getRoomState
 );

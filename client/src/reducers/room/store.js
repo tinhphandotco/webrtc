@@ -7,16 +7,17 @@ const INITIAL_STATE = {
   users: [],
   appState: {
     isLogged: false,
+    hasPassword: false,
+    messageError: null,
   }
 };
 
 const password = (state = INITIAL_STATE.password, { type, payload }) => {
   switch (type) {
-    case RoomTypes.GET_ROOM_PASSWORD_FROM_SERVER:
-      return payload.password;
-
+    case RoomTypes.SET_PASSWORD:
     case RoomTypes.UPDATE_PASSWORD:
       return payload.password;
+
     default:
       return state;
   }
@@ -42,8 +43,17 @@ const users = (state = INITIAL_STATE.users, { type, payload }) => {
 
 const appState = (state = INITIAL_STATE.appState, { type, payload }) => {
   switch (type) {
-    case RoomTypes.GET_ROOM_PASSWORD_FROM_SERVER:
-      return payload.password === '' ? { ...state, isLogged: true } : state;
+    case RoomTypes.ROOM_CONFIG:
+      return payload.hasPassword ? { ...state, hasPassword: true } : { ...state, isLogged: true };
+
+    case RoomTypes.LOGIN_SUCCESS:
+      return { ...state, isLogged: true };
+
+    case RoomTypes.LOGIN_FAIL:
+      return { ...state, messageError: payload.messageError };
+
+    case RoomTypes.RESET_LOGIN_MESSAGE_ERROR:
+      return { ...state, messageError: INITIAL_STATE.appState.messageError };
 
     default:
       return state;
