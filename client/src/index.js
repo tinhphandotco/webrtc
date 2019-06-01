@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
-import { BrowserRouter, Route } from "react-router-dom";
+  import { BrowserRouter, Route, Switch } from "react-router-dom";
 
 import configStore from "store";
 import { participantsListener } from 'reducers';
@@ -21,12 +21,12 @@ export const _store = store;
 participantsListener.subscribe(_store);
 
 ReactDOM.render(
-    <Provider store={_store}>
-        <PersistGate loading={(<h1>Loading...</h1>)} persistor={persistor}>
-            <BrowserRouter basename={BASE_PATH}>
-                <Route path="*" component={App} />
-            </BrowserRouter>
-        </PersistGate>
-    </Provider>
-    , document.getElementById('root')
+  <Provider store={_store}>
+    <PersistGate loading={(<h1>Loading...</h1>)} persistor={persistor}>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </PersistGate>
+  </Provider>
+  , document.getElementById('root')
 );

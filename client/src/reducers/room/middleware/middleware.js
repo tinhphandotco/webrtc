@@ -16,10 +16,21 @@ const roomMiddleware = store => {
     if (action.type === RoomTypes.CONNECT_SOCKET) {
       socket = io(SOCKET_URL);
 
+      console.log(store.getState().room.roomName)
+
       socket.on('connect', () => service.connect(store, socket.id));
 
       socket.on('error', (error) => {
         console.error(error);
+      });
+
+      socket.on('room:config', (data) => {
+        store.dispatch({
+          type: RoomTypes.GET_ROOM_PASSWORD_FROM_SERVER,
+          payload: {
+            password: data.password,
+          }
+        });
       });
 
       socket.on('chat:list-message', (listMessages) => {
@@ -61,7 +72,7 @@ const roomMiddleware = store => {
 
     if (socket) {
       if (action.type === ChatTypes.SEND_MESSAGE) {
-        socket.emit('chat:msg', omit(['dateCreated', 'me'], action.payload), (message) => {
+        socket.emit('chat:msg', omit(['dateCreated', 'me', 'status'], action.payload), (message) => {
           store.dispatch({
             type: ChatTypes.MESSAGE_SUCCESS,
             payload: {
@@ -108,6 +119,17 @@ const roomMiddleware = store => {
 
       if (action.type === RoomTypes.JOIN_ROOM) {
         socket.emit('user:join-room', action.payload.roomName);
+      }
+
+      if (action.type === RoomTypes.SEND_UPDATE_PASSWORD) {
+        socket.emit('room:update-password', { password: action.payload.password }, (password) => {
+          store.dispatch({
+            type: RoomTypes.UPDATE_PASSWORD,
+            payload: {
+              password
+            }
+          });
+        });
       }
 
       if (action.type === RoomTypes.LEAVE_ROOM) {

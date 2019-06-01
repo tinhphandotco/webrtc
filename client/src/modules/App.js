@@ -44,17 +44,14 @@ class App extends Component {
 
   render() {
     return (
-      <React.Fragment>
-        <Switch>
-          <Route
-            path="/meeting/:roomName"
-            component={MeetingRoomContainer}
-            // middlewares={[{ middleware: hasRoomMiddleware, redirect: '/' }]}
-          />
-          <Route exact path="/" component={ConnectRoomContainer} />
-          <Route path="*" component={NotFound} />
-        </Switch>
-      </React.Fragment >
+      <Switch>
+        <Route
+          path="/meeting/:roomName"
+          component={MeetingRoomContainer}
+        />
+        <Route exact path="/" component={ConnectRoomContainer} />
+        <Route path="*" component={NotFound} />
+      </Switch>
     );
   }
 }

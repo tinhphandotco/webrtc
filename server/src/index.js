@@ -1,4 +1,5 @@
 const omit = require('ramda/src/omit');
+const path = require('ramda/src/path');
 
 const fs = require('fs');
 const server = require('https').createServer({
@@ -6,6 +7,7 @@ const server = require('https').createServer({
   cert: fs.readFileSync('server-cert.pem')
 });
 const io = require('socket.io')(server);
+const roomConfig = {};
 const listMesssages = {};
 
 io.on('connection', function(socket){
@@ -13,6 +15,10 @@ io.on('connection', function(socket){
 
   socket.on('user:join-room', (roomName) => {
     socket.join(roomName);
+    io.to(socket.id).emit('room:config', {
+      listMesssages: listMesssages[roomName] || [],
+      password: path([roomName, 'password'], roomConfig) || ''
+    });
     io.to(socket.id).emit('chat:list-message', listMesssages[roomName] || []);
     socket.to(roomName).emit('peer:connected', {
       id: socket.id,
@@ -33,6 +39,21 @@ io.on('connection', function(socket){
       }
     })
   });
+
+  socket.on('room:update-password', (data, callback) => {
+    const rooms = omit([socket.id], socket.rooms);
+    Object.keys(rooms).forEach(room => {
+      roomConfig[room] = {
+        ...(roomConfig[room] || {}),
+        password: data.password
+      };
+      socket.to(room).emit('room:update-password', {
+        from: socket.id,
+        password: data.password,
+      });
+    });
+    callback(data.password)
+  })
 
   socket.on('peer:msg', (data) => {
     console.log('peer:msg - ' + data.type + ' from ' + data.from + ' to ' + data.to);

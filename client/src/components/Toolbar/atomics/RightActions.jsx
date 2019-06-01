@@ -1,7 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { Tooltip } from 'antd';
+import { Tooltip, Popover } from 'antd';
+
+import Infor from './Infor';
 
 import { StyledToolbar } from '../styled';
 
@@ -9,6 +11,7 @@ export default
 class RightActions extends React.Component {
   static propTypes = {
     openModalSettings: PropTypes.func,
+    updatePassword: PropTypes.func.isRequired,
     settingDevices: PropTypes.object.isRequired,
   }
 
@@ -23,8 +26,9 @@ class RightActions extends React.Component {
   shouldComponentUpdate(nextProps) {
     const diffVideoActive = this.props.settingDevices.video.active !== nextProps.settingDevices.video.active;
     const diffAudioActive = this.props.settingDevices.audio.active !== nextProps.settingDevices.audio.active;
+    const diffRoomPassword = this.props.roomPassword !== nextProps.roomPassword;
 
-    return diffVideoActive || diffAudioActive;
+    return diffVideoActive || diffAudioActive || diffRoomPassword;
   }
 
   render() {
@@ -50,12 +54,18 @@ class RightActions extends React.Component {
           </StyledToolbar.ActionItem>
         </Tooltip>
 
-        <Tooltip placement="top" title="Need some help?" mouseLeaveDelay={0}>
+        <Popover
+          placement="topRight"
+          trigger="click"
+          content={
+            <Infor password={this.props.roomPassword} updatePassword={this.props.updatePassword} />
+          }
+        >
           <StyledToolbar.ActionItem>
-            <StyledToolbar.ActionIcon type="question-circle" />
-            <StyledToolbar.ActionLabel>Help</StyledToolbar.ActionLabel>
+            <StyledToolbar.ActionIcon type="info-circle" />
+            <StyledToolbar.ActionLabel>Info</StyledToolbar.ActionLabel>
           </StyledToolbar.ActionItem>
-        </Tooltip>
+        </Popover>
       </React.Fragment>
     );
   }

@@ -21,3 +21,10 @@ export const leaveRoom = () => (dispatch, getState) => dispatch({
     participantId: getLocalParticipantId(getState())
   }
 });
+
+export const updatePassword = (password) => ({
+  type: ActionTypes.SEND_UPDATE_PASSWORD,
+  payload: {
+    password,
+  }
+});

@@ -3,8 +3,22 @@ import { RoomTypes, ParticipantsTypes } from 'actions';
 
 const INITIAL_STATE = {
   roomName: '',
+  password: null,
   users: [],
   appState: {
+    isLogged: false,
+  }
+};
+
+const password = (state = INITIAL_STATE.password, { type, payload }) => {
+  switch (type) {
+    case RoomTypes.GET_ROOM_PASSWORD_FROM_SERVER:
+      return payload.password;
+
+    case RoomTypes.UPDATE_PASSWORD:
+      return payload.password;
+    default:
+      return state;
   }
 };
 
@@ -26,8 +40,11 @@ const users = (state = INITIAL_STATE.users, { type, payload }) => {
   }
 };
 
-const appState = (state = INITIAL_STATE.appState, { type }) => {
+const appState = (state = INITIAL_STATE.appState, { type, payload }) => {
   switch (type) {
+    case RoomTypes.GET_ROOM_PASSWORD_FROM_SERVER:
+      return payload.password === '' ? { ...state, isLogged: true } : state;
+
     default:
       return state;
   }
@@ -35,6 +52,7 @@ const appState = (state = INITIAL_STATE.appState, { type }) => {
 
 export default combineReducers({
   roomName,
+  password,
   users,
   appState
 });

@@ -55,7 +55,9 @@
     "navigator": true,
     "If": true,
     "process": true,
-    "Image": true
+    "Image": true,
+    "Choose": true,
+    "When": true
   },
   "rules": {
     "no-console": "warn",

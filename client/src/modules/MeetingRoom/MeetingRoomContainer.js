@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 
 import { getLocalUserInfo, didGetUserMedia, errorGetUserMedia } from 'reducers/participants/select';
 import { isShowGridParticipants } from 'reducers/uiState/select';
+import { didGetRoomPasswordFromServer, isLogged } from 'reducers/room/select';
 
 import { ParticipantsActions, RoomActions } from 'actions';
 
@@ -27,7 +28,9 @@ const mapStateToProps = (state) => {
     localUserInfo: getLocalUserInfo(state),
     didGetUserMedia: didGetUserMedia(state),
     errorGetUserMedia: errorGetUserMedia(state),
-    isShowGridParticipants: isShowGridParticipants(state)
+    isShowGridParticipants: isShowGridParticipants(state),
+    didGetRoomPasswordFromServer: didGetRoomPasswordFromServer(state),
+    isLogged: isLogged(state),
 	};
 };
 
@@ -49,7 +52,9 @@ class MeetingRoomContainer extends React.Component {
     match: PropTypes.object.isRequired,
     didGetUserMedia: PropTypes.bool.isRequired,
     errorGetUserMedia: PropTypes.any,
-    isShowGridParticipants: PropTypes.bool.isRequired
+    isShowGridParticipants: PropTypes.bool.isRequired,
+    didGetRoomPasswordFromServer: PropTypes.bool.isRequired,
+    isLogged: PropTypes.bool.isRequired
   }
 
   static defaultProps = {
@@ -88,22 +93,26 @@ class MeetingRoomContainer extends React.Component {
   }
 
   render() {
+    const didConnectToRoom = this.props.didGetRoomPasswordFromServer && this.props.didGetUserMedia;
+
     return (
       <React.Fragment>
-        {!this.props.didGetUserMedia && (
-          <AskActiveDevices />
-        )}
+        <Choose>
+          <When condition={!didConnectToRoom}>
+            <AskActiveDevices />
+          </When>
 
-        {this.props.didGetUserMedia && (
-          <StyledRoom>
-            <Toolbar />
-            <Participants />
-            <Chat />
-            {!this.props.isShowGridParticipants && (
-              <FullscreenParticipant />
-            )}
-          </StyledRoom>
-        )}
+          <When condition={didConnectToRoom}>
+            <StyledRoom>
+              <Toolbar />
+              <Participants />
+              <Chat />
+              {!this.props.isShowGridParticipants && (
+                <FullscreenParticipant />
+              )}
+            </StyledRoom>
+          </When>
+        </Choose>
       </React.Fragment>
     );
   }

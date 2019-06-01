@@ -6,6 +6,7 @@ import { connect } from "react-redux";
 import { UIStateActions, ParticipantsActions, RoomActions } from 'actions';
 import { isSharingScreen, localParticipantSettings, getLocalUserInfo } from 'reducers/participants/select';
 import { isShowChat, isShowToolbar } from 'reducers/uiState/select';
+import { getRoomPassword } from 'reducers/room/select';
 
 import ToolbarComponent from './ToolbarComponent';
 
@@ -16,6 +17,7 @@ const mapStateToProps = (state) => {
     isSharingScreen: isSharingScreen(state),
     localParticipantInfo: getLocalUserInfo(state),
     localParticipantSettings: localParticipantSettings(state),
+    roomPassword: getRoomPassword(state),
 	};
 };
 
@@ -26,6 +28,7 @@ const mapDispatchToProps = {
   closeShareScreen: ParticipantsActions.closeShareScreen,
   setLocalSettingDevices: ParticipantsActions.setLocalSettingDevices,
   leaveRoom: RoomActions.leaveRoom,
+  updatePassword: RoomActions.updatePassword
 };
 
 @withRouter
@@ -41,6 +44,7 @@ export default class ToolbarContainer extends React.Component {
     isSharingScreen: PropTypes.bool.isRequired,
     localParticipantInfo: PropTypes.object,
     setLocalSettingDevices: PropTypes.func,
+    updatePassword: PropTypes.func,
     leaveRoom: PropTypes.func,
     history: PropTypes.object.isRequired,
   }
@@ -53,6 +57,7 @@ export default class ToolbarContainer extends React.Component {
     setLocalSettingDevices: () => null,
     leaveRoom: () => null,
     localParticipantInfo: {},
+    updatePassword: () => null,
   }
 
   constructor(props) {
@@ -108,6 +113,8 @@ export default class ToolbarContainer extends React.Component {
         toggleAudioDevice={this.toggleAudioDevice}
         toggleVideoDevice={this.toggleVideoDevice}
         leaveRoom={this.leaveRoom}
+        updatePassword={this.props.updatePassword}
+        roomPassword={this.props.roomPassword}
       />
     );
   }

@@ -20,6 +20,7 @@ export default class ToolbarComponent extends React.Component {
     toggleAudioDevice: PropTypes.func.isRequired,
     toggleVideoDevice: PropTypes.func.isRequired,
     leaveRoom: PropTypes.func.isRequired,
+    updatePassword: PropTypes.func.isRequired,
   }
 
   static defaultProps = {
@@ -76,6 +77,8 @@ export default class ToolbarComponent extends React.Component {
           <RightActions
             settingDevices={this.props.localParticipantSettings}
             openModalSettings={this.openModalSettings}
+            roomPassword={this.props.roomPassword}
+            updatePassword={this.props.updatePassword}
           />
         </StyledToolbar.Actions>
 
