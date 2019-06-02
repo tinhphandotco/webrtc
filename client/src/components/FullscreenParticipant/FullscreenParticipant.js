@@ -33,9 +33,14 @@ export default class FullscreenParticipant extends React.Component {
   }
 
   get dontHasVideo() {
-    return !this.props.selectedParticipant.stream
-      || !this.props.settingDevices.video.active
-      || !this.props.settingDevices.video.enable;
+    return (
+      !this.props.selectedParticipant.stream
+      || (
+        this.props.selectedParticipant.stream
+        && !this.props.settingDevices.video.enable
+        && !this.props.settingDevices.video.isSharingScreen
+      )
+    );
   }
 
   render() {
