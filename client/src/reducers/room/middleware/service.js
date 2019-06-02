@@ -88,8 +88,8 @@ const replaceLocalStream = (store, newStream) => {
 
     newStream.getVideoTracks().forEach(track => track.enabled = settings.video.enable || settings.video.isSharingScreen);
     newStream.getAudioTracks().forEach(track => track.enabled = settings.audio.enable);
-    const videoTrack = newStream.getVideoTracks()[0];
-    const audioTrack = newStream.getAudioTracks()[0];
+    const videoTrack = head(newStream.getVideoTracks());
+    const audioTrack = head(newStream.getAudioTracks());
     if (videoTrack) {
       const videoSender = participant.peerConnection.getSenders().find(s => s.track.kind == videoTrack.kind);
       videoSender.replaceTrack(videoTrack);
@@ -227,7 +227,6 @@ export const handlePeerDisconnecting = (store, data) => {
 };
 
 export const handlePeerConnected = (store, data) => {
-  console.log('peer connected: ', data.id, JSON.stringify(store.getState().participants.allIds));
   const localUserInfo = getLocalUserInfo(store.getState());
   const participantConnection = getOrCreateConnection(store, data.id);
   createOffer(participantConnection, store, localUserInfo.id, data.id);
