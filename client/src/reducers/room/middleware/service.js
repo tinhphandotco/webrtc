@@ -35,11 +35,13 @@ const getOrCreateConnection = (store, participantId) => {
   }
 
   pc.onicecandidate = (evt) => {
+    console.log('onicecandidate: ', evt.candidate)
     if (evt.candidate) {
       store.dispatch(RoomActions.socketMsg({
         from: localUserInfo.id,
         to: participantId,
-        ice: evt.candidate, type: 'ice'
+        ice: evt.candidate,
+        type: 'ice'
       }));
     }
   };

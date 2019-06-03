@@ -107,7 +107,10 @@ class MeetingRoomContainer extends React.Component {
       this.props.joinRoom(this.props.match.params.roomName);
     }
 
-    if (!prevProps.hasPassword && this.props.hasPassword) {
+    if (
+      (prevProps.hasPassword !== this.props.hasPassword || prevProps.didGetUserMedia !== this.props.didGetUserMedia)
+      && this.props.didGetUserMedia && this.props.hasPassword
+    ) {
       this.setState({
         shouldShowModalLogin: true,
       });

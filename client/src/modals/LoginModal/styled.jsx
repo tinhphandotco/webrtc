@@ -9,7 +9,7 @@ LoginModal.Title = styled.h2`
   margin-bottom: 30px;
 `;
 
-LoginModal.Form = styled.form`
+LoginModal.Form = styled.div`
   display: block;
 `;
 

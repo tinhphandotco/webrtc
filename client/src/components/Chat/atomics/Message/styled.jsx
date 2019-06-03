@@ -86,6 +86,7 @@ Message.Text = styled.div`
   min-height: 30px;
   padding: 10px 15px;
   position: relative;
+  white-space: pre-wrap;
   word-break: break-word;
   word-wrap: break-word;
 
