@@ -89,9 +89,15 @@ const replaceLocalStream = (store, newStream) => {
   const remoteParticipants = getRemoteParticipants(store.getState());
   const settings = localParticipantSettings(store.getState());
 
+  newStream.getVideoTracks().forEach(track => track.enabled = settings.video.enable || settings.video.isSharingScreen);
+  newStream.getAudioTracks().forEach(track => track.enabled = settings.audio.enable);
+
   if (settings.video.isSharingScreen) {
     const localStream = getLocalStream(store.getState());
-    newStream.addTrack(head(localStream.getAudioTracks()));
+    const audioTrack = head(localStream.getAudioTracks());
+    if (audioTrack) {
+      newStream.addTrack(audioTrack);
+    }
   }
 
   store.dispatch(ParticipantsActions.setLocalStream(localParticipantId, newStream));
@@ -101,8 +107,6 @@ const replaceLocalStream = (store, newStream) => {
     if (localStream) {
       participant.peerConnection.removeStream(localStream);
     }
-    newStream.getVideoTracks().forEach(track => track.enabled = settings.video.enable || settings.video.isSharingScreen);
-    newStream.getAudioTracks().forEach(track => track.enabled = settings.audio.enable);
     newStream.getTracks().forEach(track => participant.peerConnection.addTrack(track, newStream));
     createOffer(participant.peerConnection, store, localParticipantId, participant.id);
   });
@@ -254,14 +258,15 @@ export const handlePeerMsg = (store, data) => {
             type: 'sdp-answer'
           }));
 
-          // TODO: Don't re-send this when change to share screen
           const mySettings = getParticipantSettingById(data.to)(store.getState());
-          store.dispatch(ParticipantsActions.socketMsg({
-            from: data.to,
-            to: data.from,
-            type: 'setting-devices',
-            settings: mySettings
-          }));
+          if (!mySettings.video.isSharingScreen) {
+            store.dispatch(ParticipantsActions.socketMsg({
+              from: data.to,
+              to: data.from,
+              type: 'setting-devices',
+              settings: mySettings
+            }));
+          }
         });
       break;
     }
@@ -269,14 +274,15 @@ export const handlePeerMsg = (store, data) => {
     case 'sdp-answer': {
       participantConnection.setRemoteDescription(new RTCSessionDescription(data.sdp));
 
-      // TODO: Don't re-send this when change to share screen
       const mySettings = getParticipantSettingById(data.to)(store.getState());
-      store.dispatch(ParticipantsActions.socketMsg({
-        from: data.to,
-        to: data.from,
-        type: 'setting-devices',
-        settings: mySettings
-      }));
+      if (!mySettings.video.isSharingScreen) {
+        store.dispatch(ParticipantsActions.socketMsg({
+          from: data.to,
+          to: data.from,
+          type: 'setting-devices',
+          settings: mySettings
+        }));
+      }
       break;
     }
 

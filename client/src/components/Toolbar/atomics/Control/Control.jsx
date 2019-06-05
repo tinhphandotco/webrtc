@@ -23,6 +23,11 @@ class Toolbar extends React.Component {
     };
   }
 
+  get isVideoEnable() {
+    const { settingDevices } = this.props;
+    return settingDevices.video.isSharingScreen || settingDevices.video.enable;
+  }
+
   shouldComponentUpdate(nextProps, nextState) {
     const diffSettingDevices = this.props.settingDevices !== nextProps.settingDevices;
     const diffIsSharingScreen = this.props.isSharingScreen !== nextProps.isSharingScreen;
@@ -85,7 +90,7 @@ class Toolbar extends React.Component {
         </Popconfirm>
 
         <StyledControl.DeviceControl disabled={!settingDevices.video.active || isSharingScreen} onClick={toggleVideoDevice}>
-          <MyIcon type={settingDevices.video.enable ? 'iconcamera' : 'iconcamera-off'} />
+          <MyIcon type={this.isVideoEnable ? 'iconcamera' : 'iconcamera-off'} />
         </StyledControl.DeviceControl>
       </StyledControl>
     );

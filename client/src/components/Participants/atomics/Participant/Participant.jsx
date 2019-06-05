@@ -39,6 +39,11 @@ export default class Participant extends React.Component {
     );
   }
 
+  get isVideoEnable() {
+    const { settingDevices } = this.props;
+    return settingDevices.video.isSharingScreen || settingDevices.video.enable;
+  }
+
   toggleInfo = state => () => {
     this.setState({
       isShowInfo: state
@@ -79,7 +84,7 @@ export default class Participant extends React.Component {
               <MyIcon type={settingDevices.audio.enable ? 'iconmic' : 'iconmic_off'} />
             </StyledParticipantItem.DeviceItem>
             <StyledParticipantItem.DeviceItem>
-              <MyIcon type={settingDevices.video.enable ? 'iconcamera' : 'iconcamera-off'} />
+              <MyIcon type={this.isVideoEnable ? 'iconcamera' : 'iconcamera-off'} />
             </StyledParticipantItem.DeviceItem>
           </StyledParticipantItem.Devices>
         </StyledParticipantItem.Actions>
