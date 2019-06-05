@@ -76,3 +76,8 @@ export const getParticipantsStream = compose(
     .map(id => ({ id, stream: path(['byId', id, 'stream'], participantsState) })),
   getParticipantsState,
 );
+
+export const getLocalStream = compose(
+  participantsState => path(['byId', participantsState.localUser, 'stream'], participantsState),
+  getParticipantsState,
+);

@@ -10,6 +10,7 @@ const INIT_USER = {
     video: {
       active: false,
       enable: false,
+      isSharingScreen: false,
     },
     audio: {
       active: false,
@@ -26,6 +27,7 @@ const INIT_REMOTE_USER = {
     video: {
       active: false,
       enable: false,
+      isSharingScreen: false,
     },
     audio: {
       active: false,
@@ -128,6 +130,7 @@ const byId = (state = INITIAL_STATE.byId, { type, payload }) => {
           stream.getAudioTracks().forEach(track => track.enabled = payload.settings.audio.enable);
         }
       }
+      // return state;
 
       return {
         ...state,

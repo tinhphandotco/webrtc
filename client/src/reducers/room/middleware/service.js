@@ -10,7 +10,8 @@ import {
   getUserInfoById,
   getLocalUserInfo,
   localParticipantSettings,
-  getParticipantSettingById
+  getParticipantSettingById,
+  getLocalStream
 } from 'reducers/participants/select';
 import { getDevices } from 'reducers/devices/select';
 
@@ -21,11 +22,8 @@ const iceConfig = {
 };
 
 const getOrCreateConnection = (store, participantId) => {
-  console.log('getOrCreateConnection have? ', participantId);
   const participantInfo = getUserInfoById(participantId)(store.getState());
   if (participantInfo) { return participantInfo.peerConnection; }
-
-  console.log('getOrCreateConnection dont have: ', participantId);
 
   const localUserInfo = getLocalUserInfo(store.getState());
   const pc = new RTCPeerConnection(iceConfig);
@@ -35,13 +33,27 @@ const getOrCreateConnection = (store, participantId) => {
   }
 
   pc.onicecandidate = (evt) => {
-    console.log('onicecandidate: ', evt.candidate)
+    console.log('onicecandidate: ', evt.candidate);
     if (evt.candidate) {
       store.dispatch(RoomActions.socketMsg({
         from: localUserInfo.id,
         to: participantId,
         ice: evt.candidate,
         type: 'ice'
+      }));
+    }
+  };
+
+  pc.onconnectionstatechange = (evt) => {
+    console.log('onconnectionstatechange: ', pc.connectionState, evt);
+    if (pc.connectionState === 'failed') {
+      store.dispatch(ParticipantsActions.setSettingDevices(participantId, {
+        video: {
+          enable: false
+        },
+        audio: {
+          enable: false
+        },
       }));
     }
   };
@@ -76,30 +88,22 @@ const replaceLocalStream = (store, newStream) => {
   const localParticipantId = getLocalParticipantId(store.getState());
   const remoteParticipants = getRemoteParticipants(store.getState());
   const settings = localParticipantSettings(store.getState());
+
+  if (settings.video.isSharingScreen) {
+    const localStream = getLocalStream(store.getState());
+    newStream.addTrack(head(localStream.getAudioTracks()));
+  }
+
   store.dispatch(ParticipantsActions.setLocalStream(localParticipantId, newStream));
 
   remoteParticipants.forEach(participant => {
-    // const localStream = head(participant.peerConnection.getLocalStreams());
-    // if (localStream.length) {
-    //   participant.peerConnection.removeStream(head(localStream));
-    // }
-    // newStream.getVideoTracks().forEach(track => track.enabled = settings.video.enable || settings.video.isSharingScreen);
-    // newStream.getAudioTracks().forEach(track => track.enabled = settings.audio.enable);
-    // newStream.getTracks().forEach(track => participant.peerConnection.addTrack(track, newStream));
-    // createOffer(participant.peerConnection, store, localParticipantId, participant.id);
-
+    const localStream = head(participant.peerConnection.getLocalStreams());
+    if (localStream) {
+      participant.peerConnection.removeStream(localStream);
+    }
     newStream.getVideoTracks().forEach(track => track.enabled = settings.video.enable || settings.video.isSharingScreen);
     newStream.getAudioTracks().forEach(track => track.enabled = settings.audio.enable);
-    const videoTrack = head(newStream.getVideoTracks());
-    const audioTrack = head(newStream.getAudioTracks());
-    if (videoTrack) {
-      const videoSender = participant.peerConnection.getSenders().find(s => s.track.kind == videoTrack.kind);
-      videoSender.replaceTrack(videoTrack);
-    }
-    if (audioTrack) {
-      const audioSender = participant.peerConnection.getSenders().find(s => s.track.kind == audioTrack.kind);
-      audioSender.replaceTrack(audioTrack);
-    }
+    newStream.getTracks().forEach(track => participant.peerConnection.addTrack(track, newStream));
     createOffer(participant.peerConnection, store, localParticipantId, participant.id);
   });
 };
