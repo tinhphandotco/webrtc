@@ -47,7 +47,7 @@ io.on('connection', function(socket){
       if (Object.keys(io.sockets.adapter.rooms[room].sockets).length === 1) {
         console.log('Reset list message in: ', room);
         listMesssages[room] = [];
-        // roomConfig[room] = {};
+        roomConfig[room] = {};
       }
     })
   });

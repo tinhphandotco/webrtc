@@ -259,14 +259,14 @@ export const handlePeerMsg = (store, data) => {
           }));
 
           const mySettings = getParticipantSettingById(data.to)(store.getState());
-          if (!mySettings.video.isSharingScreen) {
+          // if (!mySettings.video.isSharingScreen) {
             store.dispatch(ParticipantsActions.socketMsg({
               from: data.to,
               to: data.from,
               type: 'setting-devices',
               settings: mySettings
             }));
-          }
+          // }
         });
       break;
     }
@@ -275,14 +275,14 @@ export const handlePeerMsg = (store, data) => {
       participantConnection.setRemoteDescription(new RTCSessionDescription(data.sdp));
 
       const mySettings = getParticipantSettingById(data.to)(store.getState());
-      if (!mySettings.video.isSharingScreen) {
+      // if (!mySettings.video.isSharingScreen) {
         store.dispatch(ParticipantsActions.socketMsg({
           from: data.to,
           to: data.from,
           type: 'setting-devices',
           settings: mySettings
         }));
-      }
+      // }
       break;
     }
 
