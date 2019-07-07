@@ -77,8 +77,8 @@ export default class Participant extends React.Component {
         />
 
         <StyledParticipantItem.Actions>
-          <span>C</span>
-          <span>A</span>
+          {/* <span>C</span> */}
+          {/* <span>A</span> */}
           <StyledParticipantItem.Devices>
             <StyledParticipantItem.DeviceItem>
               <MyIcon type={settingDevices.audio.enable ? 'iconmic' : 'iconmic_off'} />

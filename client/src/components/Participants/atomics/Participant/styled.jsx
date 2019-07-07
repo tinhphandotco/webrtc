@@ -84,6 +84,7 @@ ParticipantItem.Devices = styled.div`
   align-items: center;
   display: flex;
   color: #fff;
+  margin-left: auto;
   visibility: hidden;
 `;
 

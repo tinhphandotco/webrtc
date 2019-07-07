@@ -27,6 +27,7 @@ class Infor extends React.Component {
     };
   }
 
+  // FIXME: use `getDerivedPropsToState()` instead
   componentDidUpdate(prevProps) {
     if (this.props.password !== prevProps.password) {
       this.setState({
@@ -65,7 +66,7 @@ class Infor extends React.Component {
 
   copyLink = () => {
     copyToClipboard(window.location.href);
-    message.info('Copy successfull!');
+    message.info('Copy link successfull!');
   }
 
   updatePassword = () => {
@@ -89,7 +90,12 @@ class Infor extends React.Component {
             <When condition={this.state.isEditPassword}>
               <StyledInfor.InputGroup>
                 <StyledInfor.InputWrapper>
-                  <Input value={this.state.password} onChange={this.onChangePassword} />
+                  <Input
+                    value={this.state.password}
+                    onChange={this.onChangePassword}
+                    onPressEnter={this.updatePassword}
+                    autoFocus
+                  />
                 </StyledInfor.InputWrapper>
                 <StyledInfor.InputActions>
                   <Button type="primary" size="small" style={{ marginRight: '5px' }} onClick={this.updatePassword}>
